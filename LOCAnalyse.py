@@ -5,6 +5,8 @@
 # @File    : LOCAnalyse.py
 # @Software: PyCharm
 
+import sys
+
 def blank_row(s):
     s = s.strip("\n\r\t   ")
     if len(s) == 0:
@@ -87,7 +89,11 @@ def loc_metrics_analyse(list_of_codes):
     return list_of_status;
 
 if __name__ == "__main__":
-    file = open("/Users/lijiechu/Documents/test.java", 'r')
+
+    if(len(sys.argv) < 2):
+        print ("Error: usage should be like that:\n" + sys.argv[0] + " filepath/filename")
+        sys.exit();
+    file = open(sys.argv[1],'r')
     try:
         list_of_rows = file.readlines()
     finally:
@@ -99,12 +105,13 @@ if __name__ == "__main__":
     LOC_CODE_AND_COMMENT = 0
     LOC_EXECUTABLE = 0
 
-    # print total_row
+    # print analyze_result
     analyze_result = loc_metrics_analyse(list_of_rows)
 
     for i in range(len(analyze_result)):
         print ("row ", i + 1, "~~~~", "~~~~", analyze_result[i], list_of_rows[i])
 
+    # calculate LOC_metrics
     for x in analyze_result:
         if x == "Blank":
             LOC_BLANK += 1
