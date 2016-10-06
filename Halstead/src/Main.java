@@ -35,7 +35,7 @@ public class Main {
 
     public static void main(String... args) throws Exception {
         // 默认包下一个叫Simple.java的文件 根据自己的情况更改
-        String path = "E:\\MyCodes\\Java\\JavaCodeParser\\src\\Simple.java";
+        String path = "E:\\MyCodes\\Java\\JavaCodeParser\\src\\Main.java";
 
         FileInputStream inputStream = new FileInputStream(path);
 
@@ -66,7 +66,7 @@ public class Main {
         n2 = CalculateVisitor.operands.size();
         n = n1 + n2;
 
-        Set<Map.Entry<String, Integer>> operatorSet = CalculateVisitor.operands.entrySet();
+        Set<Map.Entry<String, Integer>> operatorSet = CalculateVisitor.operators.entrySet();
         Set<Map.Entry<String, Integer>> operandSet = CalculateVisitor.operands.entrySet();
 
         for (Map.Entry<String, Integer> item : operatorSet) {
