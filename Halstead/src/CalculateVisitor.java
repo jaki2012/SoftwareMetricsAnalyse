@@ -153,6 +153,7 @@ public class CalculateVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(ContinueStmt n, Object arg) {
+        addOperator("continue");
         super.visit(n, arg);
     }
 

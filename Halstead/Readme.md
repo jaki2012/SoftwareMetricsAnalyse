@@ -2,7 +2,21 @@
 ---
 使用了```JavaParser```进行语法分析  
 对操作符和操作数进行了大致的统计  
-注：目前还没有对赋值语句，```if```、```for```、```while```、```do```等中的条件语句进行分析
+已经计入的如
+ - if else/else if
+ - while/do while
+ - switch case defaule  
+ - continue/break
+ - return
+ - Unary expression
+ - Class/Interface
+ - Package
+ - Primitive type
+ - Identifier/Reserved words  
+ ......
+
+注：目前还没有对赋值语句，```if```、```for```、```while```、```do```等中的条件语句进行分析  
+关于操作符和操作数的定义是参考https://zh.scribd.com/doc/99533/Halstead-s-Operators-and-Operands-in-C-C-JAVA-by-Indranil-Nandy 注意和维基百科有些出入
 
 依赖包
 ----
