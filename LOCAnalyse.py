@@ -7,12 +7,14 @@
 
 import sys
 
+
 def blank_row(s):
     s = s.strip("\n\r\t   ")
     if len(s) == 0:
         return True
     else:
         return False
+
 
 def define_row(row):
     row = row.strip("\n\r\t   ")
@@ -43,12 +45,14 @@ def define_row(row):
     else:
         return "Unknown";
 
+
 def last_status(status):
     if '_' in status:
         pos = status.rfind('_');
         return status[pos+1:];
     else:
         return status;
+
 
 def loc_metrics_analyse(list_of_codes):
     l = len(list_of_codes)
@@ -92,8 +96,8 @@ if __name__ == "__main__":
 
     if(len(sys.argv) < 2):
         print ("Error: usage should be like that:\n" + sys.argv[0] + " filepath/filename")
-        sys.exit();
-    file = open(sys.argv[1],'r')
+        sys.exit()
+    file = open(sys.argv[1], 'r')
     try:
         list_of_rows = file.readlines()
     finally:
