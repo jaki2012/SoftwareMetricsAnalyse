@@ -43,35 +43,37 @@
 栗子~
 ---
 简单算法：
-    File path:E:\MyCodes\Java\JavaCodeParser\src\Simple.java
-    ========================================================
-    n1:24
-    n2:38
-    n:62
-    N1:30
-    N2:55
-    N:85
-    CPL:309.460345528164
-    V:506.1066863828844
-    D:17.0
-    E:8603.813668509034
-
+```
+File path:E:\MyCodes\Java\JavaCodeParser\src\Simple.java
+========================================================
+n1:24
+n2:38
+n:62
+N1:30
+N2:55
+N:85
+CPL:309.460345528164
+V:506.1066863828844
+D:17.0
+E:8603.813668509034
+```
 完备算法：
-    File path:E:\MyCodes\Java\JavaCodeParser\src\Simple.java
-    ========================================================
-    n1:								132.0
-    n2:								133.0
-    n(Program Vocabulary):			265.0
-    N1:								35.0
-    N2:								54.0
-    N(Program length):				89.0
-    Calculated program length:		1868.2125876769742
-    Volume:							576.3402753560094
-    Difficulty:						26.796992481203006
-    Effort:							15444.186025329454
-    Time required to program:		858.0103347405252
-    Purity ratio:					20.9911526705278
-
+```
+File path:E:\MyCodes\Java\JavaCodeParser\src\Simple.java
+========================================================
+n1:								132.0
+n2:								133.0
+n(Program Vocabulary):			265.0
+N1:								35.0
+N2:								54.0
+N(Program length):				89.0
+Calculated program length:		1868.2125876769742
+Volume:							576.3402753560094
+Difficulty:						26.796992481203006
+Effort:							15444.186025329454
+Time required to program:		858.0103347405252
+Purity ratio:					20.9911526705278
+```
 更新日志
 ---
 - 2016.10.06 实现了简单算法  
