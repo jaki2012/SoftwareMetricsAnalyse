@@ -22,6 +22,7 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 	@Override
 	public Integer visitStatement(StatementContext ctx) {
 		RuleContext rc = ctx.getPayload();
+//		System.out.println("Rule context:" + rc.getText());
 
 		if (rc != null) {
 			//we have a while loop
@@ -31,7 +32,8 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 					ctx.getTokens(JavaParser.FOR).size() > 0 ||
 					ctx.getTokens(JavaParser.CATCH).size() > 0 ||
 					ctx.getTokens(JavaParser.SWITCH).size() > 0 ||
-					ctx.getTokens(JavaParser.DO).size() > 0 ) {
+					ctx.getTokens(JavaParser.DO).size() > 0 ||
+					ctx.getTokens(JavaParser.THROW).size() > 0) {
 
 				entryStack.peek().bumpDecisionPoints();
 				return super.visitStatement(ctx);

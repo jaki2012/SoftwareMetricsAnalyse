@@ -1,6 +1,6 @@
 package visitors;
 
-import metrics.Java8BaseListener;
+import metrics.java.Java8BaseListener;
 
 /**
  * Project: Halstead

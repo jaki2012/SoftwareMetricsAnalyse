@@ -145,6 +145,7 @@ public class CalculateVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(ConditionalExpr n, Object arg) {
+        System.out.println(n.toString());
         super.visit(n, arg);
     }
 

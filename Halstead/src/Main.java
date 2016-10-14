@@ -1,12 +1,8 @@
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import metrics.Initiator;
 import metrics.MetricsEvaluator;
 import visitors.CalculateVisitor;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,39 +11,46 @@ import java.util.Set;
  */
 public class Main {
 
-    /**
-     * 生成一个语法单元
-     * 每个java文件对应一个语法单元
-     * @param in 输入文件流
-     * @return 语法单元
-     */
-    private static CompilationUnit getCompilationUnit(InputStream in) {
-        try {
-            CompilationUnit cu;
-            try {
-                // parse the file
-                cu = JavaParser.parse(in);
-                return cu;
-            } finally {
-                in.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    /**
+//     * 生成一个语法单元
+//     * 每个java文件对应一个语法单元
+//     * @param in 输入文件流
+//     * @return 语法单元
+//     */
+//    private static CompilationUnit getCompilationUnit(InputStream in) {
+//        try {
+//            CompilationUnit cu;
+//            try {
+//                // parse the file
+//                cu = JavaParser.parse(in);
+//                return cu;
+//            } finally {
+//                in.close();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public static void main(String... args) throws Exception {
         // 默认包下一个叫Simple.java的文件 根据自己的情况更改
-        String path = "E:\\MyCodes\\Java\\JavaCodeParser\\src\\Simple.java";
+        String path = "E:\\MyCodes\\Java\\FileSys\\src\\simple.java";
         System.out.println("File path:" + path);
         System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-
+//        String f = "E:\\MyCodes\\Java\\FileSys\\src\\simple.java";
         // 计算结果并显示
 //        calculateHalsteadMetrics(path);
 
         calculateHalsteadMetricsV2(path);
 
+//        Lexer lexer = new JavaLexer(new ANTLRFileStream(f));
+//        CommonTokenStream tokens = new CommonTokenStream(lexer);
+//        JavaParser parser = new JavaParser(tokens);
+//        ParserRuleContext tree = parser.compilationUnit();
+//
+//        CyclomaticComplexityVisitor mv = new CyclomaticComplexityVisitor();
+//        mv.visit(tree);
         // 下面是测试
 //        Set<Map.Entry<String, Integer>> set1 = visitors.CalculateVisitor.operands.entrySet();
 //        for (Map.Entry<String, Integer> item : set1) {
@@ -78,22 +81,22 @@ public class Main {
         System.out.println("Purity ratio:\t\t\t\t\t" + e.PURITY_RATIO);
     }
 
-    private static void runSimpleTest(String path) throws FileNotFoundException {
-        FileInputStream inputStream = new FileInputStream(path);
-
-        CompilationUnit compilationUnit = getCompilationUnit(inputStream);
-
-        assert compilationUnit != null;
-        // 使用Visitor模式进行相关统计
-        new CalculateVisitor().visit(compilationUnit, null);
-    }
+//    private static void runSimpleTest(String path) throws FileNotFoundException {
+//        FileInputStream inputStream = new FileInputStream(path);
+//
+//        CompilationUnit compilationUnit = getCompilationUnit(inputStream);
+//
+//        assert compilationUnit != null;
+//        // 使用Visitor模式进行相关统计
+//        new CalculateVisitor().visit(compilationUnit, null);
+//    }
 
     private static void calculateHalsteadMetrics(String path) {
-        try {
-            runSimpleTest(path);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            runSimpleTest(path);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
         int n1, n2, n, N1 = 0, N2 = 0, N;
         double CPL, V, D, E;

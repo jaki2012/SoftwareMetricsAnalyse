@@ -12,8 +12,8 @@ import visitors.CyclomaticComplexityVisitor;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		String f =
-				"E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
-		
+				"E:\\MyCodes\\Java\\FileSys\\src\\simple.java";
+
 		Lexer lexer = new JavaLexer(new ANTLRFileStream(f));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		JavaParser parser = new JavaParser(tokens);

@@ -1,5 +1,9 @@
 package metrics;
 
+import metrics.c.CKeywords;
+import metrics.cpp.CPP14Keywords;
+import metrics.java.Java8Keywords;
+
 /**
  * Project: Halstead
  * Package: metrics

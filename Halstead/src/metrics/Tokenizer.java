@@ -1,9 +1,20 @@
 package metrics;
 
+import metrics.c.CLexer;
+import metrics.c.CParser;
+import metrics.cpp.CPP14Lexer;
+import metrics.cpp.CPP14Parser;
+import metrics.java.Java8Lexer;
+import metrics.java.Java8Parser;
+import metrics.java7.JavaLexer;
+import metrics.java7.JavaParser;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.TokenStream;
 import org.apache.commons.io.FilenameUtils;
+import visitors.CalculateVisitor;
+import visitors.CyclomaticComplexityVisitor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +29,7 @@ public class Tokenizer {
     public ArrayList<String> tokens = new ArrayList();
     protected static Tokenizer instance;
     public static String fileType = null;
+    public static ParserRuleContext tree;
 
     private Tokenizer() {
     }
@@ -56,11 +68,20 @@ public class Tokenizer {
                 break;
             case 3254818:
                 if(var4.equals("java")) {
-                    Java8Lexer jlexer = new Java8Lexer(stream);
-                    CommonTokenStream jtokenStream = new CommonTokenStream(jlexer);
-                    Java8Parser jparser = new Java8Parser(jtokenStream);
-                    jparser.compilationUnit();
-                    token = jparser.getTokenStream();
+                    // Using java7 parser is faster
+                    JavaLexer lexer = new JavaLexer(stream);
+                    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+                    JavaParser parser = new JavaParser(tokenStream);
+                    Tokenizer.tree = parser.compilationUnit();
+
+                    token = parser.getTokenStream();
+
+                    // Using java8 parser is too slow in general
+//                    Java8Lexer jlexer = new Java8Lexer(stream);
+//                    CommonTokenStream jtokenStream = new CommonTokenStream(jlexer);
+//                    Java8Parser jparser = new Java8Parser(jtokenStream);
+//                    jparser.compilationUnit();
+//                    token = jparser.getTokenStream();
                 }
         }
 

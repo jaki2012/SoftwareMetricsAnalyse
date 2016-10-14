@@ -1,5 +1,9 @@
 package metrics;
 
+import visitors.CyclomaticComplexityVisitor;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 /**
  * Project: Halstead
  * Package: ${PACKAGE_NAME}
@@ -7,6 +11,10 @@ package metrics;
  * 2016/10/7
  */
 public class MetricsEvaluator {
+    public double BRANCH_COUNT;
+    public double CALL_PAIRS;
+
+
     public double PROGRAM_LENGTH;
     public double PROGRAM_VOCABULARY;
     public double ESTIMATED_LENGTH;
@@ -15,6 +23,7 @@ public class MetricsEvaluator {
     public double DIFFICULTY;
     public double PROGRAM_EFFORT;
     public double PROGRAMMING_TIME;
+    public double DERIVED_BUGS;
     public double n1;
     public double n2;
     public double N1;
@@ -44,6 +53,8 @@ public class MetricsEvaluator {
         this.DIFFICULTY = this.n1 / 2.0D * (this.N2 / this.n2);
         this.PROGRAM_EFFORT = this.VOLUME * this.DIFFICULTY;
         this.PROGRAMMING_TIME = this.PROGRAM_EFFORT / 18.0D;
+        DERIVED_BUGS = VOLUME / 3000;
+
     }
 
 }
