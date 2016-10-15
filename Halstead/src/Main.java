@@ -11,28 +11,6 @@ import java.util.Set;
  */
 public class Main {
 
-//    /**
-//     * 生成一个语法单元
-//     * 每个java文件对应一个语法单元
-//     * @param in 输入文件流
-//     * @return 语法单元
-//     */
-//    private static CompilationUnit getCompilationUnit(InputStream in) {
-//        try {
-//            CompilationUnit cu;
-//            try {
-//                // parse the file
-//                cu = JavaParser.parse(in);
-//                return cu;
-//            } finally {
-//                in.close();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
     public static void main(String... args) throws Exception {
         // 默认包下一个叫Simple.java的文件 根据自己的情况更改
         String path = "E:\\MyCodes\\Java\\FileSys\\src\\simple.java";
@@ -44,22 +22,6 @@ public class Main {
 
         calculateHalsteadMetricsV2(path);
 
-//        Lexer lexer = new JavaLexer(new ANTLRFileStream(f));
-//        CommonTokenStream tokens = new CommonTokenStream(lexer);
-//        JavaParser parser = new JavaParser(tokens);
-//        ParserRuleContext tree = parser.compilationUnit();
-//
-//        CyclomaticComplexityVisitor mv = new CyclomaticComplexityVisitor();
-//        mv.visit(tree);
-        // 下面是测试
-//        Set<Map.Entry<String, Integer>> set1 = visitors.CalculateVisitor.operands.entrySet();
-//        for (Map.Entry<String, Integer> item : set1) {
-//            System.out.println(item.getKey() + ":" + item.getValue());
-//        }
-//        set1 = visitors.CalculateVisitor.operators.entrySet();
-//        for (Map.Entry<String, Integer> item : set1) {
-//            System.out.println(item.getKey() + ":" + item.getValue());
-//        }
     }
 
     private static void calculateHalsteadMetricsV2(String path) throws Exception {

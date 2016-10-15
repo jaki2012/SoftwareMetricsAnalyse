@@ -238,6 +238,7 @@ public class CalculateVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(IfStmt n, Object arg) {
+
         addOperator("if");
         if (n.getElseStmt() != null)
             addOperator("else");

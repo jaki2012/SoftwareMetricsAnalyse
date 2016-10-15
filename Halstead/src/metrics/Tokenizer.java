@@ -86,7 +86,7 @@ public class Tokenizer {
         }
 
         for(int var14 = 0; var14 < token.size(); ++var14) {
-            this.tokens.add(token.get(var14).getText().toString());
+            this.tokens.add(token.get(var14).getText());
         }
 
     }

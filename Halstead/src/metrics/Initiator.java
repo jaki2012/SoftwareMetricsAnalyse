@@ -1,7 +1,6 @@
 package metrics;
 
-import visitors.CalculateVisitor;
-import visitors.CyclomaticComplexityVisitor;
+import cfg.ASTVisitor;
 
 /**
  * Project: Halstead
@@ -29,7 +28,7 @@ public class Initiator {
         la.analyzeLiterals();
         MetricsEvaluator me = new MetricsEvaluator();
         me.evaluate();
-        CyclomaticComplexityVisitor visitor = new CyclomaticComplexityVisitor(me);
+        ASTVisitor visitor = new ASTVisitor();
         visitor.visit(Tokenizer.tree);
         return me;
     }
