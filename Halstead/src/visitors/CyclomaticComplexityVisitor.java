@@ -1,61 +1,176 @@
 package visitors;
 
-import java.util.Stack;
-
-import com.sun.org.apache.xpath.internal.SourceTree;
+import com.sun.xml.internal.ws.util.StringUtils;
 import metrics.MetricsEvaluator;
-import org.antlr.v4.runtime.RuleContext;
-
 import metrics.java7.JavaBaseVisitor;
 import metrics.java7.JavaParser;
-import metrics.java7.JavaParser.ClassDeclarationContext;
-import metrics.java7.JavaParser.ConstructorDeclarationContext;
-import metrics.java7.JavaParser.EnumDeclarationContext;
-import metrics.java7.JavaParser.ExpressionContext;
-import metrics.java7.JavaParser.MethodDeclarationContext;
-import metrics.java7.JavaParser.StatementContext;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+import metrics.java7.JavaParser.*;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 
     protected Stack<Entry> entryStack = new Stack<Entry>();
     private MetricsEvaluator me;
+    private Set<String> decisionPointSet = new HashSet<>();
 
     public CyclomaticComplexityVisitor(MetricsEvaluator evaluator) {
         me = evaluator;
+        decisionPointSet.add("return");
+        decisionPointSet.add("if");
+        decisionPointSet.add("else");
+        decisionPointSet.add("case");
+        decisionPointSet.add("default");
+        decisionPointSet.add("for");
+        decisionPointSet.add("while");
+        decisionPointSet.add("do");
+//        decisionPointSet.add("break");
+        decisionPointSet.add("continue");
+        decisionPointSet.add("&&");
+        decisionPointSet.add("||");
+        decisionPointSet.add("?");
+        decisionPointSet.add("catch");
+        decisionPointSet.add("finally");
+        decisionPointSet.add("throw");
     }
 
+    private void addPeekDecitionPoint() {
+        entryStack.peek().bumpDecisionPoints();
+    }
 
+    private void addPeekNodeCount() {
+        entryStack.peek().addNode();
+    }
+
+    private void addPeekNodeCount(int num) {
+        entryStack.peek().addNodes(num);
+    }
+
+    private int getSmtCnt(String text, String smt) {
+        int smtLength = text.length() - text.replace(smt, "").length();
+        return smtLength / smt.length();
+    }
+
+    @Override
+    public Integer visitCatchClause(CatchClauseContext ctx) {
+        addPeekDecitionPoint();
+        addPeekNodeCount();
+        return super.visitCatchClause(ctx);
+    }
+
+    @Override
+    public Integer visitFinallyBlock(FinallyBlockContext ctx) {
+        addPeekDecitionPoint();
+        addPeekNodeCount();
+        return super.visitFinallyBlock(ctx);
+    }
 
     @Override
     public Integer visitStatement(StatementContext ctx) {
         RuleContext rc = ctx.getPayload();
 
         if (rc != null) {
-            //we have a while loop
-            if (ctx.getTokens(JavaParser.ELSE).size() > 0 ||
-                    ctx.getTokens(JavaParser.IF).size() > 0 ||
-                    ctx.getTokens(JavaParser.WHILE).size() > 0 ||
-                    ctx.getTokens(JavaParser.FOR).size() > 0 ||
-                    ctx.getTokens(JavaParser.CATCH).size() > 0 ||
-                    ctx.getTokens(JavaParser.SWITCH).size() > 0 ||
-                    ctx.getTokens(JavaParser.DO).size() > 0) {
+            if (ctx.getTokens(JavaParser.RETURN).size() > 0) {
+                addPeekNodeCount();
+            }
+            if (ctx.getTokens(JavaParser.TRY).size() > 0) {
+                addPeekNodeCount();
+                handleEmptyContext(1, rc);
+            }
 
-                System.out.println(rc.getText());
+            if (ctx.getTokens(JavaParser.CATCH).size() > 0 ||
+                    ctx.getTokens(JavaParser.DO).size() > 0 ||
+                    ctx.getTokens(JavaParser.CONTINUE).size() > 0) {
 
-                entryStack.peek().bumpDecisionPoints();
+                addPeekDecitionPoint();
+                addPeekNodeCount();
                 return super.visitStatement(ctx);
+            } else if(ctx.getTokens(JavaParser.IF).size() > 0 ) {
+                addPeekDecitionPoint();
+                addPeekNodeCount();
+                handleEmptyContext(2, rc);
+            } else if (ctx.getTokens(JavaParser.WHILE).size() > 0) {
+                addPeekDecitionPoint();
+                addPeekNodeCount();
+                handleEmptyContext(2, rc);
+            } else if (ctx.getTokens(JavaParser.CATCH).size() > 0) {
+                addPeekDecitionPoint();
+                addPeekNodeCount();
+
+            }
+
+            else if (ctx.getTokens(JavaParser.SWITCH).size() > 0) {
+                addPeekNodeCount();
+
+                for (int i = rc.getChildCount() - 1; i >= 0; i--) {
+                    String child = rc.getChild(i).getText();
+                    if (!child.contains("switch")) {
+                        addPeekNodeCount(getSmtCnt(child, "case"));
+                        addPeekNodeCount(getSmtCnt(child, "default"));
+                    } else {
+                        int index = child.indexOf("switch");
+                        if (index > 0)  {
+                            String preSwitch = child.substring(0, index);
+                            addPeekNodeCount(getSmtCnt(preSwitch, "case"));
+                            addPeekNodeCount(getSmtCnt(preSwitch, "default"));
+                        }
+                    }
+
+                    if (child.contains("break;")) {
+                        // while connected case statements count as a single decision
+                        if (child.contains("case")) {
+                            addPeekDecitionPoint();
+                        }
+                    }
+                }
+            } else if (ctx.getTokens(JavaParser.FOR).size() > 0) {
+                addPeekNodeCount();
+                handleEmptyContext(4, rc);
+                Pattern p = Pattern.compile(";(.*?);");
+                Matcher m = p.matcher(rc.getText());
+                if (m.find()) {
+                    if (!m.group(1).equals("")) {
+                        addPeekDecitionPoint();
+                    }
+                }
             }
         }
 
         return super.visitStatement(ctx);
     }
 
+    private void handleEmptyContext(int startChild, RuleContext rc) {
+        int n = rc.getChildCount();
+        for (int i = startChild; i < n; i ++) {
+            ParseTree child = rc.getChild(i);
+            boolean flag = false;
+            for (String keyWord : decisionPointSet) {
+                if (child.getText().contains(keyWord)) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                addPeekNodeCount();
+            }
+        }
+    }
+
     @Override
     public Integer visitExpression(ExpressionContext ctx) {
         //expression '?' expression ':' expression
-        if (ctx.getTokens(JavaParser.QUESTION).size() > 0) {
-            entryStack.peek().bumpDecisionPoints();
+        if (ctx.getTokens(JavaParser.QUESTION).size() > 0 ||
+                ctx.getTokens(JavaParser.OR).size() > 0 ||
+                ctx.getTokens(JavaParser.AND).size() > 0) {
+//            System.out.println(ctx.getText());
+            addPeekDecitionPoint();
+            addPeekNodeCount();
         }
 
         return super.visitExpression(ctx);
@@ -78,14 +193,15 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 
     @Override
     public Integer visitMethodDeclaration(MethodDeclarationContext ctx) {
-        entryStack.push(new Entry(ctx));
+        entryStack.push(new Entry());
+        entryStack.peek().setVoid(ctx.getText().toLowerCase().startsWith("void"));
         Integer res = super.visitMethodDeclaration(ctx);
 
         Entry methodEntry = entryStack.pop();
 
         int methodDecisionPoints = methodEntry.decisionPoints;
 
-        System.out.printf("[%-20s method] - CC: %d\n", ctx.Identifier().getText(), methodDecisionPoints);
+        System.out.printf("[%-20s method] - CC: %d\t\tNodes: %d\n", ctx.Identifier().getText(), methodDecisionPoints, methodEntry.getNodeCnt());
 
         Entry classEntry = entryStack.peek();
         classEntry.methodCount++;
@@ -100,7 +216,7 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 
     @Override
     public Integer visitClassDeclaration(ClassDeclarationContext ctx) {
-        entryStack.push(new Entry(ctx));
+        entryStack.push(new Entry());
         Integer res = super.visitClassDeclaration(ctx);
 
         Entry classEntry = entryStack.peek();
@@ -115,7 +231,7 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 
     @Override
     public Integer visitConstructorDeclaration(ConstructorDeclarationContext ctx) {
-        entryStack.push(new Entry(ctx));
+        entryStack.push(new Entry());
         Integer res = super.visitConstructorDeclaration(ctx);
         Entry constructorEntry = entryStack.pop();
 
@@ -133,7 +249,7 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 
     @Override
     public Integer visitEnumDeclaration(EnumDeclarationContext ctx) {
-        entryStack.push(new Entry(ctx));
+        entryStack.push(new Entry());
         Integer res = super.visitEnumDeclaration(ctx);
         Entry classEntry = entryStack.pop();
 
@@ -143,14 +259,12 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 
 
 class Entry {
-    private Object node;
+    private int nodeCnt = 1;
     public int decisionPoints = 1;
     public int highestDecisionPoints;
     public int methodCount;
+    private boolean isVoidMethod;
 
-    Entry(Object node) {
-        this.node = node;
-    }
 
     public void bumpDecisionPoints() {
         decisionPoints++;
@@ -160,8 +274,29 @@ class Entry {
         decisionPoints += size;
     }
 
+    public void addNode() {
+        nodeCnt++;
+    }
+
+    public int getNodeCnt() {
+        return nodeCnt;
+    }
+
+    public void addNodes(int num) {
+        if (num > 0)
+            nodeCnt += num;
+    }
+
     public int getComplexityAverage() {
         return (double) methodCount == 0 ? 1
                 : (int) Math.rint((double) decisionPoints / (double) methodCount);
+    }
+
+    public boolean isVoidMethod() {
+        return isVoidMethod;
+    }
+
+    public void setVoid(boolean isVoid) {
+        isVoidMethod = isVoid;
     }
 }
