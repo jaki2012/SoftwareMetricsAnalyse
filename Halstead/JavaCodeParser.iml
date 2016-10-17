@@ -45,5 +45,32 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.apt.core_3.4.100.v20160525-0952.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.apt.pluggable.core_1.1.100.v20160418-1457.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.apt.ui_3.4.100.v20160418-1457.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.compiler.apt_1.2.100.v20160418-1457.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.compiler.tool_1.1.100.v20160418-1457.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.core.manipulation_1.7.0.v20160419-0705.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.core_3.12.1.v20160829-0950.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.debug.ui_3.7.201.v20160811-0450.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.junit.core_3.8.0.v20160421-1701.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.junit.runtime_3.4.600.v20160505-0715.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.junit4.runtime_1.1.600.v20160505-0715.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.junit_3.9.0.v20160421-1701.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.launching_3.8.100.v20160505-0636.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.ui_3.12.1.v20160822-0645.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.annotation_1.1.100.v20160418-1457.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.annotation_2.1.0.v20160418-1457.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.annotation_1.1.100.v20160418-1457.jar!/src" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.annotation_2.1.0.v20160418-1457.jar!/src" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

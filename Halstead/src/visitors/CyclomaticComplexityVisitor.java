@@ -1,5 +1,7 @@
 package visitors;
 
+import com.github.javaparser.ParseException;
+import com.github.javaparser.ast.stmt.Statement;
 import com.sun.xml.internal.ws.util.StringUtils;
 import metrics.MetricsEvaluator;
 import metrics.java7.JavaBaseVisitor;
@@ -9,6 +11,7 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -160,6 +163,11 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
                 addPeekNodeCount();
             }
         }
+    }
+
+    @Override
+    public Integer visitCompilationUnit(CompilationUnitContext ctx) {
+        return super.visitCompilationUnit(ctx);
     }
 
     @Override

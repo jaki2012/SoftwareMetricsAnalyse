@@ -1,8 +1,10 @@
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import metrics.Initiator;
 import metrics.MetricsEvaluator;
 import visitors.CalculateVisitor;
 
+import java.io.FileInputStream;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +14,7 @@ import java.util.Set;
 public class Main {
 
     public static void main(String... args) throws Exception {
-        // 默认包下一个叫Simple.java的文件 根据自己的情况更改
+        // 默认包下一个叫Simple.java的文件 根据况更改
         String path = "E:\\MyCodes\\Java\\FileSys\\src\\simple.java";
         System.out.println("File path:" + path);
         System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
@@ -21,6 +23,7 @@ public class Main {
 //        calculateHalsteadMetrics(path);
 
         calculateHalsteadMetricsV2(path);
+//        CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
 
     }
 
@@ -34,7 +37,6 @@ public class Main {
         System.out.println("N1:\t\t\t\t\t\t\t\t" + e.N1);
         System.out.println("N2:\t\t\t\t\t\t\t\t" + e.N2);
         System.out.println("N(Program length):\t\t\t\t" + e.PROGRAM_LENGTH);
-
         System.out.println("Calculated program length:\t\t" + e.ESTIMATED_LENGTH);
         System.out.println("Volume:\t\t\t\t\t\t\t" + e.VOLUME);
         System.out.println("Difficulty:\t\t\t\t\t\t" + e.DIFFICULTY);

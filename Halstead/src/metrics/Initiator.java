@@ -1,6 +1,7 @@
 package metrics;
 
 import metrics.java7.JavaBaseVisitor;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import visitors.CyclomaticComplexityVisitor;
 
 /**
@@ -29,6 +30,9 @@ public class Initiator {
         la.analyzeLiterals();
         MetricsEvaluator me = new MetricsEvaluator();
         me.evaluate();
+        ParseTreeWalker walker = new ParseTreeWalker();
+
+
         JavaBaseVisitor visitor = new CyclomaticComplexityVisitor(me);
         visitor.visit(Tokenizer.tree);
         return me;
