@@ -30,8 +30,6 @@ public class Initiator {
         la.analyzeLiterals();
         MetricsEvaluator me = new MetricsEvaluator();
         me.evaluate();
-        ParseTreeWalker walker = new ParseTreeWalker();
-
 
         JavaBaseVisitor visitor = new CyclomaticComplexityVisitor(me);
         visitor.visit(Tokenizer.tree);

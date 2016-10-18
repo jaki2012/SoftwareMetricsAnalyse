@@ -3,6 +3,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import metrics.Initiator;
 import metrics.MetricsEvaluator;
 import visitors.CalculateVisitor;
+import visitors.GraphBuildVisitor;
 
 import java.io.FileInputStream;
 import java.util.Map;
@@ -23,7 +24,9 @@ public class Main {
 //        calculateHalsteadMetrics(path);
 
         calculateHalsteadMetricsV2(path);
-//        CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
+        CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
+
+        new GraphBuildVisitor("CC").visit(unit, null);
 
     }
 

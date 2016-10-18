@@ -64,6 +64,22 @@
           <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.ui_3.12.1.v20160822-0645.jar!/" />
           <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.annotation_1.1.100.v20160418-1457.jar!/" />
           <root url="jar://C:/eclipse/plugins/org.eclipse.jdt.annotation_2.1.0.v20160418-1457.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.commands_3.8.0.v20160316-1921.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.contenttype_3.5.100.v20160418-1621.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.databinding.beans_1.3.100.v20160509-1025.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.databinding.observable_1.6.0.v20160511-1747.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.databinding.property_1.6.0.v20160427-0852.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.databinding_1.6.0.v20160412-0910.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.expressions_3.5.100.v20160418-1621.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.externaltools_1.0.400.v20160509-1057.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.filebuffers_3.6.0.v20160503-1849.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.filesystem_1.6.0.v20160503-1608.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.jobs_3.8.0.v20160509-0411.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.net.win32.x86_64_1.1.0.v20160323-1650.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.net_1.3.0.v20160418-1534.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.resources_3.11.0.v20160503-1608.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.runtime_3.12.0.v20160606-1342.jar!/" />
+          <root url="jar://C:/eclipse/plugins/org.eclipse.core.variables_3.3.0.v20160419-1720.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>

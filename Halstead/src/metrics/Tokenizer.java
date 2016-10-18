@@ -1,5 +1,7 @@
 package metrics;
 
+import com.github.javaparser.ast.CompilationUnit;
+import domain.ast.visitors.GraphBuilder;
 import metrics.c.CLexer;
 import metrics.c.CParser;
 import metrics.cpp.CPP14Lexer;
@@ -12,10 +14,19 @@ import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.apache.commons.io.FilenameUtils;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import simple.EvalVisitor;
 import visitors.CalculateVisitor;
 import visitors.CyclomaticComplexityVisitor;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -74,8 +85,18 @@ public class Tokenizer {
                     JavaParser parser = new JavaParser(tokenStream);
                     Tokenizer.tree = parser.compilationUnit();
 
-                    token = parser.getTokenStream();
 
+//                    ASTParser astParser = ASTParser.newParser(AST.JLS8);
+//                    astParser.setKind(ASTParser.K_COMPILATION_UNIT);
+//                    astParser.setSource(ReadFileToCharArray(fileURL));
+//                    astParser.setResolveBindings(true);
+//                    org.eclipse.jdt.core.dom.CompilationUnit parserUnit = (org.eclipse.jdt.core.dom.CompilationUnit)astParser.createAST(null);
+//
+//                    GraphBuilder builder = new GraphBuilder("CC", parserUnit);
+//                    parserUnit.accept(builder);
+
+                    token = parser.getTokenStream();
+//                    System.out.println(builder.getMethodParameters());
                     // Using java8 parser is too slow in general
 //                    Java8Lexer jlexer = new Java8Lexer(stream);
 //                    CommonTokenStream jtokenStream = new CommonTokenStream(jlexer);
@@ -89,5 +110,22 @@ public class Tokenizer {
             this.tokens.add(token.get(var14).getText());
         }
 
+    }
+    public static char[] ReadFileToCharArray(String filePath) throws IOException {
+        StringBuilder fileData = new StringBuilder(1000);
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+        char[] buf = new char[10];
+        int numRead = 0;
+        while ((numRead = reader.read(buf)) != -1) {
+            System.out.println(numRead);
+            String readData = String.valueOf(buf, 0, numRead);
+            fileData.append(readData);
+            buf = new char[1024];
+        }
+
+        reader.close();
+
+        return  fileData.toString().toCharArray();
     }
 }
