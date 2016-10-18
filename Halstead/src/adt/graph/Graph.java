@@ -376,6 +376,18 @@ public class Graph<V extends Comparable<V>> {
 	public int size() {
 		return nodes.size();
 	}
+
+	/**
+	 * The edge number of th graph
+	 * @return
+	 */
+	public int edgeCount() {
+		int edgeCnt = 0;
+		for (Map.Entry<Node<V>, Set<Edge<V>>> entry : edges.entrySet()) {
+			edgeCnt += entry.getValue().size();
+		}
+		return edgeCnt;
+	}
 	
 	/**
 	 * Checks if the given Path is a Path of the Graph.

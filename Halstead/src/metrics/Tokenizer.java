@@ -1,31 +1,18 @@
 package metrics;
 
-import com.github.javaparser.ast.CompilationUnit;
-import domain.ast.visitors.GraphBuilder;
 import metrics.c.CLexer;
 import metrics.c.CParser;
 import metrics.cpp.CPP14Lexer;
 import metrics.cpp.CPP14Parser;
-import metrics.java.Java8Lexer;
-import metrics.java.Java8Parser;
 import metrics.java7.JavaLexer;
 import metrics.java7.JavaParser;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.apache.commons.io.FilenameUtils;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import simple.EvalVisitor;
-import visitors.CalculateVisitor;
-import visitors.CyclomaticComplexityVisitor;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

@@ -7,7 +7,8 @@ package metrics;
  * 2016/10/7
  */
 public class SymbolAnalyzer {
-    String[] symbols = new String[]{"+", "++", "-", "--", "*", ".", ";", "/", "%", "!", ">", "<", ">=", "<=", "==", "=", ":", "~"};
+    public static String[] symbols = new String[]{"+", "++", "-", "--", "*", ".", ";", "/", "%", "!", ">", "<", ">=", "<=", "==", "=", ":", "~"};
+    public static String[] compare = new String[]{"!", "||", "&&"};
 
     public SymbolAnalyzer() {
     }
@@ -16,7 +17,7 @@ public class SymbolAnalyzer {
         int count = 0;
 
         for(int i = 0; i < Tokenizer.getInstance().tokens.size(); ++i) {
-            if(((String)Tokenizer.getInstance().tokens.get(i)).toString().equals(this.symbols[index])) {
+            if(((String) Tokenizer.getInstance().tokens.get(i)).equals(symbols[index])) {
                 ++count;
             }
         }
@@ -25,10 +26,10 @@ public class SymbolAnalyzer {
     }
 
     public void analyzeSymbols() {
-        for(int i = 0; i < this.symbols.length; ++i) {
+        for(int i = 0; i < symbols.length; ++i) {
             int count = this.countSymbols(i);
             if(count > 0) {
-                Operators.getInstance().insert(this.symbols[i], count);
+                Operators.getInstance().insert(symbols[i], count);
             }
         }
 
