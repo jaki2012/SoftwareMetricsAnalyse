@@ -252,7 +252,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         continueNode.pop(); // when ends clean the stack.
         breakNode.pop(); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the WhileBody.
-            sourceGraph.addEdge(noWhile, noWhileBody); // connects the body to final node
+            sourceGraph.addEdge(noWhileBody, noEndWhile);
             if (!controlFlag) // verify if a break or a continue occur in the WhileBody.
                 sourceGraph.addEdge(prevNode.pop(), noWhile); // the loop connection.
             else
@@ -283,7 +283,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         continueNode.pop(); // when ends clean the stack.
         breakNode.pop(); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the DoWhileBody.
-
             if (!controlFlag) // verify if a break or a continue occur in the DoWhileBody.
                 sourceGraph.addEdge(prevNode.pop(), noWhile); // the connection from the DoWhileBody node to the WhileStatement node.
             else
@@ -545,8 +544,23 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         calculateFinal();
 
-        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum);
+//        printEdges();
+
+        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + (edgeNum - nodeNum + 2));
         initBuilder();
+    }
+
+    /**
+     * Print the edges in graph
+     * e.g. (1,2) (2,3) ...etc
+     */
+    private void printEdges() {
+        Map<Node<Integer>, Set<Edge<Integer>>> map = sourceGraph.getEdges();
+        for (Map.Entry<Node<Integer>, Set<Edge<Integer>>> entry : map.entrySet()) {
+            for (Edge<Integer> edge : entry.getValue()) {
+                System.out.println(edge.toString());
+            }
+        }
     }
 
     private void calculateFinal() {

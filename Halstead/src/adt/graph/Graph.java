@@ -203,6 +203,10 @@ public class Graph<V extends Comparable<V>> {
 		return nodeEdges;
 	}
 
+	public Map<Node<V>, Set<Edge<V>>> getEdges() {
+		return edges;
+	}
+
 	/**
 	 * Get the set of edges for the Node.
 	 * Where the given Node is the Edge end Node.
