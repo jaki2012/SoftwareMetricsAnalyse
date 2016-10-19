@@ -6,6 +6,8 @@ public class Node<V extends Comparable<V>> implements Comparable<Node<V>> {
 
 	private V value;
 
+	private boolean containsMethodCall;
+
 	public Node(V value) {
 		this.value = value;
 	}

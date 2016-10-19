@@ -15,6 +15,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import domain.constants.Layer;
 import domain.graph.visitors.RenumNodesGraphVisitor;
+import metrics.MetricsEvaluator;
 import metrics.SymbolAnalyzer;
 
 import java.util.*;
@@ -44,16 +45,19 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private int decisionDensity;
     private int globalParameters;
 
+    private MetricsEvaluator evaluator;
+
     private HashSet<String> variableDeclarators;
     //    private List<SingleVariableDeclaration> params;
     private List<EnumDeclaration> enumFields;
 
-    public GraphBuildVisitor(String methodName) {
-        initBuilder(methodName);
+    public GraphBuildVisitor(MetricsEvaluator evaluator) {
+        this.evaluator = evaluator;
+        initBuilder();
     }
 
-    private void initBuilder(String methodName) {
-        this.methodName = methodName; // name of the method to be analyzed.
+    private void initBuilder() {
+        //this.methodName = methodName; // name of the method to be analyzed.
         nodeNum = 0; // number of the node.
         edgeNum = 0;
         callPairs = 0; // number of function calls
@@ -134,24 +138,48 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         callPairs++;
         super.visit(n, arg);
     }
-//    @Override
-//    public void visit(TryStmt n, Object arg) {
-////        Edge<Integer> edge = createConnection();
-////        Node<Integer> nodeTry = edge.getEndNode();
-////        prevNode.push(nodeTry); // the graph continues from the initial node of the TryStatement
-////        infos.addInformationToLayer1(sourceGraph, nodeTry, n.toString());
-////        Edge<Integer> edgeThen = createConnection();
-////        infos.addInformationToLayer2(sourceGraph, edgeThen, n.toString());
-////        Node<Integer> nodeTryThen = edgeThen.getEndNode();
-////        prevNode.push(nodeTryThen);
-////        n.getTryBlock().accept(this, arg);
-////        boolean breakThenFlag = controlFlag; // verify if a break or a continue occur in the IFThen.
-////        boolean returnThenFlag = returnFlag; // verify if a return occur in the IFThen.
-////        controlFlag = false;
-////        returnFlag = false;
-////        prevNode.push(nodeTry); // the graph continues from the initial node of the TryStatement
-////        List<CatchClause> catchStarements = n.getCatchs();
-//    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void visit(TryStmt n, Object arg) {
+        Edge<Integer> edge = createConnection();
+        Node<Integer> nodeTry = edge.getEndNode();
+        prevNode.push(nodeTry); // the graph continues from the initial node of the TryStatement
+        infos.addInformationToLayer1(sourceGraph, nodeTry, n.toString());
+//        Edge<Integer> edgeThen = createConnection();
+//        infos.addInformationToLayer2(sourceGraph, edgeThen, n.toString());
+//        Node<Integer> nodeTryThen = edgeThen.getEndNode();
+//        prevNode.push(nodeTry);
+        n.getTryBlock().accept(this, arg);
+        boolean breakThenFlag = controlFlag; // verify if a break or a continue occur in the TryThen.
+        boolean returnThenFlag = returnFlag; // verify if a return occur in the TryThen.
+        controlFlag = false;
+        returnFlag = false;
+        prevNode.push(nodeTry); // the graph continues from the initial node of the TryStatement
+        Node<Integer> finalNode = null;
+
+        if (!returnThenFlag || !breakThenFlag) {
+            // Create the final node of try statement
+            edge = createConnection();
+            finalNode = edge.getEndNode();
+            prevNode.push(nodeTry); // the graph continues from the initial node of the TryStatement
+        }
+
+        List<CatchClause> catchStatements = n.getCatchs();
+        for (CatchClause clause : catchStatements) {
+            Edge<Integer> edgeCatch = createConnection();
+            infos.addInformationToLayer2(sourceGraph, edgeCatch, clause.toString());
+            Node<Integer> nodeCatch = edgeCatch.getEndNode();
+            prevNode.push(nodeCatch);
+            infos.addInformationToLayer1(sourceGraph, nodeCatch, clause.toString());
+            clause.accept(this, arg);
+            if (finalNode != null && !returnFlag && !controlFlag)
+                sourceGraph.addEdge(nodeCatch, finalNode);
+        }
+
+        if (finalNode != null)
+            prevNode.push(finalNode);
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -514,8 +542,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         calculateFinal();
 
-        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + getNodeCount() + " Edge:" + getEdgeCount());
-        initBuilder(methodName);
+        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum);
+        initBuilder();
     }
 
     private void calculateFinal() {
@@ -523,7 +551,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         conditionsCount = multiConditionCount * 2;
         nodeNum = getNodeCount();
         edgeNum = getEdgeCount();
-        System.out.println("Global data c:" + globalParameters);
 //        decisionDensity = conditionsCount / dp;
     }
 

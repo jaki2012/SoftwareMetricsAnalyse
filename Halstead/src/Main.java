@@ -24,13 +24,11 @@ public class Main {
 //        calculateHalsteadMetrics(path);
 
         calculateHalsteadMetricsV2(path);
-        CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
 
-        new GraphBuildVisitor("CC").visit(unit, null);
 
     }
 
-    private static void calculateHalsteadMetricsV2(String path) throws Exception {
+    private static MetricsEvaluator calculateHalsteadMetricsV2(String path) throws Exception {
         MetricsEvaluator e = (new Initiator()).initiate(path);
 
         System.out.println("n1:\t\t\t\t\t\t\t\t" + e.n1);
@@ -46,6 +44,10 @@ public class Main {
         System.out.println("Effort:\t\t\t\t\t\t\t" + e.PROGRAM_EFFORT);
         System.out.println("Time required to program:\t\t" + e.PROGRAMMING_TIME);
         System.out.println("Purity ratio:\t\t\t\t\t" + e.PURITY_RATIO);
+        CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
+
+        new GraphBuildVisitor(e).visit(unit, null);
+        return e;
     }
 
 //    private static void runSimpleTest(String path) throws FileNotFoundException {
