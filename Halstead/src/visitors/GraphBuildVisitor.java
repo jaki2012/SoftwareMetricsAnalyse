@@ -467,18 +467,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     }
 
     @Override
-    public void visit(QualifiedNameExpr n, Object arg) {
-//        System.out.println("QualifiedNameExpr:\t\t" + n.toString());
-        super.visit(n, arg);
-    }
-
-    @Override
-    public void visit(ReferenceType n, Object arg) {
-//        System.out.println("ReferenceType:\t\t" + n.toString());
-        super.visit(n, arg);
-    }
-
-    @Override
     public void visit(FieldAccessExpr n, Object arg) {
         addGlobalParameter(1);
         super.visit(n, arg);
