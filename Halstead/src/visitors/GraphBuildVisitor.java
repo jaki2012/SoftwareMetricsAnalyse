@@ -135,7 +135,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(MethodCallExpr n, Object arg) {
-        callPairs++;
+        addCallPairs();
         super.visit(n, arg);
     }
 
@@ -252,6 +252,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         continueNode.pop(); // when ends clean the stack.
         breakNode.pop(); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the WhileBody.
+            sourceGraph.addEdge(noWhile, noWhileBody); // connects the body to final node
             if (!controlFlag) // verify if a break or a continue occur in the WhileBody.
                 sourceGraph.addEdge(prevNode.pop(), noWhile); // the loop connection.
             else
@@ -271,7 +272,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         addBranchCount(2);
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noDoWhileBody = edge.getEndNode(); // create the DoWhileBody node.
-        prevNode.push(noDoWhileBody); // the graph continues from the DoWhileBody node.
+        prevNode
+                .push(noDoWhileBody); // the graph continues from the DoWhileBody node.
         Node<Integer> noWhile = sourceGraph.addNode(++nodeNum); // the node of the WhileStatement.
         infos.addInformationToLayer1(sourceGraph, noWhile, node.toString());
         Node<Integer> noEndDoWhile = sourceGraph.addNode(++nodeNum); // the final node of the DoStatement.
@@ -281,6 +283,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         continueNode.pop(); // when ends clean the stack.
         breakNode.pop(); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the DoWhileBody.
+
             if (!controlFlag) // verify if a break or a continue occur in the DoWhileBody.
                 sourceGraph.addEdge(prevNode.pop(), noWhile); // the connection from the DoWhileBody node to the WhileStatement node.
             else
@@ -605,5 +608,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     private void addGlobalParameter(int num) {
         globalParameters += num;
+    }
+
+    private void addCallPairs() {
+        callPairs++;
+        prevNode.peek().containsMethodCall(); // set this node to contains method call
     }
 }

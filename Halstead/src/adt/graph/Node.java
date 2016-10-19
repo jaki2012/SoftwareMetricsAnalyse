@@ -8,6 +8,14 @@ public class Node<V extends Comparable<V>> implements Comparable<Node<V>> {
 
 	private boolean containsMethodCall;
 
+	public void containsMethodCall() {
+		containsMethodCall = true;
+	}
+
+	public boolean isContainMethodCall() {
+		return containsMethodCall;
+	}
+
 	public Node(V value) {
 		this.value = value;
 	}
