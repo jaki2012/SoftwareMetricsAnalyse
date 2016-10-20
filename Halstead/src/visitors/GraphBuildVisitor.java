@@ -385,14 +385,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 //        prevNode.push(noSwitch); // the graph continues from the initial node of the SwitchStatement.
         switchBegin.push(noSwitch);
         swichEnd.push(noEndSwitch);
-//        if(n.getEntries() != null) {
-//            Iterator var3 = n.getEntries().iterator();
-//
-//            while(var3.hasNext()) {
-//                SwitchEntryStmt e = (SwitchEntryStmt)var3.next();
-//                e.accept(this, arg);
-//            }
-//        }
+
         super.visit(n, arg);
         swichEnd.pop();
         switchBegin.pop();
@@ -569,7 +562,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         calculateFinal();
 
-        printEdges();
+//        printEdges();
 
         System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + (edgeNum - nodeNum + 2));
         initBuilder();
