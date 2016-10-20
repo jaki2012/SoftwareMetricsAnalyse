@@ -44,6 +44,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private int conditionsCount;
     private int decisionDensity;
     private int globalParameters;
+    private Stack<Node<Integer>> switchBegin;
+    private Stack<Node<Integer>> swichEnd;
 
     private MetricsEvaluator evaluator;
 
@@ -76,6 +78,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         prevNode = new Stack<>(); // stack that contain the predecessor nodes.
         continueNode = new Stack<>(); // stack that contains the node to be linked if a continue occurs.
         breakNode = new Stack<>(); // stack that contains the node to be linked if a break occurs.
+        switchBegin = new Stack<>();
+        swichEnd = new Stack<>();
         controlFlag = false; // flag that control if a continue or a break occur.
         returnFlag = false; // flag that control if a return occur.
         caseFlag = false; // flag that control the occurrence of a break in the previous case;
@@ -298,6 +302,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void visit(ForStmt node, Object arg) {
         addModifiedCondition(node.getCompare());
@@ -376,49 +381,81 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Node<Integer> noEndSwitch = sourceGraph.addNode(++nodeNum); // the final node of the SwitchStatement.
         breakNode.push(noEndSwitch); // if a break occur goes to the final node of the ForStatement.
         continueNode.push(noEndSwitch); // if a continue occur goes to the incFor node.
-        prevNode.push(noEndSwitch);
-        prevNode.push(noSwitch); // the graph continues from the initial node of the SwitchStatement.
+//        prevNode.push(noEndSwitch);
+//        prevNode.push(noSwitch); // the graph continues from the initial node of the SwitchStatement.
+        switchBegin.push(noSwitch);
+        swichEnd.push(noEndSwitch);
+//        if(n.getEntries() != null) {
+//            Iterator var3 = n.getEntries().iterator();
+//
+//            while(var3.hasNext()) {
+//                SwitchEntryStmt e = (SwitchEntryStmt)var3.next();
+//                e.accept(this, arg);
+//            }
+//        }
         super.visit(n, arg);
+        swichEnd.pop();
+        switchBegin.pop();
+
         // if the default case doesn't have a break.
         // the number 2 represents the initial and the final nodes of the SwitchStatement.
-        if (prevNode.size() > 2) {
-            sourceGraph.addEdge(prevNode.pop(), breakNode.peek());
-            while (prevNode.size() != 2) // if one or more cases doesn't have a break.
-                prevNode.pop();
-        }
-        breakNode.pop(); // when ends clean the stack.
-        continueNode.pop(); // when ends clean the stack.
-        prevNode.pop(); // the graph continues from the final node of the SwitchStatement.
-        finalnode = prevNode.peek(); // update the final node.
-        controlFlag = false;
-        returnFlag = false;
+//        if (prevNode.size() > 2) {
+//            sourceGraph.addEdge(prevNode.pop(), breakNode.peek());
+//            while (prevNode.size() != 2) // if one or more cases doesn't have a break.
+//                prevNode.pop();
+//        }
+//        breakNode.pop(); // when ends clean the stack.
+//        continueNode.pop(); // when ends clean the stack.
+//        prevNode.pop(); // the graph continues from the final node of the SwitchStatement.
+//        finalnode = prevNode.peek(); // update the final node.
+//        controlFlag = false;
+//        returnFlag = false;
     }
 
     @Override
     public void visit(SwitchEntryStmt node, Object arg) {
+//        List<Statement> switchEntryStmts = node.getStmts();
+//        StringBuilder entryBuilder = new StringBuilder();
         addBranchCount();
-        if (!returnFlag) { // verify if a return occur in the SwitchBody.
-            if (controlFlag) { // if there is a case with no break.
-                while (prevNode.size() != 2) // the number 2 represents the initial and the final nodes of the SwitchStatement.
-                    prevNode.pop();
-                controlFlag = false;
-                caseFlag = true;
-            } else
-                caseFlag = false;
-        } else
-            returnFlag = false;
-        nodeNum++;
-        Node<Integer> n = sourceGraph.addNode(nodeNum); // create the node of the case.
-        infos.addInformationToLayer1(sourceGraph, n, node.toString());
-        Edge<Integer> edge = null;
-        if (!caseFlag && prevNode.size() > 2)
-            edge = sourceGraph.addEdge(prevNode.pop(), n); // create a edge from the previous node to this node.
-        edge = sourceGraph.addEdge(prevNode.peek(), n); // create a edge from the begin of switch to this node.
-        if (node.getLabel() == null)// if the node is the default of the switch.
-            infos.addInformationToLayer2(sourceGraph, edge, "default:");
+//        String endStmt = switchEntryStmts.get(switchEntryStmts.size() - 1).toString(); // get last statement
+//        if (endStmt.contains("return"))
+//            returnFlag = true;
+//        if (endStmt.contains("break"))
+//            controlFlag = false;
+        prevNode.push(switchBegin.peek());
+        Edge<Integer> edgeCase = createConnection();
+        if (node.getLabel() == null)
+            infos.addInformationToLayer2(sourceGraph, edgeCase, "default");
         else
-            infos.addInformationToLayer2(sourceGraph, edge, "case " + node.toString());
-        prevNode.push(n); // the graph continues from the case node of the SwitchStatement.
+            infos.addInformationToLayer2(sourceGraph, edgeCase, "case" + node.getLabel());
+        Node<Integer> noCase = edgeCase.getEndNode(); // the initial node of the EnhancedForStatement.
+        prevNode.push(noCase);
+
+        if(node.getStmts() != null) {
+            Iterator var3 = node.getStmts().iterator();
+            while(var3.hasNext()) {
+                Statement s = (Statement)var3.next();
+                s.accept(this, arg);
+            }
+        }
+
+//        if (!returnFlag) { // verify if a return occur in the SwitchBody.
+////            sourceGraph.addEdge(noCase, swichEnd);
+//            returnFlag = false;
+//        }
+//        nodeNum++;
+//        Node<Integer> n = sourceGraph.addNode(nodeNum); // create the node of the case.
+//        infos.addInformationToLayer1(sourceGraph, n, node.toString());
+//        Edge<Integer> edge = null;
+//        if (!caseFlag && prevNode.size() > 2)
+//            edge = sourceGraph.addEdge(prevNode.pop(), n); // create a edge from the previous node to this node.
+//        edge = sourceGraph.addEdge(prevNode.peek(), n); // create a edge from the begin of switch to this node.
+//        if (node.getLabel() == null)// if the node is the default of the switch.
+//            infos.addInformationToLayer2(sourceGraph, edge, "default:");
+//        else
+//            infos.addInformationToLayer2(sourceGraph, edge, "case " + node.toString());
+//        prevNode.push(n); // the graph continues from the case node of the SwitchStatement.
+
     }
 
     @Override
@@ -532,7 +569,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         calculateFinal();
 
-//        printEdges();
+        printEdges();
 
         System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + (edgeNum - nodeNum + 2));
         initBuilder();
