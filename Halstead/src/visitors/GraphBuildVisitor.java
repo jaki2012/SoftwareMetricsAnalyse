@@ -564,7 +564,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
 //        printEdges();
 
-        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + (edgeNum - nodeNum + 2));
+        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + calculateCC());
         initBuilder();
     }
 
@@ -579,6 +579,21 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 System.out.println(edge.toString());
             }
         }
+    }
+
+    /**
+     * Call before calculate final
+     * WARNING: Call this after calculateFinal()
+     * @return calculated Cyclomatic Complexity
+     */
+    private int calculateCC() {
+        int offset;
+
+        offset = sourceGraph.getFinalNodes().size();
+        // all final nodes counts for one
+        // in CC calculation
+        offset = offset == 1? (offset - 1): (offset - 2);
+        return edgeNum - (nodeNum - offset) + 2;
     }
 
     private void calculateFinal() {

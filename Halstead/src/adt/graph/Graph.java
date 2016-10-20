@@ -259,7 +259,7 @@ public class Graph<V extends Comparable<V>> {
 	 * 
 	 * @return Iterable<Node<V>> - The Graph final nodes.
 	 */
-	public Iterable<Node<V>> getFinalNodes() {
+	public Set<Node<V>> getFinalNodes() {
 		return finalNodes;
 	}
 
