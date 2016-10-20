@@ -4,28 +4,29 @@ import adt.graph.Edge;
 import adt.graph.Graph;
 import adt.graph.GraphInformation;
 import adt.graph.Node;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import domain.constants.Layer;
 import domain.graph.visitors.RenumNodesGraphVisitor;
 import metrics.MetricsEvaluator;
 import metrics.SymbolAnalyzer;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.*;
 
 /**
- * Created by Novemser on 2016/10/6.
+ * Project: Halstead
+ * Package: visitors
+ * Author:  Novemser
+ * 2016/10/6
  */
 public class GraphBuildVisitor extends VoidVisitorAdapter {
     private Graph<Integer> sourceGraph;
-    private String methodName;
     private int nodeNum;
     private int edgeNum;
     private Stack<Node<Integer>> prevNode;
@@ -234,7 +235,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 prevNode.push(edge.getEndNode());
             }
         }
-
     }
 
     @Override
@@ -276,8 +276,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         addBranchCount(2);
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noDoWhileBody = edge.getEndNode(); // create the DoWhileBody node.
-        prevNode
-                .push(noDoWhileBody); // the graph continues from the DoWhileBody node.
+        prevNode.push(noDoWhileBody); // the graph continues from the DoWhileBody node.
         Node<Integer> noWhile = sourceGraph.addNode(++nodeNum); // the node of the WhileStatement.
         infos.addInformationToLayer1(sourceGraph, noWhile, node.toString());
         Node<Integer> noEndDoWhile = sourceGraph.addNode(++nodeNum); // the final node of the DoStatement.
@@ -556,8 +555,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!sourceGraph.getInitialNodes().iterator().hasNext())
             sourceGraph.addInitialNode(sourceGraph.getNodes().iterator().next());
 
-        RenumNodesGraphVisitor visitor = new RenumNodesGraphVisitor();
-        sourceGraph.accept(visitor);
+        Graph<Integer> clonedObj = SerializationUtils.clone(sourceGraph);
+//        RenumNodesGraphVisitor visitor = new RenumNodesGraphVisitor();
+//        sourceGraph.accept(visitor);
         sourceGraph.sortNodes();
 
         calculateFinal();

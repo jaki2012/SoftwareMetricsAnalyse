@@ -1,9 +1,10 @@
 package adt.graph;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GraphMetadataLayer {
+public class GraphMetadataLayer implements Serializable {
 	
 	/**
 	 * The Node information associated to the Graph meta-data. 

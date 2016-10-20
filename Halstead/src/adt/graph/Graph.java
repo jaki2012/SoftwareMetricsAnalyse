@@ -1,5 +1,6 @@
 package adt.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,7 +13,7 @@ import java.util.TreeSet;
 
 import domain.graph.visitors.IGraphVisitor;
 
-public class Graph<V extends Comparable<V>> {
+public class Graph<V extends Comparable<V>> implements Serializable {
 
 	/**
 	 * The set of nodes in the Graph.

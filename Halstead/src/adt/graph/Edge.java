@@ -2,7 +2,9 @@ package adt.graph;
 
 import domain.graph.visitors.IGraphVisitor;
 
-public class Edge<V extends Comparable<V>> {
+import java.io.Serializable;
+
+public class Edge<V extends Comparable<V>> implements Serializable {
 
 	/**
 	 * The Edge begin Node.

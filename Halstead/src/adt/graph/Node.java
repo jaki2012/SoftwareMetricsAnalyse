@@ -2,7 +2,9 @@ package adt.graph;
 
 import domain.graph.visitors.IGraphVisitor;
 
-public class Node<V extends Comparable<V>> implements Comparable<Node<V>> {
+import java.io.Serializable;
+
+public class Node<V extends Comparable<V>> implements Comparable<Node<V>>, Serializable {
 
 	private V value;
 
