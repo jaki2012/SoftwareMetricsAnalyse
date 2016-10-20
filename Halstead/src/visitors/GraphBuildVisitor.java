@@ -12,6 +12,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import domain.constants.Layer;
+import domain.graph.visitors.EssComplexVisitor;
 import domain.graph.visitors.RenumNodesGraphVisitor;
 import metrics.MetricsEvaluator;
 import metrics.SymbolAnalyzer;
@@ -556,8 +557,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
             sourceGraph.addInitialNode(sourceGraph.getNodes().iterator().next());
 
         Graph<Integer> clonedObj = SerializationUtils.clone(sourceGraph);
-//        RenumNodesGraphVisitor visitor = new RenumNodesGraphVisitor();
-//        sourceGraph.accept(visitor);
+        EssComplexVisitor<Integer> visitor = new EssComplexVisitor<>(clonedObj);
+        clonedObj.accept(visitor);
+
         sourceGraph.sortNodes();
 
         calculateFinal();

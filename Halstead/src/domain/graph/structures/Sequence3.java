@@ -9,9 +9,7 @@ import adt.graph.Node;
  * Author:  Novemser
  * 2016/10/20
  */
-public class CaseStmt<V extends Comparable<V>> implements IStructure<V> {
-
-
+public class Sequence3<V extends Comparable<V>> implements IStructure<V> {
     @Override
     public boolean isStructure(Graph<V> graph, Node<V> node) {
         return false;

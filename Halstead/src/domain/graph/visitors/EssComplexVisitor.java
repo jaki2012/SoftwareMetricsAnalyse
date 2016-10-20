@@ -1,10 +1,8 @@
 package domain.graph.visitors;
 
+import adt.graph.Graph;
 import adt.graph.Node;
-import domain.graph.structures.CaseStmt;
-import domain.graph.structures.IStructure;
-import domain.graph.structures.IfStmt;
-import domain.graph.structures.StructureProvider;
+import domain.graph.structures.*;
 
 import java.util.Iterator;
 
@@ -16,11 +14,14 @@ import java.util.Iterator;
  */
 public class EssComplexVisitor<V extends Comparable<V>> extends DepthFirstGraphVisitor<V> {
     private StructureProvider<V> structureProvider;
+    private Graph<V> graph;
 
-    public EssComplexVisitor() {
+    public EssComplexVisitor(Graph<V> sourceGraph) {
         structureProvider = new StructureProvider<>();
         structureProvider.addStructure(new IfStmt<>());
         structureProvider.addStructure(new CaseStmt<>());
+        structureProvider.addStructure(new IfNoElse<>());
+        graph = sourceGraph;
     }
 
     @Override
@@ -29,9 +30,8 @@ public class EssComplexVisitor<V extends Comparable<V>> extends DepthFirstGraphV
         while (iterator.hasNext()) {
             IStructure<V> structure = iterator.next();
 
-            if (structure.isStructure(node))
-                structure.remove(node);
+            if (structure.isStructure(graph, node))
+                structure.remove(graph, node);
         }
-        super.handleNode(node);
     }
 }
