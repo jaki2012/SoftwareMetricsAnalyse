@@ -5,6 +5,12 @@ import java.util.Set;
 
 import adt.graph.Node;
 
+/**
+ * Project: Halstead
+ * Package: domain.graph.visitors
+ * Author:  Novemser
+ * 2016/10/20
+ */
 public class RenumNodesGraphVisitor extends DepthFirstGraphVisitor<Integer> {
 
 	private int nodeNum = 0;

@@ -4,17 +4,23 @@ import adt.graph.Edge;
 import adt.graph.Graph;
 import adt.graph.Node;
 
-
+/**
+ * Project: Halstead
+ * Package: domain.graph.visitors
+ * Author:  Novemser
+ * 2016/10/20
+ */
 public interface IGraphVisitor<V extends Comparable<V>> {
 	
-	public void visitEdge(Edge<V> edge);
-	public boolean visit(Edge<V> edge);
-	public void endVisit (Edge<V> edge);
-	public void visitNode(Node<V> node);
-	public boolean visit(Node<V> node);
-	public void endVisit(Node<V> node);
-	public void visitGraph(Graph<V> graph);
-	public boolean visit(Graph<V> graph);
-	public void endVisit(Graph<V> graph);
-	public boolean alreadyVisited(Node<V> node);
+	void visitEdge(Edge<V> edge);
+	boolean visit(Edge<V> edge);
+	void endVisit(Edge<V> edge);
+	void visitNode(Node<V> node);
+	boolean visit(Node<V> node);
+	void endVisit(Node<V> node);
+	void visitGraph(Graph<V> graph);
+	boolean visit(Graph<V> graph);
+	void endVisit(Graph<V> graph);
+	boolean alreadyVisited(Node<V> node);
+	void handleNode(Node<V> node);
 }

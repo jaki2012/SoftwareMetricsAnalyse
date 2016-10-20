@@ -7,6 +7,12 @@ import adt.graph.Edge;
 import adt.graph.Graph;
 import adt.graph.Node;
 
+/**
+ * Project: Halstead
+ * Package: domain.graph.visitors
+ * Author:  Novemser
+ * 2016/10/20
+ */
 public class DepthFirstGraphVisitor<V extends Comparable<V>> implements IGraphVisitor<V> {
 
 	private Set<Node<V>> visitedNodes;
@@ -36,13 +42,13 @@ public class DepthFirstGraphVisitor<V extends Comparable<V>> implements IGraphVi
 
 	@Override
 	public void visitNode(Node<V> node) {
-		if(visit(node)) { 
+		if(visit(node)) {
+			handleNode(node);
 			visitedNodes.add(node);
 			for(Edge<V> edge : graph.getNodeEdges(node)) {
 				edge.accept(this);
 				edge.getEndNode().accept(this);
 			}
-			visitedNodes.remove(node);
 			endVisit(node);
 		}
 	}
@@ -74,11 +80,17 @@ public class DepthFirstGraphVisitor<V extends Comparable<V>> implements IGraphVi
 
 	@Override
 	public void endVisit(Graph<V> graph) {
-		// does nothing!
+		// Clear visited nodes
+		visitedNodes.clear();
 	}
 
 	@Override
 	public boolean alreadyVisited(Node<V> node) {
 		return visitedNodes.contains(node);
+	}
+
+	@Override
+	public void handleNode(Node<V> node) {
+		// Extend this class to implement
 	}
 }
