@@ -25,10 +25,22 @@
       <file leaf-file-name="GraphBuildVisitor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/visitors/GraphBuildVisitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2884">
-              <caret line="370" column="0" selection-start-line="370" selection-start-column="0" selection-end-line="370" selection-end-column="0" />
+            <state relative-caret-position="490">
+              <caret line="289" column="41" selection-start-line="289" selection-start-column="41" selection-end-line="289" selection-end-column="41" />
               <folding>
                 <element signature="method#addModifiedCondition#0;class#GraphBuildVisitor#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DoStmt.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/domain/graph/structures/DoStmt.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="708">
+              <caret line="39" column="51" selection-start-line="39" selection-start-column="51" selection-end-line="39" selection-end-column="51" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -79,21 +91,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="simple.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="simple.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../../../Java/FileSys/src/simple.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="177" column="27" selection-start-line="177" selection-start-column="27" selection-end-line="177" selection-end-column="27" />
+            <state relative-caret-position="504">
+              <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EssComplexVisitor.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="EssComplexVisitor.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/domain/graph/visitors/EssComplexVisitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="34" column="55" selection-start-line="34" selection-start-column="55" selection-end-line="34" selection-end-column="55" />
+            <state relative-caret-position="490">
+              <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -130,7 +142,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/metrics/c/CParser.java" />
         <option value="$PROJECT_DIR$/src/metrics/java/Java8BaseVisitor.java" />
         <option value="$PROJECT_DIR$/src/metrics/java/Java8Visitor.java" />
         <option value="$PROJECT_DIR$/src/metrics/java/Java8Parser.java" />
@@ -176,11 +187,12 @@
         <option value="$PROJECT_DIR$/src/visitors/GraphBuildVisitor.java" />
         <option value="$PROJECT_DIR$/src/domain/graph/structures/SwitchCaseStmt.java" />
         <option value="$PROJECT_DIR$/src/domain/graph/structures/WhileStmt.java" />
-        <option value="$PROJECT_DIR$/../../../Java/FileSys/src/simple.java" />
         <option value="$PROJECT_DIR$/src/domain/graph/structures/IAddStructures.java" />
         <option value="$PROJECT_DIR$/src/domain/graph/structures/StructureProvider.java" />
         <option value="$PROJECT_DIR$/src/domain/graph/structures/ForEachStmt.java" />
         <option value="$PROJECT_DIR$/src/domain/graph/visitors/EssComplexVisitor.java" />
+        <option value="$PROJECT_DIR$/src/domain/graph/structures/DoStmt.java" />
+        <option value="$PROJECT_DIR$/../../../Java/FileSys/src/simple.java" />
       </list>
     </option>
   </component>
@@ -847,12 +859,12 @@
       <workItem from="1476764785732" duration="20019000" />
       <workItem from="1476841964500" duration="20975000" />
       <workItem from="1476938409651" duration="28294000" />
-      <workItem from="1477029336169" duration="18704000" />
+      <workItem from="1477029336169" duration="19478000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="208533000" />
+    <option name="totallyTimeSpent" value="209307000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -874,7 +886,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40186915" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11422638" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12564902" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17537314" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -949,14 +961,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/metrics/BracesAnalyzer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/com/github/javaparser/javaparser-core/2.5.1/javaparser-core-2.5.1.jar!/com/github/javaparser/ast/body/FieldDeclaration.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1344">
@@ -1250,14 +1254,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Java/FileSys/src/simple.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="177" column="27" selection-start-line="177" selection-start-column="27" selection-end-line="177" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/domain/graph/visitors/RenumNodesGraphVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -1303,16 +1299,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/visitors/GraphBuildVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2884">
-          <caret line="370" column="0" selection-start-line="370" selection-start-column="0" selection-end-line="370" selection-end-column="0" />
-          <folding>
-            <element signature="method#addModifiedCondition#0;class#GraphBuildVisitor#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/domain/graph/structures/ForEachStmt.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -1333,11 +1319,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/domain/graph/visitors/EssComplexVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="34" column="55" selection-start-line="34" selection-start-column="55" selection-end-line="34" selection-end-column="55" />
+        <state relative-caret-position="490">
+          <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/visitors/GraphBuildVisitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="490">
+          <caret line="289" column="41" selection-start-line="289" selection-start-column="41" selection-end-line="289" selection-end-column="41" />
+          <folding>
+            <element signature="method#addModifiedCondition#0;class#GraphBuildVisitor#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/domain/graph/structures/DoStmt.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="708">
+          <caret line="39" column="51" selection-start-line="39" selection-start-column="51" selection-end-line="39" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Java/FileSys/src/simple.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="25" column="25" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
