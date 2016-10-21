@@ -1,7 +1,10 @@
 package domain.graph.structures;
 
+import adt.graph.Edge;
 import adt.graph.Graph;
 import adt.graph.Node;
+
+import java.util.Set;
 
 /**
  * Project: Halstead
@@ -11,5 +14,6 @@ import adt.graph.Node;
  */
 public interface IStructure<V extends Comparable<V>> {
     boolean isStructure(Graph<V> graph, Node<V> node);
-    void remove(Graph<V> graph, Node<V> node);
+    Set<Node<V>> getRemovableNodes();
+    Set<Edge<V>> getRemovableEdges();
 }

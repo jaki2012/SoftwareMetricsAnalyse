@@ -9,7 +9,7 @@ import adt.graph.Node;
  * Author:  Novemser
  * 2016/10/20
  */
-public class CaseStmt<V extends Comparable<V>> implements IStructure<V> {
+public class CaseStmt<V extends Comparable<V>> extends BaseStructure<V> implements IStructure<V> {
 
 
     @Override
@@ -17,8 +17,4 @@ public class CaseStmt<V extends Comparable<V>> implements IStructure<V> {
         return false;
     }
 
-    @Override
-    public void remove(Graph<V> graph, Node<V> node) {
-
-    }
 }

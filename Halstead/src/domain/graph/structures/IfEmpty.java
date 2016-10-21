@@ -13,12 +13,13 @@ import java.util.Set;
  * Author:  Novemser
  * 2016/10/20
  */
-public class IfEmpty<V extends Comparable<V>> implements IStructure<V> {
+public class IfEmpty<V extends Comparable<V>> extends BaseStructure<V> implements IStructure<V> {
 
     /**
      * If the node down here is a
-     * 'if' statement without 'else'.
-     *
+     * statement without
+     * 'if-then' body or
+     * 'else' body.
      * @param graph the graph to process
      * @param node  the node to determine
      * @return true means yes vice versa
@@ -61,8 +62,4 @@ public class IfEmpty<V extends Comparable<V>> implements IStructure<V> {
         return false;
     }
 
-    @Override
-    public void remove(Graph<V> graph, Node<V> node) {
-
-    }
 }

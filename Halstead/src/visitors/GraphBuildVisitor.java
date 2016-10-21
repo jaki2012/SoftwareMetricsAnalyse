@@ -522,8 +522,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         super.visit(node, arg);
 
         // Remove unnecessary nodes/edges
-        List<Node<Integer>> nodesToRemove = new LinkedList<Node<Integer>>();
-        List<Edge<Integer>> edgesToRemove = new LinkedList<Edge<Integer>>();
+        List<Node<Integer>> nodesToRemove = new LinkedList<>();
+        List<Edge<Integer>> edgesToRemove = new LinkedList<>();
         for (Node<Integer> graphNode : sourceGraph.getNodes()) {
             sourceGraph.selectMetadataLayer(Layer.INSTRUCTIONS.getLayer()); // select the layer to get the information.
             if (sourceGraph.getMetadata(graphNode) == null &&
