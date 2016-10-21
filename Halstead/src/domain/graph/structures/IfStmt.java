@@ -29,7 +29,7 @@ public class IfStmt<V extends Comparable<V>> extends BaseStructure<V> implements
 
         Set<Edge<V>> edges = graph.getNodeEdges(node);
         if (null != edges && edges.size() == 2) {
-            nodesToRemove.add(node);
+//            nodesToRemove.add(node);
             ArrayList<Edge<V>> tmpEdge = new ArrayList<>();
             tmpEdge.addAll(edges);
             edgesToRemove.add(tmpEdge.get(0));
@@ -51,7 +51,7 @@ public class IfStmt<V extends Comparable<V>> extends BaseStructure<V> implements
                     tmpEdge.addAll(edges);
                     leftFinal = tmpEdge.get(0).getEndNode(); // get left final node
                     edgesToRemove.add(tmpEdge.get(0));
-                    nodesToRemove.add(leftFinal);
+//                    nodesToRemove.add(leftFinal);
                     tmpEdge.clear();
 
                     if (leftFinal != null) {
@@ -63,6 +63,7 @@ public class IfStmt<V extends Comparable<V>> extends BaseStructure<V> implements
                             rightFinal = tmpEdge.get(0).getEndNode(); // get right final node
 
                             if (leftFinal.equals(rightFinal)) { // if left final && right final are equal
+                                graph.addEdge(node, leftFinal);
                                 return true;
                             }
                         }

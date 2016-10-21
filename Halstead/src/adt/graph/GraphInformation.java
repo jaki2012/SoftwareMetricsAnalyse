@@ -15,27 +15,13 @@ import java.util.Map;
  */
 public class GraphInformation {
 
-
-    /**
-     * Associates the node in the abstract graph representation
-     * and the correspondent one in the layout graph.
-     * * This information is stored in abstract graph meta-data Layer.EMPTY.
-     *
-     * @param sourceGraph - The abstract representation of the graph.
-     * @param sourceNode - The abstract representation of the node in the abstract graph.
-     */
-    public void addInformationToLayer0(Graph<Integer> sourceGraph, Node<Integer> sourceNode) {
-        sourceGraph.selectMetadataLayer(Layer.EMPTY.getLayer()); // change to node association layer.
-        sourceGraph.addMetadata(sourceNode, new Object()); // associate the the nodes of sourceGraph and layoutGraph.
-    }
-
     /**
      * Associates the program instructions to the corresponding node in the abstract grapg.
      * This information is stored in abstract graph meta-data Layer.INSTRUCTIONS.
      *
      * @param sourceGraph - The abstract representation of the graph.
      * @param sourceNode - The abstract representation of the node in the abstract graph.
-     * @param instructions - The program instructions associated to the sourceNode.
+     * @param instructions - The program instructions or node information associated to the sourceNode.
      */
     @SuppressWarnings("unchecked")
     public void addInformationToLayer1(Graph<Integer> sourceGraph, Node<Integer> sourceNode, String instructions) {

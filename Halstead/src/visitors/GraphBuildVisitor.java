@@ -389,20 +389,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         super.visit(n, arg);
         swichEnd.pop();
         switchBegin.pop();
-
-        // if the default case doesn't have a break.
-        // the number 2 represents the initial and the final nodes of the SwitchStatement.
-//        if (prevNode.size() > 2) {
-//            sourceGraph.addEdge(prevNode.pop(), breakNode.peek());
-//            while (prevNode.size() != 2) // if one or more cases doesn't have a break.
-//                prevNode.pop();
-//        }
-//        breakNode.pop(); // when ends clean the stack.
-//        continueNode.pop(); // when ends clean the stack.
-//        prevNode.pop(); // the graph continues from the final node of the SwitchStatement.
-//        finalnode = prevNode.peek(); // update the final node.
-//        controlFlag = false;
-//        returnFlag = false;
     }
 
     @Override
@@ -564,7 +550,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         calculateFinal();
 
-//        printEdges();
+//        printEdges(sourceGraph);
 
         System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + calculateCC());
         initBuilder();
@@ -574,7 +560,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
      * Print the edges in graph
      * e.g. (1,2) (2,3) ...etc
      */
-    private void printEdges() {
+    public static void printEdges(Graph sourceGraph) {
         Map<Node<Integer>, Set<Edge<Integer>>> map = sourceGraph.getEdges();
         for (Map.Entry<Node<Integer>, Set<Edge<Integer>>> entry : map.entrySet()) {
             for (Edge<Integer> edge : entry.getValue()) {

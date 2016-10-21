@@ -4,6 +4,7 @@ import adt.graph.Edge;
 import adt.graph.Graph;
 import adt.graph.Node;
 import domain.graph.structures.*;
+import visitors.GraphBuildVisitor;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,7 +25,7 @@ public class EssComplexVisitor<V extends Comparable<V>> extends DepthFirstGraphV
     public EssComplexVisitor(Graph<V> sourceGraph) {
         structureProvider = new StructureProvider<>();
         structureProvider.addStructure(new IfStmt<>());
-        structureProvider.addStructure(new CaseStmt<>());
+        structureProvider.addStructure(new SwitchCaseStmt<>());
         structureProvider.addStructure(new IfEmpty<>());
         graph = sourceGraph;
     }
@@ -44,6 +45,8 @@ public class EssComplexVisitor<V extends Comparable<V>> extends DepthFirstGraphV
 
     @Override
     public void endVisit(Graph<V> graph) {
+        System.out.println("B4:");
+        GraphBuildVisitor.printEdges(graph);
         if (edgesToRemove.size() != 0 && nodesToRemove.size() != 0) {
             edgesToRemove.forEach(graph::removeEdge);
             nodesToRemove.forEach(graph::removeNode);
@@ -52,5 +55,7 @@ public class EssComplexVisitor<V extends Comparable<V>> extends DepthFirstGraphV
             // perform another DFS removing
             graph.accept(this);
         }
+        System.out.println("Af:");
+        GraphBuildVisitor.printEdges(graph);
     }
 }

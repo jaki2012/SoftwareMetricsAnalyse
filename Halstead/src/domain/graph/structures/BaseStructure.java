@@ -19,6 +19,8 @@ class BaseStructure<V extends Comparable<V>> implements IStructure<V> {
 
     @Override
     public boolean isStructure(Graph<V> graph, Node<V> node) {
+        nodesToRemove.clear();
+        edgesToRemove.clear();
         return false;
     }
 
