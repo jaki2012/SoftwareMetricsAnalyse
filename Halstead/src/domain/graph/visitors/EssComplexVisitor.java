@@ -32,6 +32,7 @@ public class EssComplexVisitor<V extends Comparable<V>> extends DepthFirstGraphV
         structureProvider.addStructure(new Sequence3<>());
         structureProvider.addStructure(new ForStmt<>());
         structureProvider.addStructure(new WhileStmt<>());
+        structureProvider.addStructure(new ForEachStmt<>());
         graph = sourceGraph;
     }
 

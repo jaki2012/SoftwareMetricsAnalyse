@@ -9,9 +9,6 @@ import adt.graph.Node;
  * Author:  Novemser
  * 2016/10/21
  */
-public class ForEachStmt<V extends Comparable<V>> extends BaseStructure<V> {
-    @Override
-    public boolean isStructure(Graph<V> graph, Node<V> node) {
-        return super.isStructure(graph, node);
-    }
+public class ForEachStmt<V extends Comparable<V>> extends WhileStmt<V> {
+    // Now, it's the Same with while
 }
