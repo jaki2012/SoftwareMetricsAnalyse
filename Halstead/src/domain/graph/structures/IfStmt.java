@@ -12,7 +12,7 @@ import java.util.*;
  * Author:  Novemser
  * 2016/10/20
  */
-public class IfStmt<V extends Comparable<V>> extends BaseStructure<V> implements IStructure<V> {
+public class IfStmt<V extends Comparable<V>> extends BaseStructure<V> {
 
     /**
      * If the node down here is a
@@ -26,7 +26,7 @@ public class IfStmt<V extends Comparable<V>> extends BaseStructure<V> implements
     public boolean isStructure(Graph<V> graph, Node<V> node) {
         if (null == node || graph == null)
             return false;
-
+        super.isStructure(graph, node);
         Set<Edge<V>> edges = graph.getNodeEdges(node);
         if (null != edges && edges.size() == 2) {
 //            nodesToRemove.add(node);
@@ -71,8 +71,7 @@ public class IfStmt<V extends Comparable<V>> extends BaseStructure<V> implements
                 }
             }
         }
-        nodesToRemove.clear();
-        edgesToRemove.clear();
+
         return false;
     }
 }

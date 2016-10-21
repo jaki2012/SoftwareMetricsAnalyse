@@ -15,7 +15,7 @@ import adt.graph.Node;
  */
 public class DepthFirstGraphVisitor<V extends Comparable<V>> implements IGraphVisitor<V> {
 
-	private Set<Node<V>> visitedNodes;
+	protected Set<Node<V>> visitedNodes;
 	protected Graph<V> graph;
 	
 	public DepthFirstGraphVisitor() {
@@ -46,7 +46,7 @@ public class DepthFirstGraphVisitor<V extends Comparable<V>> implements IGraphVi
 			handleNode(node);
 			visitedNodes.add(node);
 			for(Edge<V> edge : graph.getNodeEdges(node)) {
-				edge.accept(this);
+//				edge.accept(this);
 				edge.getEndNode().accept(this);
 			}
 			endVisit(node);
@@ -69,6 +69,7 @@ public class DepthFirstGraphVisitor<V extends Comparable<V>> implements IGraphVi
 			this.graph = graph;
 			for(Node<V> node : graph.getInitialNodes())
 				node.accept(this);
+
 			endVisit(graph);
 		}
 	}

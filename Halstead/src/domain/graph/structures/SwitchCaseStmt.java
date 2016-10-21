@@ -12,7 +12,7 @@ import java.util.*;
  * Author:  Novemser
  * 2016/10/20
  */
-public class SwitchCaseStmt<V extends Comparable<V>> extends BaseStructure<V> implements IStructure<V> {
+public class SwitchCaseStmt<V extends Comparable<V>> extends BaseStructure<V> {
     private Map<Node<V>, Integer> originFinalNodes = new TreeMap<>();
 
     @Override
@@ -20,6 +20,7 @@ public class SwitchCaseStmt<V extends Comparable<V>> extends BaseStructure<V> im
         if (null == node || graph == null)
             return false;
 
+        super.isStructure(graph, node);
         Set<Edge<V>> edges = graph.getNodeEdges(node);
         if (null != edges && edges.size() > 2) { // if size == 2, IfStmt will do the work
 //            nodesToRemove.add(node);
@@ -30,6 +31,7 @@ public class SwitchCaseStmt<V extends Comparable<V>> extends BaseStructure<V> im
             List<Edge<V>> finalEdges = new ArrayList<>();
             for (Edge<V> edge : tmpEdge) {
                 Node<V> caseNode = edge.getEndNode();
+
                 if (graph.getNodeEdges(caseNode).size() == 1) { // smallest part of case statement
                     nodesToRemove.add(caseNode);
                     tmpNode.add(caseNode);
@@ -41,7 +43,9 @@ public class SwitchCaseStmt<V extends Comparable<V>> extends BaseStructure<V> im
             if (finalEdges.size() != 0) {
                 for (Edge<V> finalEdge : finalEdges) {
                     Node<V> lastNode = finalEdge.getEndNode();
+
                     if (lastNode != null) {
+
                         if (!originFinalNodes.containsKey(lastNode)) {
                             originFinalNodes.put(lastNode, 1);
                         } else {
@@ -52,6 +56,7 @@ public class SwitchCaseStmt<V extends Comparable<V>> extends BaseStructure<V> im
             }
 
             for (Map.Entry<Node<V>, Integer> entry : originFinalNodes.entrySet()) {
+
                 if (entry.getValue() > 1) {
                     graph.addEdge(node, entry.getKey()); // add an edge from origin to end
                     return true;
@@ -60,8 +65,6 @@ public class SwitchCaseStmt<V extends Comparable<V>> extends BaseStructure<V> im
 
         }
 
-        nodesToRemove.clear();
-        edgesToRemove.clear();
         return false;
     }
 

@@ -13,7 +13,7 @@ import java.util.Set;
  * Author:  Novemser
  * 2016/10/20
  */
-public class IfEmpty<V extends Comparable<V>> extends BaseStructure<V> implements IStructure<V> {
+public class IfEmpty<V extends Comparable<V>> extends BaseStructure<V> {
 
     /**
      * If the node down here is a

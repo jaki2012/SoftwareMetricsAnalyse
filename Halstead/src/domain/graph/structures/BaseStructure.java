@@ -17,10 +17,17 @@ class BaseStructure<V extends Comparable<V>> implements IStructure<V> {
     Set<Node<V>> nodesToRemove = new HashSet<>();
     Set<Edge<V>> edgesToRemove = new HashSet<>();
 
-    @Override
-    public boolean isStructure(Graph<V> graph, Node<V> node) {
+    /**
+     * Perform cleaning to temp data sets.
+     */
+    private void clean() {
         nodesToRemove.clear();
         edgesToRemove.clear();
+    }
+
+    @Override
+    public boolean isStructure(Graph<V> graph, Node<V> node) {
+        clean();
         return false;
     }
 

@@ -23,11 +23,14 @@ public class EssComplexVisitor<V extends Comparable<V>> extends DepthFirstGraphV
     private Set<Edge<V>> edgesToRemove = new HashSet<>();
 
     public EssComplexVisitor(Graph<V> sourceGraph) {
+        System.out.println("B4:");
+        GraphBuildVisitor.printEdges(sourceGraph);
         structureProvider = new StructureProvider<>();
         structureProvider.addStructure(new IfStmt<>());
         structureProvider.addStructure(new SwitchCaseStmt<>());
         structureProvider.addStructure(new IfEmpty<>());
         structureProvider.addStructure(new Sequence3<>());
+        structureProvider.addStructure(new ForStmt<>());
         graph = sourceGraph;
     }
 
@@ -46,17 +49,27 @@ public class EssComplexVisitor<V extends Comparable<V>> extends DepthFirstGraphV
 
     @Override
     public void endVisit(Graph<V> graph) {
-        System.out.println("B4:");
-        GraphBuildVisitor.printEdges(graph);
-        if (edgesToRemove.size() != 0 && nodesToRemove.size() != 0) {
+        if (edgesToRemove.size() != 0 || nodesToRemove.size() != 0) {
             edgesToRemove.forEach(graph::removeEdge);
             nodesToRemove.forEach(graph::removeNode);
             edgesToRemove.clear();
             nodesToRemove.clear();
             // perform another DFS removing
+            visitedNodes.clear();
+            for (Node<V> n : graph.getNodes())
+                if (graph.getNodeEndEdges(n).size() == 0 && !graph.isInitialNode(n) && !nodesToRemove.contains(n)) {
+                    edgesToRemove.addAll(graph.getNodeEdges(n));
+                    nodesToRemove.add(n);
+                }
+
+            edgesToRemove.forEach(graph::removeEdge);
+            nodesToRemove.forEach(graph::removeNode);
             graph.accept(this);
         }
-        System.out.println("Af:");
-        GraphBuildVisitor.printEdges(graph);
+        else {
+            System.out.println("Reduced:");
+            GraphBuildVisitor.printEdges(graph);
+        }
+
     }
 }

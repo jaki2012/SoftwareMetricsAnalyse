@@ -12,7 +12,7 @@ import java.util.Set;
  * Author:  Novemser
  * 2016/10/20
  */
-public class Sequence3<V extends Comparable<V>> extends BaseStructure<V> implements IStructure<V> {
+public class Sequence3<V extends Comparable<V>> extends BaseStructure<V> {
     @Override
     public boolean isStructure(Graph<V> graph, Node<V> node) {
         super.isStructure(graph, node);
@@ -24,12 +24,22 @@ public class Sequence3<V extends Comparable<V>> extends BaseStructure<V> impleme
             edgesToRemove.addAll(edges);
             Node<V> nextNode = ((Edge<V>) edges.toArray()[0]).getEndNode(); // next node
             nodesToRemove.add(nextNode);
+
             if (null != nextNode) {
                 edges = graph.getNodeEdges(nextNode);
+
                 if (edges != null && edges.size() == 1) {
                     edgesToRemove.addAll(edges);
                     nextNode = ((Edge<V>) edges.toArray()[0]).getEndNode(); // final node
+
                     if (nextNode != null) {
+                        Set<Edge<V>> toStartEdges = graph.getNodeEdges(nextNode);
+                        if (toStartEdges.size() > 0) {
+                            for (Edge<V> edge : toStartEdges) {
+                                if (edge.getEndNode().equals(node))
+                                    return false;
+                            }
+                        }
                         graph.addEdge(node, nextNode);
                         return true;
                     }

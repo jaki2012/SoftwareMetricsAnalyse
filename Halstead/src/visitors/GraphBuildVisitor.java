@@ -257,7 +257,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         continueNode.pop(); // when ends clean the stack.
         breakNode.pop(); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the WhileBody.
-            sourceGraph.addEdge(noWhileBody, noEndWhile);
             if (!controlFlag) // verify if a break or a continue occur in the WhileBody.
                 sourceGraph.addEdge(prevNode.pop(), noWhile); // the loop connection.
             else
