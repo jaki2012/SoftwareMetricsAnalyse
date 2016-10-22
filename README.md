@@ -1,8 +1,8 @@
 # SoftwareMetricsAnalyse
+
 ## Overview
 A project to compute all kinds of descriptors for those software products(e.g. LOC, McCabe, Halstead).
 
----
 ## Methodology
 使用```Antlr4```和```JavaParser```进行语法树级别的分析  
 能够的到较为准确且完备的信息  
@@ -51,7 +51,6 @@ PERCENT_COMMENTS,
 LOC_TOTAL
 ```
 ## Dependencies
-----
  - com.github.javaparser
  - org.apache.commons.io
  - antlr-4.5.3-complete
@@ -60,7 +59,6 @@ LOC_TOTAL
 Please use Maven to get all these dependencies(In idea, press: Project Structure->Modules->Dependencies)  
 
 
----
 ## Usage
 
 ```
