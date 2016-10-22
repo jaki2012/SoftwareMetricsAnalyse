@@ -27,7 +27,7 @@ public class Looping<V extends Comparable<V>> extends BaseStructure<V> {
         Set<Edge<V>> edges = graph.getNodeEdges(node);
 
         Node<V> next = ((Edge<V>)edges.toArray()[0]).getEndNode();
-        while (null != next
+        while ( null != next
                 && !next.isContainMethodCall()) {
             edges = graph.getNodeEdges(next);
 

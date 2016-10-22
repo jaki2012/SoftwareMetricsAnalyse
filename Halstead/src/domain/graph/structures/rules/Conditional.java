@@ -37,7 +37,7 @@ public class Conditional<V extends Comparable<V>> extends BaseStructure<V> {
                         && !begin.isContainMethodCall()
                         && graph.getNodeEdges(begin).size() == 1) { // no method call, only one out-degree
                     pathFirst.add(begin);
-                    begin = ((Edge<V>)graph.getNodeEdges(begin)).getEndNode();
+                    begin = ((Edge<V>)graph.getNodeEdges(begin).toArray()[0]).getEndNode();
                 }
 
                 if (null != begin) { // add last call or non-call node
@@ -53,7 +53,7 @@ public class Conditional<V extends Comparable<V>> extends BaseStructure<V> {
                         && !end.isContainMethodCall()
                         && graph.getNodeEdges(end).size() == 1) { // no method call, only one out-degree
                     pathSecond.add(end);
-                    end = ((Edge<V>)graph.getNodeEdges(end)).getEndNode();
+                    end = ((Edge<V>)graph.getNodeEdges(end).toArray()[0]).getEndNode();
                 }
 
                 if (null != end) {

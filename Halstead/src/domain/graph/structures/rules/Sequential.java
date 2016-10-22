@@ -20,8 +20,8 @@ public class Sequential<V extends Comparable<V>> extends BaseStructure<V> {
         if (null == node || graph == null) {
             return false;
         }
-        super.isStructure(graph, node);
 
+        super.isStructure(graph, node);
         Set<Edge<V>> edges = graph.getNodeEdges(node);
         if (null != edges && edges.size() == 1) {
             Node<V> nextNode = ((Edge<V>) edges.toArray()[0]).getEndNode(); // next node
