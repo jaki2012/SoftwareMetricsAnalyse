@@ -4,6 +4,7 @@ import metrics.Initiator;
 import metrics.MetricsEvaluator;
 import visitors.CalculateVisitor;
 import visitors.GraphBuildVisitor;
+import visitors.ModuleVisitor;
 
 import java.io.FileInputStream;
 import java.util.Map;
@@ -32,26 +33,12 @@ public class Main {
 
     }
 
-    private static MetricsEvaluator calculateHalsteadMetricsV2(String path) throws Exception {
-        MetricsEvaluator e = (new Initiator()).initiate(path);
+    private static void calculateHalsteadMetricsV2(String path) throws Exception {
+//        MetricsEvaluator e = (new Initiator()).initiate(path);
 
-        System.out.println("n1:\t\t\t\t\t\t\t\t" + e.n1);
-        System.out.println("n2:\t\t\t\t\t\t\t\t" + e.n2);
-        System.out.println("n(Program Vocabulary):\t\t\t" + e.PROGRAM_VOCABULARY);
-
-        System.out.println("N1:\t\t\t\t\t\t\t\t" + e.N1);
-        System.out.println("N2:\t\t\t\t\t\t\t\t" + e.N2);
-        System.out.println("N(Program length):\t\t\t\t" + e.PROGRAM_LENGTH);
-        System.out.println("Calculated program length:\t\t" + e.ESTIMATED_LENGTH);
-        System.out.println("Volume:\t\t\t\t\t\t\t" + e.VOLUME);
-        System.out.println("Difficulty:\t\t\t\t\t\t" + e.DIFFICULTY);
-        System.out.println("Effort:\t\t\t\t\t\t\t" + e.PROGRAM_EFFORT);
-        System.out.println("Time required to program:\t\t" + e.PROGRAMMING_TIME);
-        System.out.println("Purity ratio:\t\t\t\t\t" + e.PURITY_RATIO);
         CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
-
-        new GraphBuildVisitor(e).visit(unit, null);
-        return e;
+        new ModuleVisitor().visit(unit, null);
+//        new GraphBuildVisitor(e).visit(unit, null);
     }
 
 //    private static void runSimpleTest(String path) throws FileNotFoundException {
@@ -64,6 +51,7 @@ public class Main {
 //        new CalculateVisitor().visit(compilationUnit, null);
 //    }
 
+    @Deprecated
     private static void calculateHalsteadMetrics(String path) {
 //        try {
 //            runSimpleTest(path);

@@ -1,6 +1,7 @@
 package metrics;
 
 import metrics.java7.JavaBaseVisitor;
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import visitors.CyclomaticComplexityVisitor;
 
@@ -14,12 +15,22 @@ public class Initiator {
     public Initiator() {
     }
 
-    public MetricsEvaluator initiate(String fileURL) throws Exception {
+    public MetricsEvaluator initiate(CharStream stream) throws Exception {
+        resetOps();
+        Tokenizer.getInstance().tokenize(stream);
+
+        return getEvaluator();
+    }
+
+    private void resetOps() {
+        Tokenizer.reset();
         Operators.getInstance().count.clear();
         Operators.getInstance().name.clear();
         Operands.getInstance().name.clear();
         Operands.getInstance().count.clear();
-        Tokenizer.getInstance().tokenize(fileURL);
+    }
+
+    private MetricsEvaluator getEvaluator() {
         KeywordAnalyzer ka = new KeywordAnalyzer();
         ka.analyzeKeywords();
         SymbolAnalyzer sa = new SymbolAnalyzer();
@@ -30,9 +41,13 @@ public class Initiator {
         la.analyzeLiterals();
         MetricsEvaluator me = new MetricsEvaluator();
         me.evaluate();
-
-        JavaBaseVisitor visitor = new CyclomaticComplexityVisitor(me);
-        visitor.visit(Tokenizer.tree);
         return me;
+    }
+
+    public MetricsEvaluator initiate(String fileURL) throws Exception {
+        resetOps();
+        Tokenizer.getInstance().tokenize(fileURL);
+
+        return getEvaluator();
     }
 }

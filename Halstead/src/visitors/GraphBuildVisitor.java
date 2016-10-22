@@ -52,7 +52,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private MetricsEvaluator evaluator;
 
     private HashSet<String> variableDeclarators;
-    //    private List<SingleVariableDeclaration> params;
     private List<EnumDeclaration> enumFields;
 
     public GraphBuildVisitor(MetricsEvaluator evaluator) {
@@ -152,10 +151,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Node<Integer> nodeTry = edge.getEndNode();
         prevNode.push(nodeTry); // the graph continues from the initial node of the TryStatement
         infos.addInformationToLayer1(sourceGraph, nodeTry, n.toString());
-//        Edge<Integer> edgeThen = createConnection();
-//        infos.addInformationToLayer2(sourceGraph, edgeThen, n.toString());
-//        Node<Integer> nodeTryThen = edgeThen.getEndNode();
-//        prevNode.push(nodeTry);
         n.getTryBlock().accept(this, arg);
         boolean breakThenFlag = controlFlag; // verify if a break or a continue occur in the TryThen.
         boolean returnThenFlag = returnFlag; // verify if a return occur in the TryThen.
@@ -379,8 +374,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Node<Integer> noEndSwitch = sourceGraph.addNode(++nodeNum); // the final node of the SwitchStatement.
         breakNode.push(noEndSwitch); // if a break occur goes to the final node of the ForStatement.
         continueNode.push(noEndSwitch); // if a continue occur goes to the incFor node.
-//        prevNode.push(noEndSwitch);
-//        prevNode.push(noSwitch); // the graph continues from the initial node of the SwitchStatement.
         switchBegin.push(noSwitch);
         swichEnd.push(noEndSwitch);
 
@@ -392,14 +385,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public void visit(SwitchEntryStmt node, Object arg) {
-//        List<Statement> switchEntryStmts = node.getStmts();
-//        StringBuilder entryBuilder = new StringBuilder();
         addBranchCount();
-//        String endStmt = switchEntryStmts.get(switchEntryStmts.size() - 1).toString(); // get last statement
-//        if (endStmt.contains("return"))
-//            returnFlag = true;
-//        if (endStmt.contains("break"))
-//            controlFlag = false;
         prevNode.push(switchBegin.peek());
         Edge<Integer> edgeCase = createConnection();
         if (node.getLabel() == null)
@@ -420,24 +406,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!controlFlag) { // case without a body
             sourceGraph.addEdge(noCase, swichEnd.peek());
         }
-
-//        if (!returnFlag) { // verify if a return occur in the SwitchBody.
-////            sourceGraph.addEdge(noCase, swichEnd);
-//            returnFlag = false;
-//        }
-//        nodeNum++;
-//        Node<Integer> n = sourceGraph.addNode(nodeNum); // create the node of the case.
-//        infos.addInformationToLayer1(sourceGraph, n, node.toString());
-//        Edge<Integer> edge = null;
-//        if (!caseFlag && prevNode.size() > 2)
-//            edge = sourceGraph.addEdge(prevNode.pop(), n); // create a edge from the previous node to this node.
-//        edge = sourceGraph.addEdge(prevNode.peek(), n); // create a edge from the begin of switch to this node.
-//        if (node.getLabel() == null)// if the node is the default of the switch.
-//            infos.addInformationToLayer2(sourceGraph, edge, "default:");
-//        else
-//            infos.addInformationToLayer2(sourceGraph, edge, "case " + node.toString());
-//        prevNode.push(n); // the graph continues from the case node of the SwitchStatement.
-
     }
 
     @Override
@@ -547,11 +515,13 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
 //        sourceGraph.accept(new ReNumNodesVisitor());
 
-        Graph<Integer> clonedObj = SerializationUtils.clone(sourceGraph);
-//        EssComplexVisitor<Integer> visitor = new EssComplexVisitor<>(clonedObj);
-//        clonedObj.accept(visitor);
-        ModuleComplexVisitor<Integer> mVisitor = new ModuleComplexVisitor<>(clonedObj);
-        clonedObj.accept(mVisitor);
+        Graph<Integer> essComplexGraph = SerializationUtils.clone(sourceGraph);
+        EssComplexVisitor<Integer> visitor = new EssComplexVisitor<>(essComplexGraph);
+        essComplexGraph.accept(visitor);
+
+        Graph<Integer> modDesignGraph = SerializationUtils.clone(sourceGraph);
+        ModuleComplexVisitor<Integer> mVisitor = new ModuleComplexVisitor<>(modDesignGraph);
+        modDesignGraph.accept(mVisitor);
 
         sourceGraph.sortNodes();
 
@@ -559,7 +529,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
 //        printEdges(sourceGraph);
 
-        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + calculateCC());
+//        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + calculateCC());
         initBuilder();
     }
 
@@ -597,6 +567,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         nodeNum = getNodeCount();
         edgeNum = getEdgeCount();
 //        decisionDensity = conditionsCount / dp;
+
+        calculateCC();
     }
 
     private Edge<Integer> createConnection() {

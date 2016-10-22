@@ -6,10 +6,7 @@ import metrics.cpp.CPP14Lexer;
 import metrics.cpp.CPP14Parser;
 import metrics.java7.JavaLexer;
 import metrics.java7.JavaParser;
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.*;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.BufferedReader;
@@ -27,17 +24,37 @@ public class Tokenizer {
     public ArrayList<String> tokens = new ArrayList();
     protected static Tokenizer instance;
     public static String fileType = null;
-    public static ParserRuleContext tree;
+//    public static ParserRuleContext tree;
 
     private Tokenizer() {
     }
 
     public static Tokenizer getInstance() {
-        if(instance == null) {
+        if(null == instance) {
             instance = new Tokenizer();
         }
 
         return instance;
+    }
+
+    public static void reset() {
+        if (null != instance)
+            instance.tokens.clear();
+    }
+
+    public void tokenize(CharStream stream) {
+        TokenStream token = null;
+        fileType = "java";
+        // Using java7 parser is faster
+        JavaLexer lexer = new JavaLexer(stream);
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+        JavaParser parser = new JavaParser(tokenStream);
+        parser.compilationUnit();
+        token = parser.getTokenStream();
+
+        for(int i = 0; i < token.size(); ++i) {
+            this.tokens.add(token.get(i).getText());
+        }
     }
 
     public void tokenize(String fileURL) throws IOException {
@@ -70,20 +87,9 @@ public class Tokenizer {
                     JavaLexer lexer = new JavaLexer(stream);
                     CommonTokenStream tokenStream = new CommonTokenStream(lexer);
                     JavaParser parser = new JavaParser(tokenStream);
-                    Tokenizer.tree = parser.compilationUnit();
-
-
-//                    ASTParser astParser = ASTParser.newParser(AST.JLS8);
-//                    astParser.setKind(ASTParser.K_COMPILATION_UNIT);
-//                    astParser.setSource(ReadFileToCharArray(fileURL));
-//                    astParser.setResolveBindings(true);
-//                    org.eclipse.jdt.core.dom.CompilationUnit parserUnit = (org.eclipse.jdt.core.dom.CompilationUnit)astParser.createAST(null);
-//
-//                    GraphBuilder builder = new GraphBuilder("CC", parserUnit);
-//                    parserUnit.accept(builder);
-
+//                    Tokenizer.tree = parser.compilationUnit();
                     token = parser.getTokenStream();
-//                    System.out.println(builder.getMethodParameters());
+
                     // Using java8 parser is too slow in general
 //                    Java8Lexer jlexer = new Java8Lexer(stream);
 //                    CommonTokenStream jtokenStream = new CommonTokenStream(jlexer);
@@ -98,6 +104,7 @@ public class Tokenizer {
         }
 
     }
+
     public static char[] ReadFileToCharArray(String filePath) throws IOException {
         StringBuilder fileData = new StringBuilder(1000);
         BufferedReader reader = new BufferedReader(new FileReader(filePath));

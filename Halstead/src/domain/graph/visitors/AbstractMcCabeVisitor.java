@@ -58,8 +58,8 @@ public class AbstractMcCabeVisitor<V extends Comparable<V>> extends DepthFirstGr
             graph.accept(this);
         }
         else {
-            System.out.println("Reduced:");
-            GraphBuildVisitor.printEdges(graph);
+//            System.out.println("Reduced:");
+//            GraphBuildVisitor.printEdges(graph);
         }
 
     }

@@ -19,8 +19,8 @@ import java.util.Set;
 public class EssComplexVisitor<V extends Comparable<V>> extends AbstractMcCabeVisitor<V> {
 
     public EssComplexVisitor(Graph<V> sourceGraph) {
-        System.out.println("B4:");
-        GraphBuildVisitor.printEdges(sourceGraph);
+//        System.out.println("B4:");
+//        GraphBuildVisitor.printEdges(sourceGraph);
         structureProvider = new StructureProvider<>();
         structureProvider.addStructure(new IfStmt<>());
         structureProvider.addStructure(new SwitchCaseStmt<>());

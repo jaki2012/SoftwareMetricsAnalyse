@@ -20,8 +20,8 @@ import java.util.Set;
 public class ModuleComplexVisitor<V extends Comparable<V>> extends AbstractMcCabeVisitor<V> {
 
     public ModuleComplexVisitor(Graph<V> sourceGraph) {
-        System.out.println("B4:");
-        GraphBuildVisitor.printEdges(sourceGraph);
+//        System.out.println("B4:");
+//        GraphBuildVisitor.printEdges(sourceGraph);
         structureProvider = new StructureProvider<>();
         structureProvider.addStructure(new Sequential<V>());
         structureProvider.addStructure(new Conditional<V>());

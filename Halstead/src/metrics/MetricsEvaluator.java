@@ -13,9 +13,8 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 public class MetricsEvaluator {
     public double BRANCH_COUNT;
     public double CALL_PAIRS;
-    public int branchCount;
-    public int multiConditionCount;
-    public int modifiedConditionCount;
+    public int MULTI_CONDITION_COUNT;
+    public int MODIFIED_CONDITION_COUNT;
     public int globalParameters;
 
     public double PROGRAM_LENGTH;
