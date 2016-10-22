@@ -383,7 +383,7 @@ public class Graph<V extends Comparable<V>> implements Serializable {
 	}
 
 	/**
-	 * The edge number of th graph
+	 * The edge number of the graph
 	 * @return
 	 */
 	public int edgeCount() {

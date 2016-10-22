@@ -5,6 +5,7 @@ import ast.graph.Graph;
 import ast.graph.Node;
 import domain.graph.structures.BaseStructure;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 /**
@@ -13,11 +14,23 @@ import java.util.Set;
  * Author:  Novemser
  * 2016/10/22
  */
-public class Repetitive<V extends Comparable<V>> extends BaseStructure<V> {
+public class Repetitive<V extends Comparable<V>> extends BaseRule<V> {
+    public Repetitive(String method) {
+        super(method);
+    }
+
     @Override
     public boolean isStructure(Graph<V> graph, Node<V> node) {
-        if (null == node || graph == null || node.isContainMethodCall())
-            return false;
+        try {
+            if (null == node
+                    || graph == null
+                    || (boolean) method.invoke(node))
+                return false;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
 
         super.isStructure(graph, node);
         Set<Edge<V>> edges = graph.getNodeEdges(node);

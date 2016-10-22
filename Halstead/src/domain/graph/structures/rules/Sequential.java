@@ -5,6 +5,7 @@ import ast.graph.Graph;
 import ast.graph.Node;
 import domain.graph.structures.BaseStructure;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 /**
@@ -13,7 +14,11 @@ import java.util.Set;
  * Author:  Novemser
  * 2016/10/22
  */
-public class Sequential<V extends Comparable<V>> extends BaseStructure<V> {
+public class Sequential<V extends Comparable<V>> extends BaseRule<V> {
+
+    public Sequential(String method) {
+        super(method);
+    }
 
     @Override
     public boolean isStructure(Graph<V> graph, Node<V> node) {
@@ -27,25 +32,31 @@ public class Sequential<V extends Comparable<V>> extends BaseStructure<V> {
             Node<V> nextNode = ((Edge<V>) edges.toArray()[0]).getEndNode(); // next node
 
             if (null != nextNode) {
-                if (!nextNode.isContainMethodCall()) {
-                    nodesToRemove.add(nextNode);
-                    edges = graph.getNodeEdges(nextNode);
+                try {
+                    if (!(boolean)method.invoke(nextNode)) {
+                        nodesToRemove.add(nextNode);
+                        edges = graph.getNodeEdges(nextNode);
 
-                    if (edges != null && edges.size() == 1) {
-                        nextNode = ((Edge<V>) edges.toArray()[0]).getEndNode(); // final node
+                        if (edges != null && edges.size() == 1) {
+                            nextNode = ((Edge<V>) edges.toArray()[0]).getEndNode(); // final node
 
-                        if (nextNode != null) {
-                            Set<Edge<V>> toStartEdges = graph.getNodeEdges(nextNode);
-                            if (toStartEdges.size() > 0) {
-                                for (Edge<V> edge : toStartEdges) {
-                                    if (edge.getEndNode().equals(node))
-                                        return false;
+                            if (nextNode != null) {
+                                Set<Edge<V>> toStartEdges = graph.getNodeEdges(nextNode);
+                                if (toStartEdges.size() > 0) {
+                                    for (Edge<V> edge : toStartEdges) {
+                                        if (edge.getEndNode().equals(node))
+                                            return false;
+                                    }
                                 }
+                                return true;
                             }
-                            return true;
                         }
-                    }
 
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
                 }
             }
         }

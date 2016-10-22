@@ -209,7 +209,7 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
 
         int methodDecisionPoints = methodEntry.decisionPoints;
 
-        System.out.printf("[%-20s method] - CC: %d\t\tNodes: %d\n", ctx.Identifier().getText(), methodDecisionPoints, methodEntry.getNodeCnt());
+        System.out.printf("[%-20s methodName] - CC: %d\t\tNodes: %d\n", ctx.Identifier().getText(), methodDecisionPoints, methodEntry.getNodeCnt());
 
         Entry classEntry = entryStack.peek();
         classEntry.methodCount++;

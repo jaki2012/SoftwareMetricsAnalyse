@@ -4,6 +4,7 @@ import ast.graph.Edge;
 import ast.graph.Graph;
 import ast.graph.Node;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 /**

@@ -5,6 +5,7 @@ import ast.graph.Graph;
 import ast.graph.Node;
 import domain.graph.structures.BaseStructure;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -14,7 +15,11 @@ import java.util.Set;
  * Author:  Novemser
  * 2016/10/22
  */
-public class IfStmtNCall<V extends Comparable<V>> extends BaseStructure<V> {
+public class IfStmtNCall<V extends Comparable<V>> extends BaseRule<V> {
+
+    public IfStmtNCall(String method) {
+        super(method);
+    }
 
     /**
      * If the node down here is a
@@ -41,40 +46,46 @@ public class IfStmtNCall<V extends Comparable<V>> extends BaseStructure<V> {
             Node<V> rightNode = tmpEdge.get(1).getEndNode();
 
             // Get the branches of if statement
-            if (    leftNode != null
-                    && rightNode != null
-                    && !leftNode.isContainMethodCall()
-                    && !rightNode.isContainMethodCall()) {
-                nodesToRemove.add(leftNode);
-                nodesToRemove.add(rightNode);
+            try {
+                if (    leftNode != null
+                        && rightNode != null
+                        && !(boolean)method.invoke(leftNode)
+                        && !(boolean)method.invoke(rightNode)) {
+                    nodesToRemove.add(leftNode);
+                    nodesToRemove.add(rightNode);
 
-                tmpEdge.clear();
-                Node<V> leftFinal, rightFinal;
-                edges = graph.getNodeEdges(leftNode); // get end nodes of left node
-
-                if (    null != edges
-                        && edges.size() == 1) { // if left node only has one edge
-                    tmpEdge.addAll(edges);
-                    leftFinal = tmpEdge.get(0).getEndNode(); // get left final node
-                    edgesToRemove.add(tmpEdge.get(0));
-//                    nodesToRemove.add(leftFinal);
                     tmpEdge.clear();
+                    Node<V> leftFinal, rightFinal;
+                    edges = graph.getNodeEdges(leftNode); // get end nodes of left node
 
-                    if (leftFinal != null) {
-                        edges = graph.getNodeEdges(rightNode);
+                    if (    null != edges
+                            && edges.size() == 1) { // if left node only has one edge
+                        tmpEdge.addAll(edges);
+                        leftFinal = tmpEdge.get(0).getEndNode(); // get left final node
+                        edgesToRemove.add(tmpEdge.get(0));
+    //                    nodesToRemove.add(leftFinal);
+                        tmpEdge.clear();
 
-                        if (null != edges && edges.size() == 1) { // if right node only has one edge
-                            tmpEdge.addAll(edges);
-                            edgesToRemove.add(tmpEdge.get(0));
-                            rightFinal = tmpEdge.get(0).getEndNode(); // get right final node
+                        if (leftFinal != null) {
+                            edges = graph.getNodeEdges(rightNode);
 
-                            if (leftFinal.equals(rightFinal)) { // if left final && right final are equal
-                                graph.addEdge(node, leftFinal);
-                                return true;
+                            if (null != edges && edges.size() == 1) { // if right node only has one edge
+                                tmpEdge.addAll(edges);
+                                edgesToRemove.add(tmpEdge.get(0));
+                                rightFinal = tmpEdge.get(0).getEndNode(); // get right final node
+
+                                if (leftFinal.equals(rightFinal)) { // if left final && right final are equal
+                                    graph.addEdge(node, leftFinal);
+                                    return true;
+                                }
                             }
                         }
                     }
                 }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
         }
 

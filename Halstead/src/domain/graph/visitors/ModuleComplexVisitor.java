@@ -22,12 +22,13 @@ public class ModuleComplexVisitor<V extends Comparable<V>> extends AbstractMcCab
     public ModuleComplexVisitor(Graph<V> sourceGraph) {
 //        System.out.println("B4:");
 //        GraphBuildVisitor.printEdges(sourceGraph);
+        String method = "isContainMethodCall";
         structureProvider = new StructureProvider<>();
-        structureProvider.addStructure(new Sequential<V>());
-        structureProvider.addStructure(new Conditional<V>());
-        structureProvider.addStructure(new Looping<V>());
-        structureProvider.addStructure(new Repetitive<V>());
-        structureProvider.addStructure(new IfStmtNCall<>());
+        structureProvider.addStructure(new Sequential<>(method));
+        structureProvider.addStructure(new Conditional<>(method));
+        structureProvider.addStructure(new Looping<>(method));
+        structureProvider.addStructure(new Repetitive<>(method));
+        structureProvider.addStructure(new IfStmtNCall<>(method));
         graph = sourceGraph;
     }
 }

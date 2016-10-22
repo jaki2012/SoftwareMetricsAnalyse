@@ -4,16 +4,14 @@ import ast.graph.Edge;
 import ast.graph.Graph;
 import ast.graph.GraphInformation;
 import ast.graph.Node;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import domain.constants.Layer;
 import domain.graph.visitors.EssComplexVisitor;
 import domain.graph.visitors.ModuleComplexVisitor;
+import metrics.Dimension;
 import metrics.MetricsEvaluator;
 import metrics.SymbolAnalyzer;
 import org.apache.commons.lang3.SerializationUtils;
@@ -46,21 +44,22 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private int conditionsCount;
     private int decisionDensity;
     private int globalParameters;
+
     private Stack<Node<Integer>> switchBegin;
-    private Stack<Node<Integer>> swichEnd;
+    private Stack<Node<Integer>> switchEnd;
 
     private MetricsEvaluator evaluator;
 
     private HashSet<String> variableDeclarators;
     private List<EnumDeclaration> enumFields;
-
+    private Set<String> parameters;
     public GraphBuildVisitor(MetricsEvaluator evaluator) {
         this.evaluator = evaluator;
         initBuilder();
     }
 
     private void initBuilder() {
-        //this.methodName = methodName; // name of the method to be analyzed.
+        //this.methodName = methodName; // name of the methodName to be analyzed.
         nodeNum = 0; // number of the node.
         edgeNum = 0;
         callPairs = 0; // number of function calls
@@ -80,7 +79,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         continueNode = new Stack<>(); // stack that contains the node to be linked if a continue occurs.
         breakNode = new Stack<>(); // stack that contains the node to be linked if a break occurs.
         switchBegin = new Stack<>();
-        swichEnd = new Stack<>();
+        switchEnd = new Stack<>();
         controlFlag = false; // flag that control if a continue or a break occur.
         returnFlag = false; // flag that control if a return occur.
         caseFlag = false; // flag that control the occurrence of a break in the previous case;
@@ -89,6 +88,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         prevNode.push(initial); // add first node to the previous node stack.
         finalnode = initial; // The final node.
         infos = new GraphInformation(); // the graph informations.
+        parameters = new TreeSet<>();
     }
 
     @Override
@@ -375,10 +375,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         breakNode.push(noEndSwitch); // if a break occur goes to the final node of the ForStatement.
         continueNode.push(noEndSwitch); // if a continue occur goes to the incFor node.
         switchBegin.push(noSwitch);
-        swichEnd.push(noEndSwitch);
+        switchEnd.push(noEndSwitch);
 
         super.visit(n, arg);
-        swichEnd.pop();
+        switchEnd.pop();
         switchBegin.pop();
     }
 
@@ -404,7 +404,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
             }
         }
         if (!controlFlag) { // case without a body
-            sourceGraph.addEdge(noCase, swichEnd.peek());
+            sourceGraph.addEdge(noCase, switchEnd.peek());
         }
     }
 
@@ -448,6 +448,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(NameExpr n, Object arg) {
+        if (parameters.contains(n.getName()))
+            if (prevNode.size() > 0)
+                prevNode.peek().containsParamCall();
+
         if (variableDeclarators.contains(n.toString()))
             addGlobalParameter(1);
         super.visit(n, arg);
@@ -475,6 +479,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(MethodDeclaration node, Object arg) {
+        for (Parameter p : node.getParameters()) {
+            parameters.add(p.getName());
+        }
         addGlobalParameter(node.getParameters().size());
         super.visit(node, arg);
 
@@ -548,17 +555,29 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     /**
      * Call before calculate final
-     * WARNING: Call this after calculateFinal()
+     * NOTE: Call this after calculateFinal()
      * @return calculated Cyclomatic Complexity
      */
-    private int calculateCC() {
+    private int calculateCC(Graph graph) {
         int offset;
 
-        offset = sourceGraph.getFinalNodes().size();
+        offset = graph.getFinalNodes().size();
         // all final nodes counts for one
         // in CC calculation
         offset = offset == 1? (offset - 1): (offset - 2);
-        return edgeNum - (nodeNum - offset) + 2;
+        return graph.edgeCount() - (graph.size() - offset) + 2;
+    }
+
+    private void bindToMetric() {
+        evaluator.putDimension(Dimension.BRANCH_COUNT, (double)branchCount);
+        evaluator.putDimension(Dimension.MULTIPLE_CONDITION_COUNT, (double)multiConditionCount);
+        evaluator.putDimension(Dimension.MODIFIED_CONDITION_COUNT, (double)modifiedConditionCount);
+        evaluator.putDimension(Dimension.NODE_COUNT, (double)nodeNum);
+        evaluator.putDimension(Dimension.EDGE_COUNT, (double)edgeNum);
+        evaluator.putDimension(Dimension.CONDITION_COUNT, (double)conditionsCount);
+        evaluator.putDimension(Dimension.CALL_PAIRS, (double)callPairs);
+        evaluator.putDimension(Dimension.PARAMETER_COUNT, (double)globalParameters);
+
     }
 
     private void calculateFinal() {
@@ -568,7 +587,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         edgeNum = getEdgeCount();
 //        decisionDensity = conditionsCount / dp;
 
-        calculateCC();
+        System.out.println("CC:" + calculateCC(sourceGraph));
+        bindToMetric();
     }
 
     private Edge<Integer> createConnection() {
@@ -626,6 +646,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     private void addCallPairs() {
         callPairs++;
-        prevNode.peek().containsMethodCall(); // set this node to contains method call
+        prevNode.peek().containsMethodCall(); // set this node to contains methodName call
     }
 }

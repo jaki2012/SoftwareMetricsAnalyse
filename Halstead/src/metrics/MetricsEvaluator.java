@@ -1,8 +1,9 @@
 package metrics;
 
-import visitors.CyclomaticComplexityVisitor;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Project: Halstead
@@ -11,11 +12,16 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
  * 2016/10/7
  */
 public class MetricsEvaluator {
-    public double BRANCH_COUNT;
-    public double CALL_PAIRS;
-    public int MULTI_CONDITION_COUNT;
-    public int MODIFIED_CONDITION_COUNT;
-    public int globalParameters;
+//    public double BRANCH_COUNT;
+//    public double CALL_PAIRS;
+//    public int MULTI_CONDITION_COUNT;
+//    public int MODIFIED_CONDITION_COUNT;
+//    public int globalParameters;
+//    public int CONDITION_COUNT;
+//    public int CYCLOMATIC_COMPLEXITY;
+//    public int CYCLOMATIC_DENSITY;
+//    public int DECISION_COUNT;
+//    public int DECISION_DENSITY;
 
     public double PROGRAM_LENGTH;
     public double PROGRAM_VOCABULARY;
@@ -30,8 +36,22 @@ public class MetricsEvaluator {
     public double n2;
     public double N1;
     public double N2;
+    private Map<Dimension, Double> dimensions;
 
     public MetricsEvaluator() {
+        dimensions = new HashMap<>();
+        // add all dimensions to a map
+        for (Dimension dimension : Dimension.values()) {
+            dimensions.put(dimension, 0.0);
+        }
+    }
+
+    public void putDimension(Dimension dimension, Double value) {
+        dimensions.put(dimension, value);
+    }
+
+    public Double getDimension(Dimension dimension) {
+        return dimensions.get(dimension);
     }
 
     public void evaluate() {

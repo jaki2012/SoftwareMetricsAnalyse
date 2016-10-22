@@ -13,7 +13,8 @@ import metrics.MetricsEvaluator;
  * 2016/10/22
  */
 public class ModuleVisitor extends VoidVisitorAdapter {
-    String head = "public class Test {";
+    // Create a module template
+    String head = "public class Module {";
     String end = "}";
 
     @Override
