@@ -63,7 +63,6 @@ Please use Maven to get all these dependencies(In idea, press: Project Structure
 
 ```
 File path:E:\MyCodes\Java\FileSys\src\simple.java
-=================================================
 ======================================
 Module name:simpleIf
 BRANCH_COUNT                    2.0
@@ -267,6 +266,6 @@ Purity ratio:					11.050490777211849
   - 见到一哥不打招呼
   - 把软件卖给别的组织/个人
   - 每天熬夜 不爱护身体
-  
+
 --END--
 ```
