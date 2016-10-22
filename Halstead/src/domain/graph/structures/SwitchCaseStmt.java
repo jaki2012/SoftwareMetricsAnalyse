@@ -1,8 +1,8 @@
 package domain.graph.structures;
 
-import adt.graph.Edge;
-import adt.graph.Graph;
-import adt.graph.Node;
+import ast.graph.Edge;
+import ast.graph.Graph;
+import ast.graph.Node;
 
 import java.util.*;
 

@@ -1,9 +1,9 @@
 package visitors;
 
-import adt.graph.Edge;
-import adt.graph.Graph;
-import adt.graph.GraphInformation;
-import adt.graph.Node;
+import ast.graph.Edge;
+import ast.graph.Graph;
+import ast.graph.GraphInformation;
+import ast.graph.Node;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -13,7 +13,6 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import domain.constants.Layer;
 import domain.graph.visitors.EssComplexVisitor;
-import domain.graph.visitors.RenumNodesGraphVisitor;
 import metrics.MetricsEvaluator;
 import metrics.SymbolAnalyzer;
 import org.apache.commons.lang3.SerializationUtils;
@@ -368,7 +367,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         infos.addInformationToLayer2(sourceGraph, edge, node.toString());
         prevNode.push(noEndForEach); // the graph continues from the final node of the EnhancedForStatement.
         finalnode = noEndForEach; // update the final node.
-
     }
 
     @Override
@@ -495,8 +493,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
      */
     @Override
     public void visit(FieldDeclaration n, Object arg) {
-        for (VariableDeclarator declarator : n.getVariables()) {
-            variableDeclarators.add(declarator.getId().toString());
+        for (VariableDeclarator decelerator : n.getVariables()) {
+            variableDeclarators.add(decelerator.getId().toString());
         }
         super.visit(n, arg);
     }
@@ -540,6 +538,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         if (!sourceGraph.getInitialNodes().iterator().hasNext())
             sourceGraph.addInitialNode(sourceGraph.getNodes().iterator().next());
+
+//        sourceGraph.accept(new ReNumNodesVisitor());
 
         Graph<Integer> clonedObj = SerializationUtils.clone(sourceGraph);
         EssComplexVisitor<Integer> visitor = new EssComplexVisitor<>(clonedObj);
@@ -603,11 +603,11 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         return sourceGraph;
     }
 
-    public int getNodeCount() {
+    private int getNodeCount() {
         return getGraph().size();
     }
 
-    public int getEdgeCount() {
+    private int getEdgeCount() {
         return getGraph().edgeCount();
     }
 

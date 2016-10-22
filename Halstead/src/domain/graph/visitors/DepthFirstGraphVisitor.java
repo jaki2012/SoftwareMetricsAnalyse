@@ -3,9 +3,9 @@ package domain.graph.visitors;
 import java.util.HashSet;
 import java.util.Set;
 
-import adt.graph.Edge;
-import adt.graph.Graph;
-import adt.graph.Node;
+import ast.graph.Edge;
+import ast.graph.Graph;
+import ast.graph.Node;
 
 /**
  * Project: Halstead

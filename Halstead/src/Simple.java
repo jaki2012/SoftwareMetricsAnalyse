@@ -1,7 +1,10 @@
 import java.util.Scanner;
 
 /**
- * Created by Novemser on 2016/10/6.
+ * Project: Halstead
+ * Package: ${PACKAGE_NAME}
+ * Author:  Novemser
+ * 2016/10/6
  */
 public class Simple {
     private int mem1 = 1;

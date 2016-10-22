@@ -1,8 +1,5 @@
 package domain.graph.structures;
 
-import adt.graph.Graph;
-import adt.graph.Node;
-
 /**
  * Project: Halstead
  * Package: domain.graph.structures
