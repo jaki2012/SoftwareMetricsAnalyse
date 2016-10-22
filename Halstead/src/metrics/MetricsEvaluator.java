@@ -36,7 +36,7 @@ public class MetricsEvaluator {
     public double n2;
     public double N1;
     public double N2;
-    private Map<Dimension, Double> dimensions;
+    public Map<Dimension, Double> dimensions;
 
     public MetricsEvaluator() {
         dimensions = new HashMap<>();

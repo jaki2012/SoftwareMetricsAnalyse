@@ -607,6 +607,12 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         evaluator.putDimension(Dimension.GLOBAL_DATA_COMPLEXITY, dataComplexity);
         evaluator.putDimension(Dimension.GLOBAL_DATA_DENSITY, dataComplexity / cyclomaticComplexity);
         evaluator.putDimension(Dimension.MAINTENANCE_SEVERITY, essComplexity / cyclomaticComplexity);
+        for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
+            if (!entry.getValue().equals(0.0)) {
+                String s = String.format("%-32s%s", entry.getKey(), entry.getValue());
+                System.out.println(s);
+            }
+        }
     }
 
     private void calculateFinal() {
@@ -619,7 +625,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         designDensity = moduleDesignComplexity / cyclomaticComplexity;
         if (cyclomaticComplexity - 1 > 0 && essComplexity - 1 >= 0)
             essDensity = (essComplexity - 1) / (cyclomaticComplexity - 1);
-        System.out.println("CC:" + cyclomaticComplexity);
+
         bindToMetric();
     }
 
