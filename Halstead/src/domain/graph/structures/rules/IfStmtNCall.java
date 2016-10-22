@@ -63,7 +63,6 @@ public class IfStmtNCall<V extends Comparable<V>> extends BaseRule<V> {
                         tmpEdge.addAll(edges);
                         leftFinal = tmpEdge.get(0).getEndNode(); // get left final node
                         edgesToRemove.add(tmpEdge.get(0));
-    //                    nodesToRemove.add(leftFinal);
                         tmpEdge.clear();
 
                         if (leftFinal != null) {

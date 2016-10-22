@@ -41,6 +41,7 @@ public class AbstractMcCabeVisitor<V extends Comparable<V>> extends DepthFirstGr
         if (edgesToRemove.size() != 0 || nodesToRemove.size() != 0) {
             edgesToRemove.forEach(graph::removeEdge); // first remove all connected nodes
             nodesToRemove.forEach(graph::removeNode);
+
             edgesToRemove.clear();
             nodesToRemove.clear();
 

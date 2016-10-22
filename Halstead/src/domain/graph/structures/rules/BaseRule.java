@@ -16,15 +16,13 @@ public class BaseRule<V extends Comparable<V>> extends BaseStructure<V> {
     protected String methodName;
     protected Method method;
 
-
     public BaseRule(String methodName) {
         this.methodName = methodName;
 
-        for (Method m : Node.class.getDeclaredMethods()) {
+        for (Method m : Node.class.getDeclaredMethods()) { // get the method reflected
             if (m.getName().equals(methodName)) {
                 method = m;
             }
-
         }
     }
 }
