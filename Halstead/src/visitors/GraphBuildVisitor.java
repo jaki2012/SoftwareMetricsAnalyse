@@ -388,6 +388,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         switchBegin.pop();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void visit(SwitchEntryStmt node, Object arg) {
 //        List<Statement> switchEntryStmts = node.getStmts();
@@ -405,14 +406,18 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         else
             infos.addInformationToLayer2(sourceGraph, edgeCase, "case" + node.getLabel());
         Node<Integer> noCase = edgeCase.getEndNode(); // the initial node of the EnhancedForStatement.
+        infos.addInformationToLayer1(sourceGraph, noCase, node.toString());
         prevNode.push(noCase);
-
+        controlFlag = false;
         if(node.getStmts() != null) {
             Iterator var3 = node.getStmts().iterator();
             while(var3.hasNext()) {
                 Statement s = (Statement)var3.next();
                 s.accept(this, arg);
             }
+        }
+        if (!controlFlag) {
+            sourceGraph.addEdge(noCase, swichEnd.peek());
         }
 
 //        if (!returnFlag) { // verify if a return occur in the SwitchBody.

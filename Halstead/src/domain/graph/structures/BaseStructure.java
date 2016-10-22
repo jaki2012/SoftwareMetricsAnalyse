@@ -13,9 +13,9 @@ import java.util.Set;
  * Author:  Novemser
  * 2016/10/21
  */
-class BaseStructure<V extends Comparable<V>> implements IStructure<V> {
-    Set<Node<V>> nodesToRemove = new HashSet<>();
-    Set<Edge<V>> edgesToRemove = new HashSet<>();
+public class BaseStructure<V extends Comparable<V>> implements IStructure<V> {
+    protected Set<Node<V>> nodesToRemove = new HashSet<>();
+    protected Set<Edge<V>> edgesToRemove = new HashSet<>();
 
     /**
      * Perform cleaning to temp data sets.
