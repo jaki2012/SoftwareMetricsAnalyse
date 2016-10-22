@@ -416,7 +416,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 s.accept(this, arg);
             }
         }
-        if (!controlFlag) {
+        if (!controlFlag) { // case without a body
             sourceGraph.addEdge(noCase, swichEnd.peek());
         }
 
