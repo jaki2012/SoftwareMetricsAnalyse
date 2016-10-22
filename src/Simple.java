@@ -6,6 +6,7 @@ import java.util.Scanner;
  * Author:  Novemser
  * 2016/10/6
  */
+@Deprecated
 public class Simple {
     private int mem1 = 1;
     private double mem2 = 1.2;
