@@ -26,7 +26,6 @@ public class Main {
 
     @SuppressWarnings("unchecked")
     private static void calculate(String path) throws Exception {
-
         CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
         new ModuleVisitor().visit(unit, null);
     }

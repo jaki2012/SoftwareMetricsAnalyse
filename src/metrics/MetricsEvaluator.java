@@ -1,9 +1,6 @@
 package metrics;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Project: Halstead
@@ -28,7 +25,7 @@ public class MetricsEvaluator {
     public Map<Dimension, Double> dimensions;
 
     public MetricsEvaluator() {
-        dimensions = new HashMap<>();
+        dimensions = new TreeMap<>();
         // add all dimensions to a map
         for (Dimension dimension : Dimension.values()) {
             dimensions.put(dimension, 0.0);
