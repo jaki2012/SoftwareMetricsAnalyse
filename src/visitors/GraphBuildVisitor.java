@@ -12,7 +12,9 @@ import domain.constants.Layer;
 import domain.graph.visitors.DataComplexVisitor;
 import domain.graph.visitors.EssComplexVisitor;
 import domain.graph.visitors.ModuleComplexVisitor;
+import domain.utils.ANTLRModuleStream;
 import metrics.Dimension;
+import metrics.Initiator;
 import metrics.MetricsEvaluator;
 import metrics.SymbolAnalyzer;
 import org.apache.commons.lang3.SerializationUtils;
@@ -52,6 +54,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private double decisionDensity;
     private double designDensity;
     private double essDensity;
+    private String methodName;
 
     private Stack<Node<Integer>> switchBegin;
     private Stack<Node<Integer>> switchEnd;
@@ -62,13 +65,18 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private List<EnumDeclaration> enumFields;
     private Set<String> parameters;
 
+    @Deprecated
     public GraphBuildVisitor(MetricsEvaluator evaluator) {
-        this.evaluator = evaluator;
-        initBuilder();
+        this(evaluator, "");
     }
 
-    private void initBuilder() {
-        //this.methodName = methodName; // name of the methodName to be analyzed.
+    public GraphBuildVisitor(MetricsEvaluator evaluator, String methodName) {
+        this.evaluator = evaluator;
+        initBuilder(methodName);
+    }
+
+    private void initBuilder(String methodName) {
+        this.methodName = methodName; // name of the methodName to be analyzed.
         nodeNum = 0; // number of the node.
         edgeNum = 0;
         callPairs = 0; // number of function calls
@@ -489,11 +497,47 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(MethodDeclaration node, Object arg) {
+        if (!node.getName().equals(methodName)) {
+            String head = "public class Module {";
+            String end = "}";
+            System.out.println("===================");
+            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
+            StringBuilder builder = new StringBuilder();
+            builder.append(head);
+            builder.append(node.toString());
+            builder.append(end);
+            ANTLRModuleStream stream = new ANTLRModuleStream(builder.toString().toCharArray());
+            try {
+                MetricsEvaluator e = (new Initiator()).initiate(stream);
+                new GraphBuildVisitor(e, node.getName()).visit(node, arg);
+
+                System.out.println("n1:\t\t\t\t\t\t\t\t" + e.n1);
+                System.out.println("n2:\t\t\t\t\t\t\t\t" + e.n2);
+                System.out.println("n(Program Vocabulary):\t\t\t" + e.PROGRAM_VOCABULARY);
+
+                System.out.println("N1:\t\t\t\t\t\t\t\t" + e.N1);
+                System.out.println("N2:\t\t\t\t\t\t\t\t" + e.N2);
+                System.out.println("N(Program length):\t\t\t\t" + e.PROGRAM_LENGTH);
+                System.out.println("Calculated program length:\t\t" + e.ESTIMATED_LENGTH);
+                System.out.println("Volume:\t\t\t\t\t\t\t" + e.VOLUME);
+                System.out.println("Difficulty:\t\t\t\t\t\t" + e.DIFFICULTY);
+                System.out.println("Effort:\t\t\t\t\t\t\t" + e.PROGRAM_EFFORT);
+                System.out.println("Time required to program:\t\t" + e.PROGRAMMING_TIME);
+                System.out.println("Purity ratio:\t\t\t\t\t" + e.PURITY_RATIO);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            return;
+        }
+
         for (Parameter p : node.getParameters()) {
             parameters.add(p.getName());
         }
         addGlobalParameter(node.getParameters().size());
         super.visit(node, arg);
+
+        System.out.println("======================================");
+        System.out.println("Module name:" + node.getName());
 
         // Remove unnecessary nodes/edges
         List<Node<Integer>> nodesToRemove = new LinkedList<>();
@@ -553,10 +597,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         cyclomaticComplexity = calculateCC(sourceGraph);
         calculateFinal();
 
-//        printEdges(sourceGraph);
-
-//        System.out.println("Method name:" + node.getDeclarationAsString(false, false) + " Node:" + nodeNum + " Edge:" + edgeNum + " CC:" + calculateCC());
-        initBuilder();
+        initBuilder(methodName);
     }
 
     /**

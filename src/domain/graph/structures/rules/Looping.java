@@ -51,10 +51,14 @@ public class Looping<V extends Comparable<V>> extends BaseRule<V> {
                         } else if (second.equals(node)) {
                             edgesToRemove.add((Edge<V>) edges.toArray()[1]);
                             return true;
+                        } else {
+                            return false;
                         }
                     } else {
                         break;
                     }
+                } else {
+                    break;
                 }
 
             }

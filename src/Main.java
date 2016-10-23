@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String... args) throws Exception {
         // 默认包下一个叫Simple.java的文件 根据况更改
-        String path = "E:\\MyCodes\\Java\\FileSys\\src\\simple.java";
+        String path = "E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
         System.out.println("File path:" + path);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
         calculate(path);

@@ -19,8 +19,7 @@ public class ModuleVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(MethodDeclaration n, Object arg) {
-        System.out.println("======================================");
-        System.out.println("Module name:" + n.getName());
+
         StringBuilder builder = new StringBuilder();
         builder.append(head);
         builder.append(n.toString());
@@ -28,7 +27,7 @@ public class ModuleVisitor extends VoidVisitorAdapter {
         ANTLRModuleStream stream = new ANTLRModuleStream(builder.toString().toCharArray());
         try {
             MetricsEvaluator e = (new Initiator()).initiate(stream);
-            new GraphBuildVisitor(e).visit(n, arg);
+            new GraphBuildVisitor(e, n.getName()).visit(n, arg);
 
             System.out.println("n1:\t\t\t\t\t\t\t\t" + e.n1);
             System.out.println("n2:\t\t\t\t\t\t\t\t" + e.n2);
