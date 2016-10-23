@@ -35,6 +35,21 @@ public class MetricsEvaluator {
         }
     }
 
+    private void bindDimension() {
+        dimensions.put(Dimension.HALSTEAD_CONTENT, VOLUME / DIFFICULTY);
+        dimensions.put(Dimension.HALSTEAD_DIFFICULTY, DIFFICULTY);
+        dimensions.put(Dimension.HALSTEAD_EFFORT, PROGRAM_EFFORT);
+        dimensions.put(Dimension.HALSTEAD_ERROR_SET, DERIVED_BUGS);
+        dimensions.put(Dimension.HALSTEAD_LENGTH, PROGRAM_LENGTH);
+        dimensions.put(Dimension.HALSTEAD_LEVEL, 1 / DIFFICULTY);
+        dimensions.put(Dimension.HALSTEAD_PROGRAM_TIME, PROGRAMMING_TIME);
+        dimensions.put(Dimension.HALSTEAD_VOLUME, VOLUME);
+        dimensions.put(Dimension.NUM_OPERANDS, N2);
+        dimensions.put(Dimension.NUM_OPERATORS, N1);
+        dimensions.put(Dimension.NUM_UNIQUE_OPERANDS, n2);
+        dimensions.put(Dimension.NUM_UNIQUE_OPERATORS, n1);
+    }
+
     public void putDimension(Dimension dimension, Double value) {
         dimensions.put(dimension, value);
     }
@@ -44,16 +59,16 @@ public class MetricsEvaluator {
     }
 
     public void evaluate() {
-        this.N1 = (double)Operators.getInstance().name.size();
-        this.N2 = (double)Operands.getInstance().name.size();
+        this.N1 = (double) Operators.getInstance().name.size();
+        this.N2 = (double) Operands.getInstance().name.size();
 
         int i;
-        for(i = 0; i < Operators.getInstance().name.size(); ++i) {
-            this.n1 += (double)Integer.parseInt(((String)Operators.getInstance().count.get(i)).toString());
+        for (i = 0; i < Operators.getInstance().name.size(); ++i) {
+            this.n1 += (double) Integer.parseInt(((String) Operators.getInstance().count.get(i)).toString());
         }
 
-        for(i = 0; i < Operands.getInstance().name.size(); ++i) {
-            this.n2 += (double)Integer.parseInt(((String)Operands.getInstance().count.get(i)).toString());
+        for (i = 0; i < Operands.getInstance().name.size(); ++i) {
+            this.n2 += (double) Integer.parseInt(((String) Operands.getInstance().count.get(i)).toString());
         }
 
         this.PROGRAM_LENGTH = this.N1 + this.N2;
@@ -65,7 +80,7 @@ public class MetricsEvaluator {
         this.PROGRAM_EFFORT = this.VOLUME * this.DIFFICULTY;
         this.PROGRAMMING_TIME = this.PROGRAM_EFFORT / 18.0D;
         DERIVED_BUGS = VOLUME / 3000;
-
+        bindDimension();
     }
 
 }

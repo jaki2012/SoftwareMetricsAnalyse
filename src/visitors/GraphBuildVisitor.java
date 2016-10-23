@@ -511,19 +511,19 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 MetricsEvaluator e = (new Initiator()).initiate(stream);
                 new GraphBuildVisitor(e, node.getName()).visit(node, arg);
 
-                System.out.println("n1:\t\t\t\t\t\t\t\t" + e.n1);
-                System.out.println("n2:\t\t\t\t\t\t\t\t" + e.n2);
-                System.out.println("n(Program Vocabulary):\t\t\t" + e.PROGRAM_VOCABULARY);
-
-                System.out.println("N1:\t\t\t\t\t\t\t\t" + e.N1);
-                System.out.println("N2:\t\t\t\t\t\t\t\t" + e.N2);
-                System.out.println("N(Program length):\t\t\t\t" + e.PROGRAM_LENGTH);
-                System.out.println("Calculated program length:\t\t" + e.ESTIMATED_LENGTH);
-                System.out.println("Volume:\t\t\t\t\t\t\t" + e.VOLUME);
-                System.out.println("Difficulty:\t\t\t\t\t\t" + e.DIFFICULTY);
-                System.out.println("Effort:\t\t\t\t\t\t\t" + e.PROGRAM_EFFORT);
-                System.out.println("Time required to program:\t\t" + e.PROGRAMMING_TIME);
-                System.out.println("Purity ratio:\t\t\t\t\t" + e.PURITY_RATIO);
+//                System.out.println("n1:\t\t\t\t\t\t\t\t" + e.n1);
+//                System.out.println("n2:\t\t\t\t\t\t\t\t" + e.n2);
+//                System.out.println("n(Program Vocabulary):\t\t\t" + e.PROGRAM_VOCABULARY);
+//
+//                System.out.println("N1:\t\t\t\t\t\t\t\t" + e.N1);
+//                System.out.println("N2:\t\t\t\t\t\t\t\t" + e.N2);
+//                System.out.println("N(Program length):\t\t\t\t" + e.PROGRAM_LENGTH);
+//                System.out.println("Calculated program length:\t\t" + e.ESTIMATED_LENGTH);
+//                System.out.println("Volume:\t\t\t\t\t\t\t" + e.VOLUME);
+//                System.out.println("Difficulty:\t\t\t\t\t\t" + e.DIFFICULTY);
+//                System.out.println("Effort:\t\t\t\t\t\t\t" + e.PROGRAM_EFFORT);
+//                System.out.println("Time required to program:\t\t" + e.PROGRAMMING_TIME);
+//                System.out.println("Purity ratio:\t\t\t\t\t" + e.PURITY_RATIO);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -643,17 +643,18 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         evaluator.putDimension(Dimension.CYCLOMATIC_COMPLEXITY, cyclomaticComplexity);
 //        evaluator.putDimension(Dimension.CYCLOMATIC_DENSITY, cyclomaticComplexity/LOC);
         evaluator.putDimension(Dimension.DESIGN_COMPLEXITY, moduleDesignComplexity);
-        evaluator.putDimension(Dimension.DESIGN_DENSITY, decisionDensity);
+        evaluator.putDimension(Dimension.DESIGN_DENSITY, moduleDesignComplexity / cyclomaticComplexity);
+        evaluator.putDimension(Dimension.DECISION_DENSITY, decisionDensity);
         evaluator.putDimension(Dimension.ESSENTIAL_COMPLEXITY, essComplexity);
         evaluator.putDimension(Dimension.ESSENTIAL_DENSITY, essDensity);
         evaluator.putDimension(Dimension.GLOBAL_DATA_COMPLEXITY, dataComplexity);
         evaluator.putDimension(Dimension.GLOBAL_DATA_DENSITY, dataComplexity / cyclomaticComplexity);
         evaluator.putDimension(Dimension.MAINTENANCE_SEVERITY, essComplexity / cyclomaticComplexity);
         for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
-            if (!entry.getValue().equals(0.0)) {
-                String s = String.format("%-32s%s", entry.getKey(), entry.getValue());
-                System.out.println(s);
-            }
+//            if (!entry.getValue().equals(0.0)) {
+            String s = String.format("%-32s%s", entry.getKey(), entry.getValue());
+            System.out.println(s);
+//            }
         }
     }
 
