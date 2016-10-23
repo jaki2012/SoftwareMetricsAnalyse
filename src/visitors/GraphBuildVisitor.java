@@ -584,6 +584,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         // all final nodes counts for one
         // in CC calculation
         offset = offset == 1 ? (offset - 1) : (offset - 2);
+        offset = 0;
         return graph.edgeCount() - (graph.size() - offset) + 2;
     }
 

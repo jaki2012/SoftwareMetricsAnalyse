@@ -1,9 +1,6 @@
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import metrics.Initiator;
-import metrics.MetricsEvaluator;
 import visitors.CalculateVisitor;
-import visitors.GraphBuildVisitor;
 import visitors.ModuleVisitor;
 
 import java.io.FileInputStream;
@@ -21,35 +18,19 @@ public class Main {
     public static void main(String... args) throws Exception {
         // 默认包下一个叫Simple.java的文件 根据况更改
         String path = "E:\\MyCodes\\Java\\FileSys\\src\\simple.java";
-
         System.out.println("File path:" + path);
-        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-//        String f = "E:\\MyCodes\\Java\\FileSys\\src\\simple.java";
-        // 计算结果并显示
-//        calculateHalsteadMetrics(path);
-
-        calculateHalsteadMetricsV2(path);
-
+//        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
+        calculate(path);
 
     }
 
-    private static void calculateHalsteadMetricsV2(String path) throws Exception {
-//        MetricsEvaluator e = (new Initiator()).initiate(path);
+    @SuppressWarnings("unchecked")
+    private static void calculate(String path) throws Exception {
 
         CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
         new ModuleVisitor().visit(unit, null);
-//        new GraphBuildVisitor(e).visit(unit, null);
     }
 
-//    private static void runSimpleTest(String path) throws FileNotFoundException {
-//        FileInputStream inputStream = new FileInputStream(path);
-//
-//        CompilationUnit compilationUnit = getCompilationUnit(inputStream);
-//
-//        assert compilationUnit != null;
-//        // 使用Visitor模式进行相关统计
-//        new CalculateVisitor().visit(compilationUnit, null);
-//    }
 
     @Deprecated
     private static void calculateHalsteadMetrics(String path) {

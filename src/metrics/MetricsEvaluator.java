@@ -12,17 +12,6 @@ import java.util.Map;
  * 2016/10/7
  */
 public class MetricsEvaluator {
-//    public double BRANCH_COUNT;
-//    public double CALL_PAIRS;
-//    public int MULTI_CONDITION_COUNT;
-//    public int MODIFIED_CONDITION_COUNT;
-//    public int globalParameters;
-//    public int CONDITION_COUNT;
-//    public int CYCLOMATIC_COMPLEXITY;
-//    public int CYCLOMATIC_DENSITY;
-//    public int DECISION_COUNT;
-//    public int DECISION_DENSITY;
-
     public double PROGRAM_LENGTH;
     public double PROGRAM_VOCABULARY;
     public double ESTIMATED_LENGTH;

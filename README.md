@@ -65,19 +65,20 @@ Please use Maven to get all these dependencies(In idea, press: Project Structure
 File path:E:\MyCodes\Java\FileSys\src\simple.java
 ======================================
 Module name:simpleIf
-BRANCH_COUNT                    2.0
-DESIGN_COMPLEXITY               -1.0
+1-2+2
+MULTIPLE_CONDITION_COUNT        6.0
+DESIGN_DENSITY                  2.0
+DESIGN_COMPLEXITY               1.0
+MAINTENANCE_SEVERITY            0.5
+NODE_COUNT                      5.0
 EDGE_COUNT                      5.0
+GLOBAL_DATA_COMPLEXITY          1.0
+CYCLOMATIC_COMPLEXITY           2.0
+BRANCH_COUNT                    2.0
+GLOBAL_DATA_DENSITY             0.5
 ESSENTIAL_COMPLEXITY            1.0
 CONDITION_COUNT                 12.0
-MAINTENANCE_SEVERITY            0.5
-DESIGN_DENSITY                  2.0
-GLOBAL_DATA_DENSITY             -0.5
 MODIFIED_CONDITION_COUNT        3.0
-GLOBAL_DATA_COMPLEXITY          -1.0
-NODE_COUNT                      5.0
-CYCLOMATIC_COMPLEXITY           2.0
-MULTIPLE_CONDITION_COUNT        6.0
 n1:								27.0
 n2:								31.0
 n(Program Vocabulary):			58.0
@@ -92,20 +93,20 @@ Time required to program:		54.53475439691598
 Purity ratio:					9.722829247600236
 ======================================
 Module name:CC
-BRANCH_COUNT                    4.0
-DESIGN_COMPLEXITY               2.0
-EDGE_COUNT                      5.0
-ESSENTIAL_COMPLEXITY            2.0
-CONDITION_COUNT                 8.0
-MAINTENANCE_SEVERITY            1.0
-DESIGN_DENSITY                  2.0
-GLOBAL_DATA_DENSITY             1.0
-ESSENTIAL_DENSITY               1.0
-MODIFIED_CONDITION_COUNT        2.0
-GLOBAL_DATA_COMPLEXITY          2.0
-NODE_COUNT                      6.0
-CYCLOMATIC_COMPLEXITY           2.0
+5-6+2
 MULTIPLE_CONDITION_COUNT        4.0
+DESIGN_DENSITY                  2.0
+DESIGN_COMPLEXITY               1.0
+MAINTENANCE_SEVERITY            1.0
+NODE_COUNT                      6.0
+EDGE_COUNT                      5.0
+GLOBAL_DATA_COMPLEXITY          1.0
+CYCLOMATIC_COMPLEXITY           1.0
+BRANCH_COUNT                    4.0
+GLOBAL_DATA_DENSITY             1.0
+ESSENTIAL_COMPLEXITY            1.0
+CONDITION_COUNT                 8.0
+MODIFIED_CONDITION_COUNT        2.0
 n1:								25.0
 n2:								27.0
 n(Program Vocabulary):			52.0
@@ -120,16 +121,17 @@ Time required to program:		38.81824232707781
 Purity ratio:					9.779134692111272
 ======================================
 Module name:theSleep
-PARAMETER_COUNT                 1.0
+4-4+2
 DESIGN_COMPLEXITY               2.0
-EDGE_COUNT                      4.0
-ESSENTIAL_COMPLEXITY            -1.0
-CALL_PAIRS                      4.0
-MAINTENANCE_SEVERITY            -0.5
-GLOBAL_DATA_DENSITY             -0.5
-GLOBAL_DATA_COMPLEXITY          -1.0
+MAINTENANCE_SEVERITY            0.5
 NODE_COUNT                      4.0
+CALL_PAIRS                      4.0
+EDGE_COUNT                      4.0
+GLOBAL_DATA_COMPLEXITY          1.0
 CYCLOMATIC_COMPLEXITY           2.0
+GLOBAL_DATA_DENSITY             0.5
+ESSENTIAL_COMPLEXITY            1.0
+PARAMETER_COUNT                 1.0
 n1:								27.0
 n2:								37.0
 n(Program Vocabulary):			64.0
@@ -144,21 +146,22 @@ Time required to program:		56.69447917899032
 Purity ratio:					10.704391236222827
 ======================================
 Module name:case2
-BRANCH_COUNT                    10.0
-PARAMETER_COUNT                 2.0
-DESIGN_COMPLEXITY               5.0
-EDGE_COUNT                      13.0
-ESSENTIAL_COMPLEXITY            5.0
-CONDITION_COUNT                 20.0
-MAINTENANCE_SEVERITY            1.0
-DESIGN_DENSITY                  2.0
-GLOBAL_DATA_DENSITY             1.0
-ESSENTIAL_DENSITY               1.0
-MODIFIED_CONDITION_COUNT        5.0
-GLOBAL_DATA_COMPLEXITY          5.0
-NODE_COUNT                      13.0
-CYCLOMATIC_COMPLEXITY           5.0
+13-13+2
 MULTIPLE_CONDITION_COUNT        10.0
+DESIGN_DENSITY                  2.0
+DESIGN_COMPLEXITY               2.0
+MAINTENANCE_SEVERITY            1.0
+NODE_COUNT                      13.0
+EDGE_COUNT                      13.0
+ESSENTIAL_DENSITY               1.0
+GLOBAL_DATA_COMPLEXITY          2.0
+CYCLOMATIC_COMPLEXITY           2.0
+BRANCH_COUNT                    10.0
+GLOBAL_DATA_DENSITY             1.0
+ESSENTIAL_COMPLEXITY            2.0
+PARAMETER_COUNT                 2.0
+CONDITION_COUNT                 20.0
+MODIFIED_CONDITION_COUNT        5.0
 n1:								54.0
 n2:								69.0
 n(Program Vocabulary):			123.0
@@ -173,21 +176,22 @@ Time required to program:		92.18467477439054
 Purity ratio:					19.79059763877084
 ======================================
 Module name:CalculateScore
-BRANCH_COUNT                    12.0
-PARAMETER_COUNT                 4.0
-DESIGN_COMPLEXITY               6.0
-EDGE_COUNT                      21.0
-ESSENTIAL_COMPLEXITY            1.0
-CALL_PAIRS                      1.0
-CONDITION_COUNT                 16.0
-MAINTENANCE_SEVERITY            0.125
-DESIGN_DENSITY                  2.0
-GLOBAL_DATA_DENSITY             0.75
-MODIFIED_CONDITION_COUNT        4.0
-GLOBAL_DATA_COMPLEXITY          6.0
-NODE_COUNT                      16.0
-CYCLOMATIC_COMPLEXITY           8.0
+19-15+2
 MULTIPLE_CONDITION_COUNT        8.0
+DESIGN_DENSITY                  2.0
+DESIGN_COMPLEXITY               6.0
+MAINTENANCE_SEVERITY            0.14285714285714285
+NODE_COUNT                      16.0
+CALL_PAIRS                      1.0
+EDGE_COUNT                      21.0
+GLOBAL_DATA_COMPLEXITY          6.0
+CYCLOMATIC_COMPLEXITY           7.0
+BRANCH_COUNT                    12.0
+GLOBAL_DATA_DENSITY             0.8571428571428571
+ESSENTIAL_COMPLEXITY            1.0
+PARAMETER_COUNT                 4.0
+CONDITION_COUNT                 16.0
+MODIFIED_CONDITION_COUNT        4.0
 n1:								65.0
 n2:								67.0
 n(Program Vocabulary):			132.0
@@ -202,17 +206,21 @@ Time required to program:		212.9315560818822
 Purity ratio:					15.957637672150405
 ======================================
 Module name:nestSwitch
-BRANCH_COUNT                    6.0
-PARAMETER_COUNT                 1.0
-EDGE_COUNT                      13.0
-ESSENTIAL_COMPLEXITY            -1.0
-CONDITION_COUNT                 8.0
-MAINTENANCE_SEVERITY            -0.25
-DESIGN_DENSITY                  2.0
-MODIFIED_CONDITION_COUNT        2.0
-NODE_COUNT                      11.0
-CYCLOMATIC_COMPLEXITY           4.0
+8-8+2
 MULTIPLE_CONDITION_COUNT        4.0
+DESIGN_DENSITY                  2.0
+DESIGN_COMPLEXITY               2.0
+MAINTENANCE_SEVERITY            0.25
+NODE_COUNT                      11.0
+EDGE_COUNT                      13.0
+GLOBAL_DATA_COMPLEXITY          2.0
+CYCLOMATIC_COMPLEXITY           4.0
+BRANCH_COUNT                    6.0
+GLOBAL_DATA_DENSITY             0.5
+ESSENTIAL_COMPLEXITY            1.0
+PARAMETER_COUNT                 1.0
+CONDITION_COUNT                 8.0
+MODIFIED_CONDITION_COUNT        2.0
 n1:								40.0
 n2:								35.0
 n(Program Vocabulary):			75.0
@@ -227,21 +235,22 @@ Time required to program:		59.8248612522724
 Purity ratio:					14.014358192448867
 ======================================
 Module name:main
-BRANCH_COUNT                    2.0
-PARAMETER_COUNT                 2.0
-DESIGN_COMPLEXITY               2.0
-EDGE_COUNT                      4.0
-ESSENTIAL_COMPLEXITY            -1.0
-CALL_PAIRS                      2.0
-CONDITION_COUNT                 8.0
-MAINTENANCE_SEVERITY            -0.5
-DESIGN_DENSITY                  2.0
-GLOBAL_DATA_DENSITY             1.0
-MODIFIED_CONDITION_COUNT        1.0
-GLOBAL_DATA_COMPLEXITY          2.0
-NODE_COUNT                      4.0
-CYCLOMATIC_COMPLEXITY           2.0
+4-4+2
 MULTIPLE_CONDITION_COUNT        4.0
+DESIGN_DENSITY                  2.0
+DESIGN_COMPLEXITY               2.0
+MAINTENANCE_SEVERITY            0.5
+NODE_COUNT                      4.0
+CALL_PAIRS                      2.0
+EDGE_COUNT                      4.0
+GLOBAL_DATA_COMPLEXITY          2.0
+CYCLOMATIC_COMPLEXITY           2.0
+BRANCH_COUNT                    2.0
+GLOBAL_DATA_DENSITY             1.0
+ESSENTIAL_COMPLEXITY            1.0
+PARAMETER_COUNT                 2.0
+CONDITION_COUNT                 8.0
+MODIFIED_CONDITION_COUNT        1.0
 n1:								41.0
 n2:								54.0
 n(Program Vocabulary):			95.0
