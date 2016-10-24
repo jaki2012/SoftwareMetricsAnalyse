@@ -628,10 +628,11 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         evaluator.putDimension(Dimension.CALL_PAIRS, (double) callPairs);
         evaluator.putDimension(Dimension.PARAMETER_COUNT, (double) globalParameters);
         evaluator.putDimension(Dimension.CYCLOMATIC_COMPLEXITY, cyclomaticComplexity);
-//        evaluator.putDimension(Dimension.CYCLOMATIC_DENSITY, cyclomaticComplexity/LOC);
+        evaluator.putDimension(Dimension.CYCLOMATIC_DENSITY, cyclomaticComplexity / evaluator.getDimension(Dimension.LOC_TOTAL));
+        evaluator.putDimension(Dimension.NORMALIZED_CYCLOMATIC_COMPLEXITY, cyclomaticComplexity / evaluator.getDimension(Dimension.NUMBER_OF_LINES));
         evaluator.putDimension(Dimension.DESIGN_COMPLEXITY, moduleDesignComplexity);
         evaluator.putDimension(Dimension.DESIGN_DENSITY, moduleDesignComplexity / cyclomaticComplexity);
-        evaluator.putDimension(Dimension.DECISION_COUNT, (double)decisionCount);
+        evaluator.putDimension(Dimension.DECISION_COUNT, (double) decisionCount);
         evaluator.putDimension(Dimension.DECISION_DENSITY, decisionDensity);
         evaluator.putDimension(Dimension.ESSENTIAL_COMPLEXITY, essComplexity);
         evaluator.putDimension(Dimension.ESSENTIAL_DENSITY, essDensity);
