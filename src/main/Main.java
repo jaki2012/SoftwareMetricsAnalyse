@@ -1,8 +1,11 @@
+package main;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import visitors.CalculateVisitor;
 import visitors.ModuleVisitor;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +17,17 @@ import java.util.Set;
  * 2016/10/6
  */
 public class Main {
+
+    public static void showFiles(File[] files) {
+        for (File file : files) {
+            if (file.isDirectory()) {
+                showFiles(file.listFiles()); // Calls same method again.
+            } else {
+
+                System.out.println("File: " + file.getName());
+            }
+        }
+    }
 
     public static void main(String... args) throws Exception {
         // 默认包下一个叫Simple.java的文件 根据况更改
