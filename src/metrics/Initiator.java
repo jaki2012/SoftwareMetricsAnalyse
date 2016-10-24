@@ -1,9 +1,6 @@
 package metrics;
 
-import metrics.java7.JavaBaseVisitor;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import visitors.CyclomaticComplexityVisitor;
 
 /**
  * Project: Halstead

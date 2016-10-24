@@ -2,11 +2,14 @@ package main;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import org.apache.commons.io.FilenameUtils;
 import visitors.CalculateVisitor;
 import visitors.ModuleVisitor;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,24 +21,32 @@ import java.util.Set;
  */
 public class Main {
 
-    public static void showFiles(File[] files) {
+    public static PrintWriter printWriter;
+    public static int cnt;
+
+    public static void run(File[] files) throws Exception {
         for (File file : files) {
             if (file.isDirectory()) {
-                showFiles(file.listFiles()); // Calls same method again.
+                run(file.listFiles()); // Calls same method again.
             } else {
-
-                System.out.println("File: " + file.getName());
+                if (FilenameUtils.getExtension(file.getCanonicalPath()).equals("java")) {
+                    calculate(file.getAbsolutePath());
+                    System.out.println("File " + ++cnt + " :" + file.getName() + " calculated successful");
+                    printWriter.flush();
+                }
             }
         }
     }
 
     public static void main(String... args) throws Exception {
+        String initPath = "I:\\GitUnzipped";
+        printWriter  = new PrintWriter(new File("F:\\Data.csv"));
+        run(new File(initPath).listFiles());
         // 默认包下一个叫Simple.java的文件 根据况更改
-        String path = "E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
-        System.out.println("File path:" + path);
+//        String path = "E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
+//        System.out.println("File path:" + path);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-        calculate(path);
-
+//        calculate(path);
     }
 
     @SuppressWarnings("unchecked")

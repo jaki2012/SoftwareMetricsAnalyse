@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.sun.javaws.Main;
 import domain.constants.Layer;
 import domain.graph.visitors.DataComplexVisitor;
 import domain.graph.visitors.EssComplexVisitor;
@@ -612,11 +613,13 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         // all final nodes counts for one
         // in CC calculation
         offset = offset == 1 ? (offset - 1) : (offset - 2);
-        offset = 0;
+        if (!graph.equals(sourceGraph))
+            offset = 0;
         return graph.edgeCount() - (graph.size() - offset) + 2;
     }
 
     private void bindToMetric() {
+        // CC is always bigger than 0
         assert cyclomaticComplexity <= 0;
 
         evaluator.putDimension(Dimension.BRANCH_COUNT, (double) branchCount);
@@ -639,11 +642,17 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         evaluator.putDimension(Dimension.GLOBAL_DATA_COMPLEXITY, dataComplexity);
         evaluator.putDimension(Dimension.GLOBAL_DATA_DENSITY, dataComplexity / cyclomaticComplexity);
         evaluator.putDimension(Dimension.MAINTENANCE_SEVERITY, essComplexity / cyclomaticComplexity);
-        for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
-            String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
-            System.out.println(s);
 
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
+            builder.append(entry.getValue());
+            builder.append(",");
+//            String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
+//            System.out.println(s);
         }
+        builder.append("\n");
+        main.Main.printWriter.write(builder.toString());
+
     }
 
     private void calculateFinal() {
@@ -707,6 +716,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     private void addCallPairs() {
         callPairs++;
-        prevNode.peek().containsMethodCall(); // set this node to contains methodName call
+        if (prevNode.size() > 0)
+            prevNode.peek().containsMethodCall(); // set this node to contains methodName call
     }
 }
