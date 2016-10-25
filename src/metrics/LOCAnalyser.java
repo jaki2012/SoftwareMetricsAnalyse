@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 public class LOCAnalyser {
 
-    private MetricsEvaluator e;
-
     public static void calculate(InputStream stream, MetricsEvaluator evaluator) {
         ArrayList<String> listOfLines = new ArrayList<String>();
 

@@ -46,11 +46,11 @@ public class Main {
 
     public static void main(String... args) throws Exception {
 //        String initPath = "I:\\GitUnzipped";
-//        printWriter  = new PrintWriter(new File("F:\\DataAll-2.csv"));
+//        printWriter  = new PrintWriter(new File("F:\\DataComplex-edge-g-10.csv"));
 //        run(new File(initPath).listFiles());
         // 默认包下一个叫Simple.java的文件 根据况更改
         String simple = "F:\\simple.java";
-        String path = "I:\\GitUnzipped\\alibaba-canal-5d9d5b1\\dbsync\\src\\main\\java\\com\\taobao\\tddl\\dbsync\\binlog\\event\\RowsLogBuffer.java";
+        String path = "I:\\GitUnzipped\\antlr-antlr4-e9aa00e\\runtime-testsuite\\test\\org\\antlr\\v4\\test\\runtime\\javascript\\node\\TestLexerExec.java";
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
         calculate(path);
@@ -64,7 +64,7 @@ public class Main {
 //        JavaParser.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(true);
 
         CompilationUnit unit = JavaParser.parse(stream);
-        
+
         new ModuleVisitor().visit(unit, null);
     }
 
