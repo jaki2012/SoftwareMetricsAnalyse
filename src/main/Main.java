@@ -50,7 +50,7 @@ public class Main {
         run(new File(initPath).listFiles());
         // 默认包下一个叫Simple.java的文件 根据况更改
         String simple = "F:\\simple.java";
-        String path = "I:\\GitUnzipped\\Activiti-Activiti-393247f\\modules\\activiti-engine\\src\\main\\java\\org\\activiti\\engine\\impl\\util\\json\\JSONTokener.java";
+        String path = "I:\\GitUnzipped\\alibaba-canal-5d9d5b1\\dbsync\\src\\main\\java\\com\\taobao\\tddl\\dbsync\\binlog\\event\\RowsLogBuffer.java";
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
 //        calculate(simple);

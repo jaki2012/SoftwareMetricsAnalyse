@@ -7,6 +7,7 @@ import domain.graph.structures.BaseStructure;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Project: Halstead
@@ -15,8 +16,11 @@ import java.util.Set;
  * 2016/10/22
  */
 public class Looping<V extends Comparable<V>> extends BaseRule<V> {
+    private Set<Node<V>> lineNode;
+
     public Looping(String method) {
         super(method);
+        lineNode = new TreeSet<>();
     }
 
     @Override
@@ -39,23 +43,24 @@ public class Looping<V extends Comparable<V>> extends BaseRule<V> {
                     && !(boolean) method.invoke(next)) {
                 edges = graph.getNodeEdges(next);
 
-                if (null != edges) {
-                    if (edges.size() == 1) {
-                        next = ((Edge<V>) edges.toArray()[0]).getEndNode();
-                    } else if (edges.size() == 2) {
-                        Node<V> first = ((Edge<V>) edges.toArray()[0]).getEndNode();
-                        Node<V> second = ((Edge<V>) edges.toArray()[1]).getEndNode();
-                        if (first.equals(node)) {
-                            edgesToRemove.add((Edge<V>) edges.toArray()[0]);
-                            return true;
-                        } else if (second.equals(node)) {
-                            edgesToRemove.add((Edge<V>) edges.toArray()[1]);
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    } else {
+                if (edges.size() == 1) {
+                    next = ((Edge<V>) edges.toArray()[0]).getEndNode();
+
+                    if (lineNode.contains(next)) // remove duplication
                         break;
+                    lineNode.add(next);
+
+                } else if (edges.size() == 2) {
+                    Node<V> first = ((Edge<V>) edges.toArray()[0]).getEndNode();
+                    Node<V> second = ((Edge<V>) edges.toArray()[1]).getEndNode();
+                    if (first.equals(node)) {
+                        edgesToRemove.add((Edge<V>) edges.toArray()[0]);
+                        return true;
+                    } else if (second.equals(node)) {
+                        edgesToRemove.add((Edge<V>) edges.toArray()[1]);
+                        return true;
+                    } else {
+                        return false;
                     }
                 } else {
                     break;

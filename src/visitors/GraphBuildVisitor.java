@@ -271,8 +271,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Node<Integer> noWhileBody = edgeBody.getEndNode(); // create the WhileBody node.
         prevNode.push(noWhileBody); // the graph continues from the WhileBody node.
         node.getBody().accept(this, arg);
-        continueNode.pop(); // when ends clean the stack.
-        breakNode.pop(); // when ends clean the stack.
+        if (continueNode.contains(noWhile))
+            continueNode.remove(noWhile); // when ends clean the stack.
+        if (breakNode.contains(noEndWhile))
+            breakNode.remove(noEndWhile); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the WhileBody.
             if (!controlFlag) // verify if a break or a continue occur in the WhileBody.
                 sourceGraph.addEdge(prevNode.pop(), noWhile); // the loop connection.
@@ -305,8 +307,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         breakNode.push(noEndDoWhile); // if a break occur goes to the final node of the DoStatement.
         continueNode.push(noWhile); // if a continue occur goes to the WhileStatement node.
         node.getBody().accept(this, arg);
-        continueNode.pop(); // when ends clean the stack.
-        breakNode.pop(); // when ends clean the stack.
+        if (continueNode.contains(noWhile))
+            continueNode.remove(noWhile); // when ends clean the stack.
+        if (breakNode.contains(noEndDoWhile))
+            breakNode.remove(noEndDoWhile); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the DoWhileBody.
             if (!controlFlag) // verify if a break or a continue occur in the DoWhileBody.
                 sourceGraph.addEdge(prevNode.pop(), noWhile); // the connection from the DoWhileBody node to the WhileStatement node.
@@ -370,8 +374,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Node<Integer> noForBody = edgeBody.getEndNode(); // create the ForBody node.
         prevNode.push(noForBody); // the graph continues from the ForBody node.
         node.getBody().accept(this, arg);
-        continueNode.pop(); // when ends clean the stack.
-        breakNode.pop(); // when ends clean the stack.
+        if (continueNode.contains(incFor))
+            continueNode.remove(incFor); // when ends clean the stack.
+        if (breakNode.contains(noEndFor))
+            breakNode.remove(noEndFor); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the ForBody.
             if (!controlFlag) // verify if a break or a continue occur in the ForBody.
                 sourceGraph.addEdge(prevNode.pop(), incFor); // connect the previous node to the increment node.
@@ -405,8 +411,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Node<Integer> noForEachBody = edgeBody.getEndNode(); // create the ForEachBody node.
         prevNode.push(noForEachBody); // the graph continues from the ForEachBody node.
         node.getBody().accept(this, arg);
-        continueNode.pop(); // when ends clean the stack.
-        breakNode.pop(); // when ends clean the stack.
+        if (continueNode.contains(noForEach))
+            continueNode.remove(noForEach); // when ends clean the stack.
+        if (breakNode.contains(noEndForEach))
+            breakNode.remove(noEndForEach); // when ends clean the stack.
         if (!returnFlag) { // verify if a return occur in the ForEachBody.
             if (!controlFlag) // verify if a break or a continue occur in the ForEachBody.
                 sourceGraph.addEdge(prevNode.pop(), noForEach); // the loop connection.
