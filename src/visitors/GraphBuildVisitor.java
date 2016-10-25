@@ -390,9 +390,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         infos.addInformationToLayer2(sourceGraph, edge, "(" + node.toString() + ")");
         prevNode.push(noEndFor); // the graph continues from the final node of the DoWhileStatement.
         finalnode = noEndFor; // update the final node.
-
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void visit(ForeachStmt node, Object arg) {
         addModifiedCondition();
@@ -428,6 +428,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         finalnode = noEndForEach; // update the final node.
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void visit(SwitchStmt n, Object arg) {
         addModifiedCondition(n.getSelector());
@@ -536,6 +537,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
      * @param n
      * @param arg
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void visit(FieldDeclaration n, Object arg) {
         for (VariableDeclarator decelerator : n.getVariables()) {
@@ -544,13 +546,14 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         super.visit(n, arg);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void visit(MethodDeclaration node, Object arg) {
         if (!node.getName().equals(methodName)) {
             String head = "public class Module {";
             String end = "}";
-//            System.out.println("===================");
-//            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
+            System.out.println("===================");
+            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
             StringBuilder builder = new StringBuilder();
             builder.append(head);
             builder.append(node.toString());
@@ -560,7 +563,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 MetricsEvaluator e = (new Initiator()).initiate(stream);
                 InputStream inputStream = new ByteArrayInputStream(builder.toString().getBytes());
                 LOCAnalyser.calculate(inputStream, e);
-                new GraphBuildVisitor(e, node.getName()).visit(node, arg);
+                   new GraphBuildVisitor(e, node.getName()).visit(node, arg);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -573,8 +576,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         addGlobalParameter(node.getParameters().size());
         super.visit(node, arg);
 
-//        System.out.println("======================================");
-//        System.out.println("Module name:" + node.getName());
+        System.out.println("======================================");
+        System.out.println("Module name:" + node.getName());
 
         // Remove unnecessary nodes/edges
         List<Node<Integer>> nodesToRemove = new LinkedList<>();

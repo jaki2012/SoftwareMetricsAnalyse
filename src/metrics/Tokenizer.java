@@ -24,7 +24,7 @@ public class Tokenizer {
     public ArrayList<String> tokens = new ArrayList();
     protected static Tokenizer instance;
     public static String fileType = null;
-//    public static ParserRuleContext tree;
+    public static ParserRuleContext tree;
 
     private Tokenizer() {
     }
@@ -49,7 +49,7 @@ public class Tokenizer {
         JavaLexer lexer = new JavaLexer(stream);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JavaParser parser = new JavaParser(tokenStream);
-        parser.compilationUnit();
+        tree = parser.compilationUnit();
         token = parser.getTokenStream();
 
         for(int i = 0; i < token.size(); ++i) {

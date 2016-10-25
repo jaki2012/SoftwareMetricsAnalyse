@@ -1,6 +1,7 @@
 package metrics;
 
 import org.antlr.v4.runtime.CharStream;
+import visitors.CalculateVisitor;
 
 /**
  * Project: Halstead

@@ -33,6 +33,7 @@ public class Looping<V extends Comparable<V>> extends BaseRule<V> {
                     || graph.getNodeEndEdges(node).size() != 2) { // initial loop node condition
                 return false;
             }
+            lineNode.clear(); // clear the temp
 
             super.isStructure(graph, node);
             Set<Edge<V>> edges = graph.getNodeEdges(node);
@@ -46,8 +47,10 @@ public class Looping<V extends Comparable<V>> extends BaseRule<V> {
                 if (edges.size() == 1) {
                     next = ((Edge<V>) edges.toArray()[0]).getEndNode();
 
-                    if (lineNode.contains(next)) // remove duplication
+                    if (lineNode.contains(next)) {
+                        // remove duplication
                         break;
+                    }
                     lineNode.add(next);
 
                 } else if (edges.size() == 2) {

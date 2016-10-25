@@ -23,7 +23,6 @@ public class ModuleVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(MethodDeclaration n, Object arg) {
-
         StringBuilder builder = new StringBuilder();
         builder.append(head);
         builder.append(n.toString());
@@ -37,7 +36,5 @@ public class ModuleVisitor extends VoidVisitorAdapter {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-
-
     }
 }

@@ -45,20 +45,26 @@ public class Main {
     }
 
     public static void main(String... args) throws Exception {
-        String initPath = "I:\\GitUnzipped";
-        printWriter  = new PrintWriter(new File("F:\\DataAll.csv"));
-        run(new File(initPath).listFiles());
+//        String initPath = "I:\\GitUnzipped";
+//        printWriter  = new PrintWriter(new File("F:\\DataAll-2.csv"));
+//        run(new File(initPath).listFiles());
         // 默认包下一个叫Simple.java的文件 根据况更改
         String simple = "F:\\simple.java";
         String path = "I:\\GitUnzipped\\alibaba-canal-5d9d5b1\\dbsync\\src\\main\\java\\com\\taobao\\tddl\\dbsync\\binlog\\event\\RowsLogBuffer.java";
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-//        calculate(simple);
+        calculate(path);
     }
 
     @SuppressWarnings("unchecked")
     private static void calculate(String path) throws Exception {
-        CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
+        FileInputStream stream = new FileInputStream(path);
+        // LOC analyse
+//        JavaParser.setDoNotAssignCommentsPreceedingEmptyLines(false);
+//        JavaParser.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(true);
+
+        CompilationUnit unit = JavaParser.parse(stream);
+        
         new ModuleVisitor().visit(unit, null);
     }
 
