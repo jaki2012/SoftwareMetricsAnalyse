@@ -24,15 +24,21 @@ public class Main {
     public static PrintWriter printWriter;
     public static int cnt;
 
-    public static void run(File[] files) throws Exception {
+    public static void run(File[] files) {
         for (File file : files) {
             if (file.isDirectory()) {
+                System.out.println("Dir:" + file.getAbsolutePath());
                 run(file.listFiles()); // Calls same method again.
             } else {
-                if (FilenameUtils.getExtension(file.getCanonicalPath()).equals("java")) {
-                    calculate(file.getAbsolutePath());
-                    System.out.println("File " + ++cnt + " :" + file.getName() + " calculated successful");
-                    printWriter.flush();
+                try {
+                    if (FilenameUtils.getExtension(file.getCanonicalPath()).equals("java")) {
+                        System.out.println("File " + cnt + " :" + file.getName() + " calculation...");
+                        calculate(file.getAbsolutePath());
+                        System.out.println("File " + ++cnt + " :" + file.getName() + " calculated successful");
+                        printWriter.flush();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -40,13 +46,14 @@ public class Main {
 
     public static void main(String... args) throws Exception {
         String initPath = "I:\\GitUnzipped";
-        printWriter  = new PrintWriter(new File("F:\\Data.csv"));
+        printWriter  = new PrintWriter(new File("F:\\DataAll.csv"));
         run(new File(initPath).listFiles());
         // 默认包下一个叫Simple.java的文件 根据况更改
-//        String path = "E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
-//        System.out.println("File path:" + path);
+        String simple = "F:\\simple.java";
+        String path = "I:\\GitUnzipped\\Activiti-Activiti-393247f\\modules\\activiti-engine\\src\\main\\java\\org\\activiti\\engine\\impl\\util\\json\\JSONTokener.java";
+//        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-//        calculate(path);
+//        calculate(simple);
     }
 
     @SuppressWarnings("unchecked")

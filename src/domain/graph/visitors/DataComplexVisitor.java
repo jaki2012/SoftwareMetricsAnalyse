@@ -15,11 +15,11 @@ public class DataComplexVisitor<V extends Comparable<V>> extends AbstractMcCabeV
     public DataComplexVisitor(Graph<V> sourceGraph) {
         String method = "isContainsParamCall";
         structureProvider = new StructureProvider<>();
-//        structureProvider.addStructure(new Sequential<>(method));
-//        structureProvider.addStructure(new Conditional<>(method));
+        structureProvider.addStructure(new Sequential<>(method));
+        structureProvider.addStructure(new Conditional<>(method));
         structureProvider.addStructure(new Looping<>(method));
-//        structureProvider.addStructure(new Repetitive<>(method));
-//        structureProvider.addStructure(new IfStmtNCall<>(method));
+        structureProvider.addStructure(new Repetitive<>(method));
+        structureProvider.addStructure(new IfStmtNCall<>(method));
         graph = sourceGraph;
     }
 }

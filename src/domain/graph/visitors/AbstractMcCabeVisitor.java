@@ -53,12 +53,14 @@ public class AbstractMcCabeVisitor<V extends Comparable<V>> extends DepthFirstGr
 
             edgesToRemove.forEach(graph::removeEdge);
             nodesToRemove.forEach(graph::removeNode);
-
+            edgesToRemove.clear();
+            nodesToRemove.clear();
             // perform another DFS removing
             visitedNodes.clear();
             graph.accept(this);
         }
         else {
+
 //            System.out.println("Reduced:");
 //            GraphBuildVisitor.printEdges(graph);
         }

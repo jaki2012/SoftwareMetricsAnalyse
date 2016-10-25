@@ -137,9 +137,11 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         super.visit(n, arg);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void visit(ThrowStmt n, Object arg) {
         if (!prevNode.isEmpty()) {
+            n.getExpr().accept(this, arg);
             Edge<Integer> edge = createConnection(); // create the edge from the previous node to the throws node.
             infos.addInformationToLayer2(sourceGraph, edge, "throws;"); // add information to previous node - throws.
             sourceGraph.addFinalNode(edge.getEndNode()); // add the throws node to the final nodes.
@@ -193,6 +195,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
             clause.accept(this, arg);
             if (finalNode != null && !returnFlag && !controlFlag)
                 sourceGraph.addEdge(nodeCatch, finalNode);
+            prevNode.push(nodeTry);
         }
 
         if (finalNode != null)
@@ -207,6 +210,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noIf = edge.getEndNode(); // the initial node of the IFStatement.
         prevNode.push(noIf); // the graph continues from the initial node of the IFStatement.
+        node.getCondition().accept(this, arg); // visit condition
         infos.addInformationToLayer1(sourceGraph, noIf, node.toString());
         Edge<Integer> edgeThen = createConnection(); // visit the Then block.
         infos.addInformationToLayer2(sourceGraph, edgeThen, node.toString());
@@ -257,6 +261,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noWhile = edge.getEndNode(); // the initial node of the WhileStatement.
         prevNode.push(noWhile); // the graph continues from the initial node of the WhileStatement.
+        node.getCondition().accept(this, arg);
         infos.addInformationToLayer1(sourceGraph, noWhile, node.toString());
         Node<Integer> noEndWhile = sourceGraph.addNode(++nodeNum); // the final node of the WhileStatement.
         breakNode.push(noEndWhile); // if a break occur goes to the final node of the WhileStatement.
@@ -292,6 +297,11 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Node<Integer> noWhile = sourceGraph.addNode(++nodeNum); // the node of the WhileStatement.
         infos.addInformationToLayer1(sourceGraph, noWhile, node.toString());
         Node<Integer> noEndDoWhile = sourceGraph.addNode(++nodeNum); // the final node of the DoStatement.
+        prevNode.push(noEndDoWhile);
+        node.getCondition().accept(this, arg);
+        if (prevNode.contains(noEndDoWhile)) {
+            prevNode.remove(noEndDoWhile);
+        }
         breakNode.push(noEndDoWhile); // if a break occur goes to the final node of the DoStatement.
         continueNode.push(noWhile); // if a continue occur goes to the WhileStatement node.
         node.getBody().accept(this, arg);
@@ -329,6 +339,32 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         breakNode.push(noEndFor); // if a break occur goes to the final node of the ForStatement.
         continueNode.push(incFor); // if a continue occur goes to the incFor node.
         prevNode.push(noFor); // the graph continues from the initial node of the ForStatement.
+
+        // iterate statement
+        Iterator var3;
+        Expression e;
+        if (node.getInit() != null) {
+            var3 = node.getInit().iterator();
+
+            while (var3.hasNext()) {
+                e = (Expression) var3.next();
+                e.accept(this, arg);
+            }
+        }
+
+        if (node.getCompare() != null) {
+            node.getCompare().accept(this, arg);
+        }
+
+        if (node.getUpdate() != null) {
+            var3 = node.getUpdate().iterator();
+
+            while (var3.hasNext()) {
+                e = (Expression) var3.next();
+                e.accept(this, arg);
+            }
+        }
+
         Edge<Integer> edgeBody = createConnection(); // visit the ForStatement body block.
         infos.addInformationToLayer2(sourceGraph, edgeBody, node.toString());
         Node<Integer> noForBody = edgeBody.getEndNode(); // create the ForBody node.
@@ -358,6 +394,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noForEach = edge.getEndNode(); // the initial node of the EnhancedForStatement.
         prevNode.push(noForEach);
+        node.getVariable().accept(this, arg);
+        node.getIterable().accept(this, arg);
         infos.addInformationToLayer1(sourceGraph, noForEach, node.toString());
         Node<Integer> noEndForEach = sourceGraph.addNode(++nodeNum); // the final node of the EnhancedForStatement.
         breakNode.push(noEndForEach); // if a break occur goes to the final node of the EnhancedForStatement.
@@ -393,10 +431,13 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         continueNode.push(noEndSwitch); // if a continue occur goes to the incFor node.
         switchBegin.push(noSwitch);
         switchEnd.push(noEndSwitch);
+        prevNode.push(noSwitch);
 
         super.visit(n, arg);
         switchEnd.pop();
         switchBegin.pop();
+        prevNode.push(noEndSwitch);
+        finalnode = noEndSwitch;
     }
 
     @SuppressWarnings("unchecked")
@@ -500,8 +541,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!node.getName().equals(methodName)) {
             String head = "public class Module {";
             String end = "}";
-            System.out.println("===================");
-            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
+//            System.out.println("===================");
+//            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
             StringBuilder builder = new StringBuilder();
             builder.append(head);
             builder.append(node.toString());
@@ -524,8 +565,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         addGlobalParameter(node.getParameters().size());
         super.visit(node, arg);
 
-        System.out.println("======================================");
-        System.out.println("Module name:" + node.getName());
+//        System.out.println("======================================");
+//        System.out.println("Module name:" + node.getName());
 
         // Remove unnecessary nodes/edges
         List<Node<Integer>> nodesToRemove = new LinkedList<>();
@@ -566,7 +607,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         getGraph();
         sourceGraph.sortNodes();
 
-
+//        printEdges(sourceGraph);
         Graph<Integer> essComplexGraph = SerializationUtils.clone(sourceGraph);
         EssComplexVisitor<Integer> visitor = new EssComplexVisitor<>(essComplexGraph);
         essComplexGraph.accept(visitor);
@@ -651,7 +692,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 //            System.out.println(s);
         }
         builder.append("\n");
-        main.Main.printWriter.write(builder.toString());
+        if (main.Main.printWriter != null)
+            main.Main.printWriter.write(builder.toString());
 
     }
 
@@ -694,6 +736,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     }
 
     private void addModifiedCondition(Expression expression) {
+        if (null == expression)
+            return;
         String s = expression.toString();
         int count = 0;
         for (String str : SymbolAnalyzer.compare) {
@@ -716,7 +760,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     private void addCallPairs() {
         callPairs++;
-        if (prevNode.size() > 0)
-            prevNode.peek().containsMethodCall(); // set this node to contains methodName call
+        prevNode.peek().containsMethodCall(); // set this node to contains methodName call
     }
 }
