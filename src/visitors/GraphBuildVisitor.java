@@ -552,8 +552,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!node.getName().equals(methodName)) {
             String head = "public class Module {";
             String end = "}";
-//            System.out.println("===================");
-//            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
+            System.out.println("===================");
+            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
             StringBuilder builder = new StringBuilder();
             builder.append(head);
             builder.append(node.toString());
@@ -576,8 +576,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         addGlobalParameter(node.getParameters().size());
         super.visit(node, arg);
 
-//        System.out.println("======================================");
-//        System.out.println("Module name:" + node.getName());
+        System.out.println("======================================");
+        System.out.println("Module name:" + node.getName());
 
         // Remove unnecessary nodes/edges
         List<Node<Integer>> nodesToRemove = new LinkedList<>();
@@ -699,8 +699,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
             builder.append(entry.getValue());
             builder.append(",");
-//            String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
-//            System.out.println(s);
+            String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
+            System.out.println(s);
         }
         builder.append("\n");
         if (main.Main.printWriter != null && evaluator.getDimension(Dimension.EDGE_COUNT) > 10)

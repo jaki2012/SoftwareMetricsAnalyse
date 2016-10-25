@@ -53,7 +53,7 @@ public class Main {
         String path = "I:\\GitUnzipped\\antlr-antlr4-e9aa00e\\runtime-testsuite\\test\\org\\antlr\\v4\\test\\runtime\\javascript\\node\\TestLexerExec.java";
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-        calculate(path);
+        calculate(simple);
     }
 
     @SuppressWarnings("unchecked")
