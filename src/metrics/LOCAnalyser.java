@@ -83,11 +83,16 @@ public class LOCAnalyser {
 
     public boolean isBlankRow(String line){
         line = line.trim();
-        if(0 == line.length()){
+        if("//BlankLine!!".equals(line)){
             return true;
-        } else{
+        } else {
             return false;
         }
+//        if(0 == line.length()){
+//            return true;
+//        } else{
+//            return false;
+//        }
     }
 
     public String defineRow(String line){
