@@ -6,10 +6,8 @@ import org.apache.commons.io.FilenameUtils;
 import visitors.CalculateVisitor;
 import visitors.ModuleVisitor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,6 +49,7 @@ public class Main {
         // 默认包下一个叫Simple.java的文件 根据况更改
         String simple = "F:\\simple.java";
         String path = "I:\\GitUnzipped\\antlr-antlr4-e9aa00e\\runtime-testsuite\\test\\org\\antlr\\v4\\test\\runtime\\javascript\\node\\TestLexerExec.java";
+
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
         calculate(simple);
@@ -58,14 +57,42 @@ public class Main {
 
     @SuppressWarnings("unchecked")
     private static void calculate(String path) throws Exception {
-        FileInputStream stream = new FileInputStream(path);
-        // LOC analyse
-//        JavaParser.setDoNotAssignCommentsPreceedingEmptyLines(false);
-//        JavaParser.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(true);
-
-        CompilationUnit unit = JavaParser.parse(stream);
+        //CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
+        CompilationUnit unit = JavaParser.parse(prePerceeding(new FileInputStream(path)));
 
         new ModuleVisitor().visit(unit, null);
+    }
+
+    private static ByteArrayInputStream prePerceeding(FileInputStream originFIS){
+        StringBuilder listOfLines = new StringBuilder("");
+        try {
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(originFIS));
+            String temp;
+            do{
+                temp = bufferedReader.readLine();
+                if(temp != null){
+                    //Add additional '\n' for the '\n' loss of readLine()
+                    if(0 == temp.trim().length()){
+                        listOfLines.append("//BlankLine!!\n");
+                    }else{
+                        listOfLines.append(temp+'\n');
+                    }
+                }
+            }while (temp!=null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayInputStream handledFIS = null;
+        try {
+            handledFIS = new ByteArrayInputStream(listOfLines.toString().getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return handledFIS;
     }
 
 
