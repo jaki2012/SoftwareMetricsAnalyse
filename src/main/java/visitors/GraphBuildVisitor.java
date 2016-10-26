@@ -703,8 +703,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
             System.out.println(s);
         }
         builder.append("\n");
-        if (main.Main.printWriter != null && evaluator.getDimension(Dimension.EDGE_COUNT) > 10)
-            main.Main.printWriter.write(builder.toString());
+        if (test.Main.printWriter != null && evaluator.getDimension(Dimension.EDGE_COUNT) > 10)
+            test.Main.printWriter.write(builder.toString());
 
     }
 
