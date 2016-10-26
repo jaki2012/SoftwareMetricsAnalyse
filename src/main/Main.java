@@ -1,6 +1,6 @@
 package main;
 
-import com.github.javaparser.JavaParser;
+import GithubParserUtils.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.apache.commons.io.FilenameUtils;
 import visitors.CalculateVisitor;
@@ -58,6 +58,7 @@ public class Main {
     private static void calculate(String path) throws Exception {
         //CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
         CompilationUnit unit = JavaParser.parse(prePerceeding(new FileInputStream(path)));
+        System.out.println("TOTAL FILE LOC_AND_COMMENT: " + JavaParser.LOC_CODE_AND_COMMENT);
         new ModuleVisitor().visit(unit, null);
     }
 

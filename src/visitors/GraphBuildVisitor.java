@@ -1,5 +1,6 @@
 package visitors;
 
+import GithubParserUtils.JavaParser;
 import ast.graph.Edge;
 import ast.graph.Graph;
 import ast.graph.GraphInformation;
@@ -575,6 +576,15 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         System.out.println("======================================");
         System.out.println("Module name:" + node.getName());
+
+        int count = 0;
+        for(int i = 0; i<JavaParser.commentNode.size();i++){
+
+            if(node.contains(JavaParser.commentNode.get(i))){
+                count += 1;
+            }
+        }
+        System.out.println("LOC_CODE_AND_COMMENT:" + count);
 
         // Remove unnecessary nodes/edges
         List<Node<Integer>> nodesToRemove = new LinkedList<>();
