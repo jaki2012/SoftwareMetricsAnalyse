@@ -1,4 +1,4 @@
-package main;
+package test;
 
 import GithubParserUtils.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -43,12 +43,13 @@ public class Main {
     }
 
     public static void main(String... args) throws Exception {
-//        String initPath = "I:\\GitUnzipped";
-//        printWriter  = new PrintWriter(new File("F:\\DataComplex-edge-g-10.csv"));
-//        run(new File(initPath).listFiles());
+        String initPath = "I:\\GitUnzipped";
+        printWriter  = new PrintWriter(new File("F:\\Test-speed-all.csv"));
+        run(new File(initPath).listFiles());
         // 默认包下一个叫Simple.java的文件 根据况更改
         String simple = "F:\\simple.java";
         String path = "I:\\GitUnzipped\\antlr-antlr4-e9aa00e\\runtime-testsuite\\test\\org\\antlr\\v4\\test\\runtime\\javascript\\node\\TestLexerExec.java";
+
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
         calculate(path);
@@ -58,7 +59,9 @@ public class Main {
     private static void calculate(String path) throws Exception {
         //CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
         CompilationUnit unit = JavaParser.parse(prePerceeding(new FileInputStream(path)));
-        System.out.println("TOTAL FILE LOC_AND_COMMENT: " + JavaParser.LOC_CODE_AND_COMMENT);
+
+
+//        System.out.println("TOTAL FILE LOC_AND_COMMENT: " + JavaParser.LOC_CODE_AND_COMMENT);
 
         new ModuleVisitor().visit(unit, null);
     }

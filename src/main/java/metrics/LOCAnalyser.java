@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class LOCAnalyser {
 
-    public static void calculate(InputStream stream, MetricsEvaluator evaluator) {
+    public static void run(InputStream stream, MetricsEvaluator evaluator) {
         ArrayList<String> listOfLines = new ArrayList<String>();
 
         try {
@@ -34,11 +34,7 @@ public class LOCAnalyser {
         int NUMBER_OF_LINES = listOfLines.size();
         int LOC_BLANK = 0;
         int LOC_COMMENTS = 0;
-        int LOC_CODE_AND_COMMENT = 0;
         int LOC_EXECUTABLE = 0;
-        int LOC_TOTAL = 0;
-        float PERCENT_COMMENTS = 0;
-
 
         LOCAnalyser mAnalyser = new LOCAnalyser();
 
@@ -49,14 +45,13 @@ public class LOCAnalyser {
 //            System.out.println("row " + (i + 1) + "~~~~" + "~~~~" + analyze_result.get(i) + listOfLines.get(i));
 //        }
 
-        // calculate loc metrics
+        // run loc metrics
         for(int i=0; i<analyze_result.size(); i++){
             String curResult = analyze_result.get(i);
             if("Blank".equals(curResult)){
                 LOC_BLANK += 1;
             } else if (curResult.contains("Code")) {
                 if (curResult.contains("Comment")) {
-                    LOC_CODE_AND_COMMENT += 1;
                 } else {
                     LOC_EXECUTABLE += 1;
                 }
@@ -65,27 +60,27 @@ public class LOCAnalyser {
             }
         }
 
+        calculate(e, NUMBER_OF_LINES, LOC_BLANK, LOC_COMMENTS, LOC_EXECUTABLE);
+    }
+
+    public static void calculate(MetricsEvaluator e, double NUMBER_OF_LINES, double LOC_BLANK, double LOC_COMMENTS, double LOC_EXECUTABLE) {
+        double LOC_CODE_AND_COMMENT;
+        double PERCENT_COMMENTS;
+        double LOC_TOTAL;
+        LOC_CODE_AND_COMMENT = (int)(double)e.getDimension(Dimension.LOC_CODE_AND_COMMENT);
         PERCENT_COMMENTS = (float)(LOC_COMMENTS + LOC_CODE_AND_COMMENT) / (float)(LOC_COMMENTS + LOC_CODE_AND_COMMENT + LOC_EXECUTABLE);
         LOC_TOTAL = LOC_EXECUTABLE + LOC_CODE_AND_COMMENT;
-        e.putDimension(Dimension.NUMBER_OF_LINES, (double) NUMBER_OF_LINES);
-        e.putDimension(Dimension.LOC_BLANK, (double) LOC_BLANK);
-        e.putDimension(Dimension.LOC_COMMENTS, (double) LOC_COMMENTS);
-        e.putDimension(Dimension.LOC_CODE_AND_COMMENT, (double) LOC_CODE_AND_COMMENT);
-        e.putDimension(Dimension.LOC_EXECUTABLE, (double) LOC_EXECUTABLE);
-        e.putDimension(Dimension.LOC_TOTAL, (double) LOC_TOTAL);
-        e.putDimension(Dimension.PERCENT_COMMENTS, (double) PERCENT_COMMENTS);
-//        System.out.println("NUMBER_OF_LINES: " + NUMBER_OF_LINES + "\nLOC_BLANK: " + LOC_BLANK + "\nLOC_COMMENTS: " + LOC_COMMENTS +
-//                "\nLOC_CODE_AND_COMMENT: "+ LOC_CODE_AND_COMMENT+ "\nLOC_EXECUTABLE: "+ LOC_EXECUTABLE +"\nLOC_TOTAL: " + LOC_TOTAL
-//        + "\nPERCENT_COMMENTS: " + PERCENT_COMMENTS);
+        e.putDimension(Dimension.NUMBER_OF_LINES, NUMBER_OF_LINES);
+        e.putDimension(Dimension.LOC_BLANK, LOC_BLANK);
+        e.putDimension(Dimension.LOC_COMMENTS, LOC_COMMENTS);
+        e.putDimension(Dimension.LOC_EXECUTABLE, LOC_EXECUTABLE);
+        e.putDimension(Dimension.LOC_TOTAL, LOC_TOTAL);
+        e.putDimension(Dimension.PERCENT_COMMENTS, PERCENT_COMMENTS);
     }
 
     public boolean isBlankRow(String line){
         line = line.trim();
-        if("//BlankLine!!".equals(line)){
-            return true;
-        } else {
-            return false;
-        }
+        return "//BlankLine!!".equals(line);
 //        if(0 == line.length()){
 //            return true;
 //        } else{
