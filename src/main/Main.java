@@ -1,15 +1,13 @@
 package main;
 
-import com.github.javaparser.JavaParser;
+import GithubParserUtils.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.apache.commons.io.FilenameUtils;
 import visitors.CalculateVisitor;
 import visitors.ModuleVisitor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,14 +56,43 @@ public class Main {
 
     @SuppressWarnings("unchecked")
     private static void calculate(String path) throws Exception {
-        FileInputStream stream = new FileInputStream(path);
-        // LOC analyse
-//        JavaParser.setDoNotAssignCommentsPreceedingEmptyLines(false);
-//        JavaParser.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(true);
-
-        CompilationUnit unit = JavaParser.parse(stream);
+        //CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
+        CompilationUnit unit = JavaParser.parse(prePerceeding(new FileInputStream(path)));
+        System.out.println("TOTAL FILE LOC_AND_COMMENT: " + JavaParser.LOC_CODE_AND_COMMENT);
 
         new ModuleVisitor().visit(unit, null);
+    }
+
+    private static ByteArrayInputStream prePerceeding(FileInputStream originFIS){
+        StringBuilder listOfLines = new StringBuilder("");
+        try {
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(originFIS));
+            String temp;
+            do{
+                temp = bufferedReader.readLine();
+                if(temp != null){
+                    //Add additional '\n' for the '\n' loss of readLine()
+                    if(0 == temp.trim().length()){
+                        listOfLines.append("//BlankLine!!\n");
+                    }else{
+                        listOfLines.append(temp+'\n');
+                    }
+                }
+            }while (temp!=null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayInputStream handledFIS = null;
+        try {
+            handledFIS = new ByteArrayInputStream(listOfLines.toString().getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return handledFIS;
     }
 
 
