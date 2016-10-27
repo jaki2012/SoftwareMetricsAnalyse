@@ -3,12 +3,14 @@ package visitors;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import domain.utils.ANTLRModuleStream;
+import metrics.Dimension;
 import metrics.Initiator;
 import metrics.LOCAnalyser;
 import metrics.MetricsEvaluator;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * Project: Halstead
@@ -31,10 +33,33 @@ public class ModuleVisitor extends VoidVisitorAdapter {
         try {
             MetricsEvaluator e = (new Initiator()).initiate(stream);
             InputStream inputStream = new ByteArrayInputStream(builder.toString().getBytes());
-            LOCAnalyser.calculate(inputStream, e);
+            LOCAnalyser.run(inputStream, e);
             new GraphBuildVisitor(e, n.getName()).visit(n, arg);
+            // Calculate circle dependency
+            LOCAnalyser.calculate(
+                    e,
+                    e.getDimension(Dimension.NUMBER_OF_LINES),
+                    e.getDimension(Dimension.LOC_BLANK),
+                    e.getDimension(Dimension.LOC_COMMENTS),
+                    e.getDimension(Dimension.LOC_EXECUTABLE)
+            );
+            printResult(e);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
+    }
+
+    public static void printResult(MetricsEvaluator evaluator) {
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
+            builder.append(entry.getValue());
+            builder.append(",");
+//            String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
+//            System.out.println(s);
+        }
+        builder.append("\n");
+        if (test.Main.printWriter != null)
+            test.Main.printWriter.write(builder.toString());
+
     }
 }

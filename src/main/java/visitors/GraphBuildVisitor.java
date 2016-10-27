@@ -1,5 +1,6 @@
 package visitors;
 
+import GithubParserUtils.JavaParser;
 import ast.graph.Edge;
 import ast.graph.Graph;
 import ast.graph.GraphInformation;
@@ -8,7 +9,6 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.sun.javaws.Main;
 import domain.constants.Layer;
 import domain.graph.visitors.DataComplexVisitor;
 import domain.graph.visitors.EssComplexVisitor;
@@ -54,6 +54,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private double decisionDensity;
     private double designDensity;
     private double essDensity;
+    private double locCodeAndComment;
     private String methodName;
 
     private Stack<Node<Integer>> switchBegin;
@@ -77,6 +78,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     private void initBuilder(String methodName) {
         this.methodName = methodName; // name of the methodName to be analyzed.
+        locCodeAndComment = 0;
         nodeNum = 0; // number of the node.
         edgeNum = 0;
         callPairs = 0; // number of function calls
@@ -532,7 +534,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     /**
      * Add all field declaration
-     * To calculate GLOBAL DATA
+     * To run GLOBAL DATA
      *
      * @param n
      * @param arg
@@ -552,8 +554,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!node.getName().equals(methodName)) {
             String head = "public class Module {";
             String end = "}";
-            System.out.println("===================");
-            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
+//            System.out.println("===================");
+//            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
             StringBuilder builder = new StringBuilder();
             builder.append(head);
             builder.append(node.toString());
@@ -562,8 +564,17 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
             try {
                 MetricsEvaluator e = (new Initiator()).initiate(stream);
                 InputStream inputStream = new ByteArrayInputStream(builder.toString().getBytes());
-                LOCAnalyser.calculate(inputStream, e);
-                   new GraphBuildVisitor(e, node.getName()).visit(node, arg);
+                LOCAnalyser.run(inputStream, e);
+                new GraphBuildVisitor(e, node.getName()).visit(node, arg);
+                // Calculate circle dependency
+                LOCAnalyser.calculate(
+                        e,
+                        e.getDimension(Dimension.NUMBER_OF_LINES),
+                        e.getDimension(Dimension.LOC_BLANK),
+                        e.getDimension(Dimension.LOC_COMMENTS),
+                        e.getDimension(Dimension.LOC_EXECUTABLE)
+                );
+                ModuleVisitor.printResult(e);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -576,8 +587,16 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         addGlobalParameter(node.getParameters().size());
         super.visit(node, arg);
 
-        System.out.println("======================================");
-        System.out.println("Module name:" + node.getName());
+//        System.out.println("======================================");
+//        System.out.println("Module name:" + node.getName());
+
+        for (int i = 0; i < JavaParser.commentNode.size(); i++) {
+
+            if (node.contains(JavaParser.commentNode.get(i))) {
+                locCodeAndComment += 1;
+            }
+        }
+//        System.out.println("LOC_CODE_AND_COMMENT:" + count);
 
         // Remove unnecessary nodes/edges
         List<Node<Integer>> nodesToRemove = new LinkedList<>();
@@ -654,7 +673,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     }
 
     /**
-     * Call before calculate final
+     * Call before run final
      *
      * @return calculated Cyclomatic Complexity
      */
@@ -694,18 +713,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         evaluator.putDimension(Dimension.GLOBAL_DATA_COMPLEXITY, dataComplexity);
         evaluator.putDimension(Dimension.GLOBAL_DATA_DENSITY, dataComplexity / cyclomaticComplexity);
         evaluator.putDimension(Dimension.MAINTENANCE_SEVERITY, essComplexity / cyclomaticComplexity);
-
-        StringBuilder builder = new StringBuilder();
-        for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
-            builder.append(entry.getValue());
-            builder.append(",");
-            //String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
-            //System.out.println(s);
-        }
-        builder.append("\n");
-        if (test.Main.printWriter != null && evaluator.getDimension(Dimension.EDGE_COUNT) > 10)
-            test.Main.printWriter.write(builder.toString());
-
+        evaluator.putDimension(Dimension.LOC_CODE_AND_COMMENT, locCodeAndComment);
     }
 
     private void calculateFinal() {
