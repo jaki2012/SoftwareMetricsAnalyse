@@ -205,6 +205,7 @@ public class CyclomaticComplexityVisitor extends JavaBaseVisitor<Integer> {
         entryStack.peek().setVoid(ctx.getText().toLowerCase().startsWith("void"));
         Integer res = super.visitMethodDeclaration(ctx);
 
+        System.out.println(ctx.getText());
         Entry methodEntry = entryStack.pop();
 
         int methodDecisionPoints = methodEntry.decisionPoints;

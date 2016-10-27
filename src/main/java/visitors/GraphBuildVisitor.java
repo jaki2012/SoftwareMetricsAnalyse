@@ -699,8 +699,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
             builder.append(entry.getValue());
             builder.append(",");
-            String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
-            System.out.println(s);
+            //String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
+            //System.out.println(s);
         }
         builder.append("\n");
         if (test.Main.printWriter != null && evaluator.getDimension(Dimension.EDGE_COUNT) > 10)
