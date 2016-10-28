@@ -29,6 +29,7 @@ public class EssComplexVisitor<V extends Comparable<V>> extends AbstractMcCabeVi
         structureProvider.addStructure(new ForStmt<>());
         structureProvider.addStructure(new WhileStmt<>());
         structureProvider.addStructure(new ForEachStmt<>());
+        structureProvider.addStructure(new DoStmt<>());
         graph = sourceGraph;
     }
 }

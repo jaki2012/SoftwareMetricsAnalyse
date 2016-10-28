@@ -44,7 +44,7 @@
 ---
 简单算法：
 ```
-File path:E:\MyCodes\Java\JavaCodeParser\src\Simple.java
+File path:E:\MyCodes\Java\JavaCodeParser\src\simple.java
 ========================================================
 n1:24
 n2:38
@@ -59,7 +59,7 @@ E:8603.813668509034
 ```
 完备算法：
 ```
-File path:E:\MyCodes\Java\JavaCodeParser\src\Simple.java
+File path:E:\MyCodes\Java\JavaCodeParser\src\simple.java
 ========================================================
 n1:								132.0
 n2:								133.0

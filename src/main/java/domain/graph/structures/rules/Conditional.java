@@ -20,10 +20,11 @@ public class Conditional<V extends Comparable<V>> extends BaseRule<V> {
         super(method);
     }
 
+    @SuppressWarnings("all")
     @Override
     public boolean isStructure(Graph<V> graph, Node<V> node) {
         if (null == node
-                || graph == null
+                || null == graph
                 || graph.getNodeEdges(node).size() != 2) {
             return false;
         }

@@ -25,7 +25,7 @@ public class Main {
     public static void run(File[] files) {
         for (File file : files) {
             if (file.isDirectory()) {
-                System.out.println("Dir:" + file.getAbsolutePath());
+//                System.out.println("Dir:" + file.getAbsolutePath());
                 run(file.listFiles()); // Calls same method again.
             } else {
                 try {
@@ -44,7 +44,7 @@ public class Main {
 
     public static void main(String... args) throws Exception {
         String initPath = "I:\\GitUnzipped";
-        printWriter  = new PrintWriter(new File("F:\\Test-speed-all.csv"));
+        printWriter  = new PrintWriter(new File("F:\\Test-1min.csv"));
         run(new File(initPath).listFiles());
         // 默认包下一个叫Simple.java的文件 根据况更改
         String simple = "F:\\simple.java";
@@ -52,7 +52,7 @@ public class Main {
 
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-        calculate(path);
+        calculate(simple);
     }
 
     @SuppressWarnings("unchecked")

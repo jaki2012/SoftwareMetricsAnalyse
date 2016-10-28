@@ -117,7 +117,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(ExpressionStmt n, Object arg) {
-        infos.addInformationToLayer1(sourceGraph, prevNode.peek(), n.toString());
+//        Edge<Integer> edge = createConnection();
+//        Node<Integer> node = edge.getEndNode();
+//        prevNode.push(node);
+        infos.addInformationToLayer1(sourceGraph, prevNode.peek(), " ");
         super.visit(n, arg);
     }
 
@@ -599,6 +602,37 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 //        System.out.println("LOC_CODE_AND_COMMENT:" + count);
 
         // Remove unnecessary nodes/edges
+        removeNodeEdge(sourceGraph);
+
+        addFinalNodes(sourceGraph);
+        sourceGraph.sortNodes();
+
+//        printEdges(sourceGraph);
+        Graph<Integer> essComplexGraph = SerializationUtils.clone(sourceGraph);
+        EssComplexVisitor<Integer> visitor = new EssComplexVisitor<>(essComplexGraph);
+        essComplexGraph.accept(visitor);
+//        removeNodeEdge(essComplexGraph);
+        essComplexity = calculateCC(essComplexGraph);
+
+        Graph<Integer> modDesignGraph = SerializationUtils.clone(sourceGraph);
+        ModuleComplexVisitor<Integer> mVisitor = new ModuleComplexVisitor<>(modDesignGraph);
+        modDesignGraph.accept(mVisitor);
+//        removeNodeEdge(modDesignGraph);
+        moduleDesignComplexity = calculateCC(modDesignGraph);
+
+        Graph<Integer> dataComplexGraph = SerializationUtils.clone(sourceGraph);
+        DataComplexVisitor<Integer> dVisitor = new DataComplexVisitor<>(dataComplexGraph);
+        dataComplexGraph.accept(dVisitor);
+//        removeNodeEdge(dataComplexGraph);
+        dataComplexity = calculateCC(dataComplexGraph);
+
+        cyclomaticComplexity = calculateCC(sourceGraph);
+        calculateFinal();
+
+        initBuilder(methodName);
+    }
+
+    private void removeNodeEdge(Graph<Integer> sourceGraph) {
         List<Node<Integer>> nodesToRemove = new LinkedList<>();
         List<Edge<Integer>> edgesToRemove = new LinkedList<>();
         for (Node<Integer> graphNode : sourceGraph.getNodes()) {
@@ -632,31 +666,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         if (!sourceGraph.getInitialNodes().iterator().hasNext())
             sourceGraph.addInitialNode(sourceGraph.getNodes().iterator().next());
-
-//        sourceGraph.accept(new ReNumNodesVisitor());
-        getGraph();
-        sourceGraph.sortNodes();
-
-//        printEdges(sourceGraph);
-        Graph<Integer> essComplexGraph = SerializationUtils.clone(sourceGraph);
-        EssComplexVisitor<Integer> visitor = new EssComplexVisitor<>(essComplexGraph);
-        essComplexGraph.accept(visitor);
-        essComplexity = calculateCC(essComplexGraph);
-
-        Graph<Integer> modDesignGraph = SerializationUtils.clone(sourceGraph);
-        ModuleComplexVisitor<Integer> mVisitor = new ModuleComplexVisitor<>(modDesignGraph);
-        modDesignGraph.accept(mVisitor);
-        moduleDesignComplexity = calculateCC(modDesignGraph);
-
-        Graph<Integer> dataComplexGraph = SerializationUtils.clone(sourceGraph);
-        DataComplexVisitor<Integer> dVisitor = new DataComplexVisitor<>(dataComplexGraph);
-        dataComplexGraph.accept(dVisitor);
-        dataComplexity = calculateCC(dataComplexGraph);
-
-        cyclomaticComplexity = calculateCC(sourceGraph);
-        calculateFinal();
-
-        initBuilder(methodName);
     }
 
     /**
@@ -686,13 +695,11 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         offset = offset == 1 ? (offset - 1) : (offset - 2);
         if (!graph.equals(sourceGraph))
             offset = 0;
+//        return graph.edgeCount() - graph.size() + 2;
         return graph.edgeCount() - (graph.size() - offset) + 2;
     }
 
     private void bindToMetric() {
-        // CC is always bigger than 0
-        assert cyclomaticComplexity <= 0;
-
         evaluator.putDimension(Dimension.BRANCH_COUNT, (double) branchCount);
         evaluator.putDimension(Dimension.MULTIPLE_CONDITION_COUNT, (double) multiConditionCount);
         evaluator.putDimension(Dimension.MODIFIED_CONDITION_COUNT, (double) modifiedConditionCount);
@@ -717,13 +724,32 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     }
 
     private void calculateFinal() {
+        if (cyclomaticComplexity < 1)
+            cyclomaticComplexity = 1;
+
         multiConditionCount += modifiedConditionCount * 2;
         conditionsCount = multiConditionCount * 2;
         decisionCount = (multiConditionCount % 2 == 0) ? multiConditionCount : multiConditionCount - 1;
         if (decisionCount != 0)
             decisionDensity = conditionsCount / decisionCount;
 
+        if (moduleDesignComplexity < 1)
+            moduleDesignComplexity = 1;
+        else if (moduleDesignComplexity > cyclomaticComplexity)
+            moduleDesignComplexity = cyclomaticComplexity;
+
+        if (dataComplexity < 1)
+            dataComplexity = 1;
+        else if (dataComplexity > cyclomaticComplexity)
+            dataComplexity = cyclomaticComplexity;
+
         designDensity = moduleDesignComplexity / cyclomaticComplexity;
+
+        if (essComplexity < 1)
+            essComplexity = 1;
+        else if (essComplexity > cyclomaticComplexity)
+            essComplexity = cyclomaticComplexity;
+
         if (cyclomaticComplexity - 1 > 0 && essComplexity - 1 >= 0)
             essDensity = (essComplexity - 1) / (cyclomaticComplexity - 1);
 
@@ -736,7 +762,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         return sourceGraph.addEdge(prevNode.pop(), node); // create a edge to the previous node to the new one.
     }
 
-    public Graph<Integer> getGraph() {
+    public Graph<Integer> addFinalNodes(Graph<Integer> sourceGraph) {
         if (finalnode != null)
             sourceGraph.addFinalNode(finalnode); // add final node to the final nodes of the graph.
         return sourceGraph;

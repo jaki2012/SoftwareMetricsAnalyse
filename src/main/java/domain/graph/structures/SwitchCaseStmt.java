@@ -40,6 +40,7 @@ public class SwitchCaseStmt<V extends Comparable<V>> extends BaseStructure<V> {
                 }
             }
 
+            originFinalNodes.clear();
             if (finalEdges.size() != 0) {
                 for (Edge<V> finalEdge : finalEdges) {
                     Node<V> lastNode = finalEdge.getEndNode();
