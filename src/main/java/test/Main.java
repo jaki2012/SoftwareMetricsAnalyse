@@ -43,16 +43,16 @@ public class Main {
     }
 
     public static void main(String... args) throws Exception {
-        String initPath = "I:\\GitUnzipped";
-        printWriter  = new PrintWriter(new File("F:\\Test-1min.csv"));
-        run(new File(initPath).listFiles());
+//        String initPath = "I:\\GitUnzipped";
+//        printWriter  = new PrintWriter(new File("F:\\Test-1min.csv"));
+//        run(new File(initPath).listFiles());
         // 默认包下一个叫Simple.java的文件 根据况更改
         String simple = "F:\\simple.java";
         String path = "I:\\GitUnzipped\\antlr-antlr4-e9aa00e\\runtime-testsuite\\test\\org\\antlr\\v4\\test\\runtime\\javascript\\node\\TestLexerExec.java";
-
+        String test = "E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-        calculate(simple);
+        calculate(test);
     }
 
     @SuppressWarnings("unchecked")

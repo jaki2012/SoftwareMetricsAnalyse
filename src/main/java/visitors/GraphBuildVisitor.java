@@ -557,8 +557,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!node.getName().equals(methodName)) {
             String head = "public class Module {";
             String end = "}";
-//            System.out.println("===================");
-//            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
+            System.out.println("===================");
+            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
             StringBuilder builder = new StringBuilder();
             builder.append(head);
             builder.append(node.toString());
@@ -590,8 +590,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         addGlobalParameter(node.getParameters().size());
         super.visit(node, arg);
 
-//        System.out.println("======================================");
-//        System.out.println("Module name:" + node.getName());
+        System.out.println("======================================");
+        System.out.println("Module name:" + node.getName());
 
         for (int i = 0; i < JavaParser.commentNode.size(); i++) {
 
