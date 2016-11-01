@@ -26,7 +26,7 @@ public class Operands {
 
     public void insert(String name) {
         if(this.name.contains(name)) {
-            int count = Integer.parseInt(((String)this.count.get(this.name.indexOf(name))).toString());
+            int count = Integer.parseInt(this.count.get(this.name.indexOf(name)));
             this.count.set(this.name.indexOf(name), "" + (count + 1));
         } else {
             this.name.add(name);
@@ -37,7 +37,7 @@ public class Operands {
 
     public void insert(String name, int counter) {
         if(this.name.contains(name)) {
-            counter += Integer.parseInt(((String)this.count.get(this.name.indexOf(name))).toString());
+            counter += Integer.parseInt(this.count.get(this.name.indexOf(name)));
             this.count.set(this.name.indexOf(name), "" + counter);
         } else {
             this.name.add(name);

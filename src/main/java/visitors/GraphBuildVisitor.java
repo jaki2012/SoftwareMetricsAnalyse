@@ -117,9 +117,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(ExpressionStmt n, Object arg) {
-//        Edge<Integer> edge = createConnection();
-//        Node<Integer> node = edge.getEndNode();
-//        prevNode.push(node);
         infos.addInformationToLayer1(sourceGraph, prevNode.peek(), " ");
         super.visit(n, arg);
     }
@@ -587,7 +584,13 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         for (Parameter p : node.getParameters()) {
             parameters.add(p.getName());
         }
-        addGlobalParameter(node.getParameters().size());
+        
+        if (!node.getDeclarationAsString().contains("static")) {
+            addGlobalParameter(node.getParameters().size() + 1); // "this"
+            parameters.add("this"); // add reference this
+        }
+        else
+            addGlobalParameter(node.getParameters().size()); // no "this"
         super.visit(node, arg);
 
         System.out.println("======================================");

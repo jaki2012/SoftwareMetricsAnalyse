@@ -17,7 +17,7 @@ public class SymbolAnalyzer {
         int count = 0;
 
         for(int i = 0; i < Tokenizer.getInstance().tokens.size(); ++i) {
-            if(((String) Tokenizer.getInstance().tokens.get(i)).equals(symbols[index])) {
+            if(Tokenizer.getInstance().tokens.get(i).equals(symbols[index])) {
                 ++count;
             }
         }

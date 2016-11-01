@@ -17,19 +17,19 @@ public class LiteralAnalyzer {
         ArrayList cpTokens = Tokenizer.getInstance().tokens;
         Iterator i = cpTokens.iterator();
 
-        while(i.hasNext()) {
-            String token = ((String)i.next()).toString();
-            if(Operators.getInstance().name.contains(token)) {
+        while (i.hasNext()) {
+            String token = ((String) i.next());
+            if (Operators.getInstance().name.contains(token)) {
                 i.remove();
-            } else if(Operands.getInstance().name.contains(token)) {
+            } else if (Operands.getInstance().name.contains(token)) {
                 i.remove();
-            } else if(token.equals("<EOF>")) {
+            } else if (token.equals("<EOF>")) {
                 i.remove();
             }
         }
 
-        for(int var4 = 0; var4 < cpTokens.size(); ++var4) {
-            Operands.getInstance().insert(((String)cpTokens.get(var4)).toString());
+        for (int j = 0; j < cpTokens.size(); ++j) {
+            Operands.getInstance().insert(cpTokens.get(j).toString());
         }
 
     }

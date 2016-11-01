@@ -61,11 +61,11 @@ public class MetricsEvaluator {
 
         int i;
         for (i = 0; i < Operators.getInstance().name.size(); ++i) {
-            this.n1 += (double) Integer.parseInt(((String) Operators.getInstance().count.get(i)).toString());
+            this.n1 += (double) Integer.parseInt(Operators.getInstance().count.get(i));
         }
 
         for (i = 0; i < Operands.getInstance().name.size(); ++i) {
-            this.n2 += (double) Integer.parseInt(((String) Operands.getInstance().count.get(i)).toString());
+            this.n2 += (double) Integer.parseInt(Operands.getInstance().count.get(i));
         }
 
         this.PROGRAM_LENGTH = this.N1 + this.N2;

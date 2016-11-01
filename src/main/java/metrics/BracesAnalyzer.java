@@ -18,9 +18,9 @@ public class BracesAnalyzer {
         int endCount = 0;
 
         for(int i = 0; i < Tokenizer.getInstance().tokens.size(); ++i) {
-            if(((String)Tokenizer.getInstance().tokens.get(i)).toString().equals(this.braces[index][0])) {
+            if(Tokenizer.getInstance().tokens.get(i).equals(this.braces[index][0])) {
                 ++startCount;
-            } else if(((String)Tokenizer.getInstance().tokens.get(i)).toString().equals(this.braces[index][1])) {
+            } else if(Tokenizer.getInstance().tokens.get(i).equals(this.braces[index][1])) {
                 ++endCount;
             }
         }

@@ -52,7 +52,7 @@ public class Main {
         String test = "E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
 //        System.out.println("File path:" + simple);
 //        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-        calculate(test);
+        calculate(simple);
     }
 
     @SuppressWarnings("unchecked")
