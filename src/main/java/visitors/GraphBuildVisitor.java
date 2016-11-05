@@ -225,6 +225,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         returnFlag = false;
         prevNode.push(noIf); // the graph continues from the initial node of the IFStatement.
         Statement elseStatement = node.getElseStmt(); // get the Else block.
+
         if (elseStatement != null) { // if exists visit the Else block.
             Edge<Integer> edgeElse = createConnection();
             infos.addInformationToLayer2(sourceGraph, edgeElse, "(" + node.toString() + ")");
@@ -237,8 +238,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!returnThenFlag || !returnElseFlag) { // if exist in maximum one return.
             if (!prevNode.isEmpty()) {
                 edge = createConnection(); // create the final node of the IFStatement.
-                if (elseStatement == null)
-                    infos.addInformationToLayer2(sourceGraph, edge, "(" + node.toString() + ")");
                 returnFlag = (returnThenFlag || returnElseFlag);
                 if (!returnFlag) { // if there are no returns.
                     if (!breakThenFlag || !breakElseFlag) { // if exist in maximum one break or continue.

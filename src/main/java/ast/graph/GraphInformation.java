@@ -14,28 +14,27 @@ import java.util.Map;
 public class GraphInformation {
 
     /**
-     * Associates the program instructions to the corresponding node in the abstract grapg.
-     * This information is stored in abstract graph meta-data Layer.INSTRUCTIONS.
+     * Associates the program instructions to the corresponding node in the graph.
      *
-     * @param sourceGraph - The abstract representation of the graph.
-     * @param sourceNode - The abstract representation of the node in the abstract graph.
-     * @param instructions - The program instructions or node information associated to the sourceNode.
+     * @param sourceGraph - The graph.
+     * @param sourceNode - The node in the graph.
+     * @param information - The program information or node information associated to the sourceNode.
      */
     @SuppressWarnings("unchecked")
-    public void addInformationToLayer1(Graph<Integer> sourceGraph, Node<Integer> sourceNode, String instructions) {
+    public void addInformationToLayer1(Graph<Integer> sourceGraph, Node<Integer> sourceNode, String information) {
         sourceGraph.selectMetadataLayer(Layer.INSTRUCTIONS.getLayer()); // change to instruction layer.
         Map<Node, String> nodeInstructions = (HashMap<Node, String>) sourceGraph.getMetadata(sourceNode); // contains the instructions associated to the node.
         if (nodeInstructions == null) {
             nodeInstructions = new HashMap<>();
             sourceGraph.addMetadata(sourceNode, nodeInstructions);
         }
-        Node node = new Node<>(instructions);
-        nodeInstructions.put(node, instructions);
+        Node node = new Node<>(information);
+        nodeInstructions.put(node, information);
         sourceGraph.addMetadata(sourceNode, nodeInstructions);
     }
 
     /**
-     * Add guards information to abstract graph edge.
+     * Add guards information to graph edge.
      * This information is stored in abstract graph meta-data Layer.GUARDS.
      *
      * @param sourceGraph - The abstract representation of the graph.
