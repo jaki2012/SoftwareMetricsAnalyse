@@ -58,6 +58,12 @@ LOC_TOTAL
 
 Please use Maven to get all these dependencies(In idea, press: Project Structure->Modules->Dependencies)  
 
+## Todo
+- 2016.11.06-11.13
+  - 将统计粒度由BasicBlock改为Expression级
+  - 重写DecisionPoint、MultiCondition计算算法
+  - 重新研究ModifiedCondition定义、计算方法
+  - 检查Graph Reduce算法的问题
 
 ## Usage
 
