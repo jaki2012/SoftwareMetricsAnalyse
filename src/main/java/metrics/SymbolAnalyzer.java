@@ -9,6 +9,7 @@ package metrics;
 public class SymbolAnalyzer {
     public static String[] symbols = new String[]{"+", "++", "-", "--", "*", ".", ";", "/", "%", "!", ">", "<", ">=", "<=", "==", "=", ":", "~"};
     public static String[] compare = new String[]{"!", "||", "&&"};
+    public static String[] literalBoolean = new String[]{"true", "false"};
 
     public SymbolAnalyzer() {
     }
@@ -16,8 +17,8 @@ public class SymbolAnalyzer {
     public int countSymbols(int index) {
         int count = 0;
 
-        for(int i = 0; i < Tokenizer.getInstance().tokens.size(); ++i) {
-            if(Tokenizer.getInstance().tokens.get(i).equals(symbols[index])) {
+        for (int i = 0; i < Tokenizer.getInstance().tokens.size(); ++i) {
+            if (Tokenizer.getInstance().tokens.get(i).equals(symbols[index])) {
                 ++count;
             }
         }
@@ -26,9 +27,9 @@ public class SymbolAnalyzer {
     }
 
     public void analyzeSymbols() {
-        for(int i = 0; i < symbols.length; ++i) {
+        for (int i = 0; i < symbols.length; ++i) {
             int count = this.countSymbols(i);
-            if(count > 0) {
+            if (count > 0) {
                 Operators.getInstance().insert(symbols[i], count);
             }
         }

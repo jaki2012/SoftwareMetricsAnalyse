@@ -106,7 +106,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         sourceGraph.addInitialNode(initial); // add first node to the graph.
         prevNode.push(initial); // add first node to the previous node stack.
         finalnode = initial; // The final node.
-        infos = new GraphInformation(); // the graph informations.
+        infos = new GraphInformation(); // the graph information.
         parameters = new TreeSet<>();
     }
 
@@ -207,7 +207,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public void visit(IfStmt node, Object arg) {
-        addModifiedCondition(node.getCondition());
+        calculateCondition(node.getCondition());
         addBranchCount(2);
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noIf = edge.getEndNode(); // the initial node of the IFStatement.
@@ -257,7 +257,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(WhileStmt node, Object arg) {
-        addModifiedCondition(node.getCondition());
+        calculateCondition(node.getCondition());
         addBranchCount(2);
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noWhile = edge.getEndNode(); // the initial node of the WhileStatement.
@@ -292,7 +292,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public void visit(DoStmt node, Object arg) {
-        addModifiedCondition(node.getCondition());
+        calculateCondition(node.getCondition());
         addBranchCount(2);
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noDoWhileBody = edge.getEndNode(); // create the DoWhileBody node.
@@ -331,7 +331,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public void visit(ForStmt node, Object arg) {
-        addModifiedCondition(node.getCompare());
+        calculateCondition(node.getCompare());
         addBranchCount(2);
         Edge<Integer> edge = createConnection(); // initialization of the ForStatement.
         for (Expression initNode : node.getInit())
@@ -396,7 +396,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public void visit(ForeachStmt node, Object arg) {
-        addModifiedCondition();
         addBranchCount(2);
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noForEach = edge.getEndNode(); // the initial node of the EnhancedForStatement.
@@ -432,7 +431,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public void visit(SwitchStmt n, Object arg) {
-        addModifiedCondition(n.getSelector());
+        calculateCondition(n.getSelector());
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noSwitch = edge.getEndNode(); // the initial node of the SwitchStatement.
         infos.addInformationToLayer1(sourceGraph, noSwitch, n.toString());
@@ -510,7 +509,6 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(ConditionalExpr n, Object arg) {
-        addMultipleCondition();
         super.visit(n, arg);
     }
 
@@ -774,27 +772,56 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         branchCount++;
     }
 
+    /**
+     * 给Decision count加2
+     */
+    private void addDecisionCount() {
+        decisionCount += 2;
+    }
+
     private void addBranchCount(int num) {
         branchCount += num;
     }
 
-    private void addMultipleCondition() {
-        multiConditionCount++;
+    private void addMultipleCondition(int count) {
+        multiConditionCount += count;
     }
 
-    private void addModifiedCondition(Expression expression) {
-        if (null == expression)
-            return;
-        String s = expression.toString();
-        int count = 0;
+    private void calculateCondition(Expression expression) {
+        int literalBoolCnt = 0;
+        int compareOpCount = 0;
+        String s = expression.toStringWithoutComments();
+        // 计算CompareOperator
         for (String str : SymbolAnalyzer.compare) {
-            count += (s.length() - s.replace(str, "").length()) / str.length();
+            compareOpCount += (s.length() - s.replace(str, "").length()) / str.length();
         }
+        // 计算字面布尔值
+        for (String str : SymbolAnalyzer.literalBoolean) {
+            literalBoolCnt += (s.length() - s.replace(str, "").length()) / str.length();
+        }
+        // Modified condition:
+        // 除了字面'true'/'false'以外的condition
+        addModifiedCondition(compareOpCount);
 
-        if (count == 0)
-            modifiedConditionCount++;
-        else
-            modifiedConditionCount += count + 1;
+        // Multi-condition:
+        // 除了字面'true'/'false'以外的condition*2 + 字面'true'/'false'数
+        addMultipleCondition(compareOpCount * 2 + literalBoolCnt);
+
+        // Condition count:
+        // multi-condition * 2
+        addConditionsCount(compareOpCount * 2);
+
+        // Decision count:
+        // 决策数量
+        addDecisionCount();
+    }
+
+    private void addModifiedCondition(int count) {
+        modifiedConditionCount += count;
+    }
+
+    private void addConditionsCount(int count) {
+        conditionsCount += count;
     }
 
     private void addModifiedCondition() {
