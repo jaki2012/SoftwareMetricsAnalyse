@@ -10,6 +10,8 @@ import metrics.MetricsEvaluator;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,8 +22,18 @@ import java.util.Map;
  */
 public class ModuleVisitor extends VoidVisitorAdapter {
     // Create a module template
-    String head = "public class Module {";
-    String end = "}";
+    private String head = "public class Module {";
+    private String end = "}";
+    private String modulePath;
+    public List<MetricsEvaluator> evaluatorList = new LinkedList<>();
+
+    public String getModulePath() {
+        return modulePath;
+    }
+
+    public void setModulePath(String modulePath) {
+        this.modulePath = modulePath;
+    }
 
     @Override
     public void visit(MethodDeclaration n, Object arg) {
@@ -34,7 +46,9 @@ public class ModuleVisitor extends VoidVisitorAdapter {
             MetricsEvaluator e = (new Initiator()).initiate(stream);
             InputStream inputStream = new ByteArrayInputStream(builder.toString().getBytes());
             LOCAnalyser.run(inputStream, e);
-            new GraphBuildVisitor(e, n.getName()).visit(n, arg);
+            GraphBuildVisitor graphBuildVisitor = new GraphBuildVisitor(e, n.getName(), evaluatorList);
+            graphBuildVisitor.setModulePath(modulePath);
+            graphBuildVisitor.visit(n, arg);
             // Calculate circle dependency
             LOCAnalyser.calculate(
                     e,
@@ -43,23 +57,26 @@ public class ModuleVisitor extends VoidVisitorAdapter {
                     e.getDimension(Dimension.LOC_COMMENTS),
                     e.getDimension(Dimension.LOC_EXECUTABLE)
             );
-            printResult(e);
+//            System.out.println(modulePath);
+            e.setModulePath(modulePath);
+            evaluatorList.add(e);
+//            printResult(e);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
     }
 
-    public static void printResult(MetricsEvaluator evaluator) {
-        StringBuilder builder = new StringBuilder();
+    public void printResult(MetricsEvaluator evaluator) {
+//        StringBuilder builder = new StringBuilder();
         for (Map.Entry<Dimension, Double> entry : evaluator.dimensions.entrySet()) {
-            builder.append(entry.getValue());
-            builder.append(",");
+//            builder.append(entry.getValue());
+//            builder.append(",");
             String s = String.format("%-35s%-5s", entry.getKey(), entry.getValue());
             System.out.println(s);
         }
-        builder.append("\n");
-        if (test.Main.printWriter != null)
-            test.Main.printWriter.write(builder.toString());
+//        builder.append("\n");
+//        if (test.Main.printWriter != null)
+//            test.Main.printWriter.write(builder.toString());
 
     }
 }

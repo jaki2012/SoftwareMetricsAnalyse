@@ -1,13 +1,7 @@
 package test;
 
-import GithubParserUtils.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import org.apache.commons.io.FilenameUtils;
 import visitors.CalculateVisitor;
-import visitors.ModuleVisitor;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,84 +13,86 @@ import java.util.Set;
  */
 public class Main {
 
-    public static PrintWriter printWriter;
-    public static int cnt;
+//    public static PrintWriter printWriter;
+//    public static int cnt;
 
-    public static void run(File[] files) {
-        for (File file : files) {
-            if (file.isDirectory()) {
-//                System.out.println("Dir:" + file.getAbsolutePath());
-                run(file.listFiles()); // Calls same method again.
-            } else {
-                try {
-                    if (FilenameUtils.getExtension(file.getCanonicalPath()).equals("java")) {
-                        System.out.println("File " + cnt + " :" + file.getName() + " calculation...");
-                        calculate(file.getAbsolutePath());
-                        System.out.println("File " + ++cnt + " :" + file.getName() + " calculated successful");
-                        printWriter.flush();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+//    public static void run(File[] files) {
+//        for (File file : files) {
+//            if (file.isDirectory()) {
+////                System.out.println("Dir:" + file.getAbsolutePath());
+//                run(file.listFiles()); // Calls same method again.
+//            } else {
+//                try {
+//                    if (FilenameUtils.getExtension(file.getCanonicalPath()).equals("java")) {
+//                        System.out.println("File " + cnt + " :" + file.getName() + " calculation...");
+//                        calculate(file.getAbsolutePath());
+//                        System.out.println("File " + ++cnt + " :" + file.getName() + " calculated successful");
+////                        printWriter.flush();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
-    public static void main(String... args) throws Exception {
-//        String initPath = "I:\\GitUnzipped";
-//        printWriter  = new PrintWriter(new File("F:\\Test-1min.csv"));
-//        run(new File(initPath).listFiles());
-        // 默认包下一个叫Simple.java的文件 根据况更改
-        String simple = "F:\\simple.java";
-        String path = "I:\\GitUnzipped\\antlr-antlr4-e9aa00e\\runtime-testsuite\\test\\org\\antlr\\v4\\test\\runtime\\javascript\\node\\TestLexerExec.java";
-        String test = "E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
-//        System.out.println("File path:" + simple);
-//        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
-        calculate(simple);
-    }
+//    public static void main(String... args) throws Exception {
+////        String initPath = "I:\\GitUnzipped";
+////        printWriter  = new PrintWriter(new File("F:\\Test-1min.csv"));
+////        run(new File(initPath).listFiles());
+//        // 默认包下一个叫Simple.java的文件 根据况更改
+//        String simple = "F:\\simple.java";
+//        String path = "I:\\GitUnzipped\\antlr-antlr4-e9aa00e\\runtime-testsuite\\test\\org\\antlr\\v4\\test\\runtime\\javascript\\node\\TestLexerExec.java";
+//        String test = "E:\\MyCodes\\Java\\FileSys\\src\\FileManager.java";
+////        System.out.println("File path:" + simple);
+////        System.out.println(new String(new char[("File path:" + path).length()]).replace("\0", "="));
+//        calculate(simple);
+//    }
 
-    @SuppressWarnings("unchecked")
-    private static void calculate(String path) throws Exception {
-        //CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
-        CompilationUnit unit = JavaParser.parse(prePerceeding(new FileInputStream(path)));
+//
+//
+//    @SuppressWarnings("unchecked")
+//    private static void calculate(String path) throws Exception {
+//        //CompilationUnit unit = JavaParser.parse(new FileInputStream(path));
+//        CompilationUnit unit = JavaParser.parse(preProceeding(new FileInputStream(path)));
+//
+//
+////        System.out.println("TOTAL FILE LOC_AND_COMMENT: " + JavaParser.LOC_CODE_AND_COMMENT);
+//
+//        new ModuleVisitor().visit(unit, null);
+//    }
 
-
-//        System.out.println("TOTAL FILE LOC_AND_COMMENT: " + JavaParser.LOC_CODE_AND_COMMENT);
-
-        new ModuleVisitor().visit(unit, null);
-    }
-
-    private static ByteArrayInputStream prePerceeding(FileInputStream originFIS){
-        StringBuilder listOfLines = new StringBuilder("");
-        try {
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(originFIS));
-            String temp;
-            do{
-                temp = bufferedReader.readLine();
-                if(temp != null){
-                    //Add additional '\n' for the '\n' loss of readLine()
-                    if(0 == temp.trim().length()){
-                        listOfLines.append("//BlankLine!!\n");
-                    }else{
-                        listOfLines.append(temp+'\n');
-                    }
-                }
-            }while (temp!=null);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ByteArrayInputStream handledFIS = null;
-        try {
-            handledFIS = new ByteArrayInputStream(listOfLines.toString().getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return handledFIS;
-    }
+//    private static ByteArrayInputStream preProceeding(FileInputStream originFIS){
+//        StringBuilder listOfLines = new StringBuilder("");
+//        try {
+//            BufferedReader bufferedReader = new BufferedReader(
+//                    new InputStreamReader(originFIS));
+//            String temp;
+//            do{
+//                temp = bufferedReader.readLine();
+//                if(temp != null){
+//                    //Add additional '\n' for the '\n' loss of readLine()
+//                    if(0 == temp.trim().length()){
+//                        listOfLines.append("//BlankLine!!\n");
+//                    }else{
+//                        listOfLines.append(temp+'\n');
+//                    }
+//                }
+//            }while (temp!=null);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        ByteArrayInputStream handledFIS = null;
+//        try {
+//            handledFIS = new ByteArrayInputStream(listOfLines.toString().getBytes("UTF-8"));
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return handledFIS;
+//    }
 
 
     @Deprecated

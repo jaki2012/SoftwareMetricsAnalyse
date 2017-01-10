@@ -9,6 +9,8 @@ import java.util.*;
  * 2016/10/7
  */
 public class MetricsEvaluator {
+    public String moduleName;
+    public boolean isInnerModule;
     public double PROGRAM_LENGTH;
     public double PROGRAM_VOCABULARY;
     public double ESTIMATED_LENGTH;
@@ -22,7 +24,16 @@ public class MetricsEvaluator {
     public double n2;
     public double N1;
     public double N2;
+    public String modulePath;
     public Map<Dimension, Double> dimensions;
+
+    public String getModulePath() {
+        return modulePath;
+    }
+
+    public void setModulePath(String modulePath) {
+        this.modulePath = modulePath;
+    }
 
     public MetricsEvaluator() {
         dimensions = new TreeMap<>();

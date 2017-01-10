@@ -55,6 +55,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private double designDensity;
     private double essDensity;
     private double locCodeAndComment;
+    private String modulePath;
     private String methodName;
 
     private Stack<Node<Integer>> switchBegin;
@@ -65,14 +66,24 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     private HashSet<String> variableDeclarators;
     private List<EnumDeclaration> enumFields;
     private Set<String> parameters;
+    public List<MetricsEvaluator> evaluatorList;
 
-    @Deprecated
-    public GraphBuildVisitor(MetricsEvaluator evaluator) {
-        this(evaluator, "");
+    public String getModulePath() {
+        return modulePath;
     }
 
-    public GraphBuildVisitor(MetricsEvaluator evaluator, String methodName) {
+    public void setModulePath(String modulePath) {
+        this.modulePath = modulePath;
+    }
+
+    //    @Deprecated
+//    public GraphBuildVisitor(MetricsEvaluator evaluator) {
+//        this(evaluator, "", null);
+//    }
+
+    public GraphBuildVisitor(MetricsEvaluator evaluator, String methodName, List<MetricsEvaluator> evaluatorList) {
         this.evaluator = evaluator;
+        this.evaluatorList = evaluatorList;
         initBuilder(methodName);
     }
 
@@ -117,25 +128,35 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(ExpressionStmt n, Object arg) {
-        infos.addInformationToLayer1(sourceGraph, prevNode.peek(), " ");
+        if (!prevNode.isEmpty()) {
+            Edge<Integer> edge = createConnection(); // create the edge from the previous node to the throws node.
+            Node<Integer> node = edge.getEndNode();
+            prevNode.push(node);
+            //infos.addInformationToLayer1(sourceGraph, prevNode.peek(), " ");
+        }
         super.visit(n, arg);
     }
 
     @Override
     public void visit(AssertStmt n, Object arg) {
-        infos.addInformationToLayer1(sourceGraph, prevNode.peek(), n.toString());
+        if (!prevNode.isEmpty()) {
+            Edge<Integer> edge = createConnection(); // create the edge from the previous node to the throws node.
+            Node<Integer> node = edge.getEndNode();
+            prevNode.push(node);
+            //infos.addInformationToLayer1(sourceGraph, prevNode.peek(), " ");
+        }
         super.visit(n, arg);
     }
 
     @Override
     public void visit(EmptyStmt n, Object arg) {
-        infos.addInformationToLayer1(sourceGraph, prevNode.peek(), n.toString());
+        //infos.addInformationToLayer1(sourceGraph, prevNode.peek(), n.toString());
         super.visit(n, arg);
     }
 
     @Override
     public void visit(VariableDeclarationExpr n, Object arg) {
-        infos.addInformationToLayer1(sourceGraph, prevNode.peek(), n.toString());
+        //infos.addInformationToLayer1(sourceGraph, prevNode.peek(), n.toString());
         super.visit(n, arg);
     }
 
@@ -145,9 +166,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!prevNode.isEmpty()) {
             n.getExpr().accept(this, arg);
             Edge<Integer> edge = createConnection(); // create the edge from the previous node to the throws node.
-            infos.addInformationToLayer2(sourceGraph, edge, "throws;"); // add information to previous node - throws.
+            //infos.addInformationToLayer2(sourceGraph, edge, "throws;"); // add information to previous node - throws.
             sourceGraph.addFinalNode(edge.getEndNode()); // add the throws node to the final nodes.
-            infos.addInformationToLayer1(sourceGraph, edge.getEndNode(), n.toString()); // add information to throws node.
+            //infos.addInformationToLayer1(sourceGraph, edge.getEndNode(), n.toString()); // add information to throws node.
             returnFlag = true;
             finalnode = null;
         }
@@ -155,7 +176,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
     @Override
     public void visit(TypeDeclarationStmt n, Object arg) {
-        infos.addInformationToLayer1(sourceGraph, prevNode.peek(), n.toString());
+        //infos.addInformationToLayer1(sourceGraph, prevNode.peek(), n.toString());
         super.visit(n, arg);
     }
 
@@ -171,7 +192,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Edge<Integer> edge = createConnection();
         Node<Integer> nodeTry = edge.getEndNode();
         prevNode.push(nodeTry); // the graph continues from the initial node of the TryStatement
-        infos.addInformationToLayer1(sourceGraph, nodeTry, n.toString());
+        //infos.addInformationToLayer1(sourceGraph, nodeTry, n.toString());
         n.getTryBlock().accept(this, arg);
         boolean breakThenFlag = controlFlag; // verify if a break or a continue occur in the TryThen.
         boolean returnThenFlag = returnFlag; // verify if a return occur in the TryThen.
@@ -190,10 +211,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         List<CatchClause> catchStatements = n.getCatchs();
         for (CatchClause clause : catchStatements) {
             Edge<Integer> edgeCatch = createConnection();
-            infos.addInformationToLayer2(sourceGraph, edgeCatch, clause.toString());
+            //infos.addInformationToLayer2(sourceGraph, edgeCatch, clause.toString());
             Node<Integer> nodeCatch = edgeCatch.getEndNode();
             prevNode.push(nodeCatch);
-            infos.addInformationToLayer1(sourceGraph, nodeCatch, clause.toString());
+            //infos.addInformationToLayer1(sourceGraph, nodeCatch, clause.toString());
             clause.accept(this, arg);
             if (finalNode != null && !returnFlag && !controlFlag)
                 sourceGraph.addEdge(nodeCatch, finalNode);
@@ -209,13 +230,15 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     public void visit(IfStmt node, Object arg) {
         calculateCondition(node.getCondition());
         addBranchCount(2);
+
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noIf = edge.getEndNode(); // the initial node of the IFStatement.
         prevNode.push(noIf); // the graph continues from the initial node of the IFStatement.
         node.getCondition().accept(this, arg); // visit condition
-        infos.addInformationToLayer1(sourceGraph, noIf, node.toString());
+
+        //infos.addInformationToLayer1(sourceGraph, noIf, node.toString());
         Edge<Integer> edgeThen = createConnection(); // visit the Then block.
-        infos.addInformationToLayer2(sourceGraph, edgeThen, node.toString());
+        //infos.addInformationToLayer2(sourceGraph, edgeThen, node.toString());
         Node<Integer> noIfThen = edgeThen.getEndNode(); // create the IFThen node.
         prevNode.push(noIfThen); // the graph continues from the IFThen node.
         node.getThenStmt().accept(this, arg);
@@ -228,20 +251,24 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
 
         if (elseStatement != null) { // if exists visit the Else block.
             Edge<Integer> edgeElse = createConnection();
-            infos.addInformationToLayer2(sourceGraph, edgeElse, "(" + node.toString() + ")");
+            //infos.addInformationToLayer2(sourceGraph, edgeElse, "(" + node.toString() + ")");
             Node<Integer> noIfElse = edgeElse.getEndNode(); // create the IFElse node.
             prevNode.push(noIfElse); // the graph continues from the IFElse node.
             elseStatement.accept(this, arg);
         }
+
         boolean breakElseFlag = controlFlag; // verify if a break or a continue occur in the IFElse.
         boolean returnElseFlag = returnFlag; // verify if a return occur in the IFElse.
         if (!returnThenFlag || !returnElseFlag) { // if exist in maximum one return.
             if (!prevNode.isEmpty()) {
                 edge = createConnection(); // create the final node of the IFStatement.
                 returnFlag = (returnThenFlag || returnElseFlag);
+
                 if (!returnFlag) { // if there are no returns.
+
                     if (!breakThenFlag || !breakElseFlag) { // if exist in maximum one break or continue.
                         controlFlag = (breakThenFlag || breakElseFlag);
+
                         if (!controlFlag) // if there are no breaks or continues.
                             sourceGraph.addEdge(prevNode.pop(), edge.getEndNode()); // the connection from previous node to the final node of the IFStatement.
                         else
@@ -263,19 +290,22 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         Node<Integer> noWhile = edge.getEndNode(); // the initial node of the WhileStatement.
         prevNode.push(noWhile); // the graph continues from the initial node of the WhileStatement.
         node.getCondition().accept(this, arg);
-        infos.addInformationToLayer1(sourceGraph, noWhile, node.toString());
+
+        //infos.addInformationToLayer1(sourceGraph, noWhile, node.toString());
         Node<Integer> noEndWhile = sourceGraph.addNode(++nodeNum); // the final node of the WhileStatement.
         breakNode.push(noEndWhile); // if a break occur goes to the final node of the WhileStatement.
         continueNode.push(noWhile); // if a continue occur goes to the initial node of the WhileStatement.
         Edge<Integer> edgeBody = createConnection(); // visit the while body block.
-        infos.addInformationToLayer2(sourceGraph, edgeBody, node.getBody().toString());
+        //infos.addInformationToLayer2(sourceGraph, edgeBody, node.getBody().toString());
         Node<Integer> noWhileBody = edgeBody.getEndNode(); // create the WhileBody node.
         prevNode.push(noWhileBody); // the graph continues from the WhileBody node.
         node.getBody().accept(this, arg);
+
         if (continueNode.contains(noWhile))
             continueNode.remove(noWhile); // when ends clean the stack.
         if (breakNode.contains(noEndWhile))
             breakNode.remove(noEndWhile); // when ends clean the stack.
+        
         if (!returnFlag) { // verify if a return occur in the WhileBody.
             if (!controlFlag) // verify if a break or a continue occur in the WhileBody.
                 sourceGraph.addEdge(prevNode.pop(), noWhile); // the loop connection.
@@ -283,8 +313,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 controlFlag = false;
         } else
             returnFlag = false;
+
         edge = sourceGraph.addEdge(noWhile, noEndWhile); // the connection from the initial node to the final node of the WhileStatement.
-        infos.addInformationToLayer2(sourceGraph, edge, "(" + node.getBody().toString() + ")");
+        //infos.addInformationToLayer2(sourceGraph, edge, "(" + node.getBody().toString() + ")");
         prevNode.push(noEndWhile); // the graph continues from the final node of the WhileStatement.
         finalnode = noEndWhile; // update the final node.
     }
@@ -294,20 +325,23 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     public void visit(DoStmt node, Object arg) {
         calculateCondition(node.getCondition());
         addBranchCount(2);
+        
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noDoWhileBody = edge.getEndNode(); // create the DoWhileBody node.
         prevNode.push(noDoWhileBody); // the graph continues from the DoWhileBody node.
         Node<Integer> noWhile = sourceGraph.addNode(++nodeNum); // the node of the WhileStatement.
-        infos.addInformationToLayer1(sourceGraph, noWhile, node.toString());
+        //infos.addInformationToLayer1(sourceGraph, noWhile, node.toString());
         Node<Integer> noEndDoWhile = sourceGraph.addNode(++nodeNum); // the final node of the DoStatement.
         prevNode.push(noEndDoWhile);
         node.getCondition().accept(this, arg);
+        
         if (prevNode.contains(noEndDoWhile)) {
             prevNode.remove(noEndDoWhile);
         }
         breakNode.push(noEndDoWhile); // if a break occur goes to the final node of the DoStatement.
         continueNode.push(noWhile); // if a continue occur goes to the WhileStatement node.
         node.getBody().accept(this, arg);
+        
         if (continueNode.contains(noWhile))
             continueNode.remove(noWhile); // when ends clean the stack.
         if (breakNode.contains(noEndDoWhile))
@@ -319,13 +353,13 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 controlFlag = false;
         } else
             returnFlag = false;
+        
         edge = sourceGraph.addEdge(noWhile, noDoWhileBody); // the loop connection.
-        infos.addInformationToLayer2(sourceGraph, edge, node.toString());
+        //infos.addInformationToLayer2(sourceGraph, edge, node.toString());
         edge = sourceGraph.addEdge(noWhile, noEndDoWhile); // the connection from the WhileStatement node to the final node of the DoWhileStatement.
-        infos.addInformationToLayer2(sourceGraph, edge, "(" + node.toString() + ")");
+        //infos.addInformationToLayer2(sourceGraph, edge, "(" + node.toString() + ")");
         prevNode.push(noEndDoWhile); // the graph continues from the final node of the DoWhileStatement.
         finalnode = noEndDoWhile; // update the final node.
-
     }
 
     @SuppressWarnings("unchecked")
@@ -334,12 +368,12 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         calculateCondition(node.getCompare());
         addBranchCount(2);
         Edge<Integer> edge = createConnection(); // initialization of the ForStatement.
-        for (Expression initNode : node.getInit())
-            infos.addInformationToLayer1(sourceGraph, edge.getBeginNode(), initNode.toString());
+//        for (Expression initNode : node.getInit())
+            //infos.addInformationToLayer1(sourceGraph, edge.getBeginNode(), initNode.toString());
         Node<Integer> noFor = edge.getEndNode(); // the initial node of the ForStatement.
         Node<Integer> incFor = sourceGraph.addNode(++nodeNum); // the node of the incFor.
-        for (Expression incNode : node.getUpdate())
-            infos.addInformationToLayer1(sourceGraph, incFor, incNode.toString());
+//        for (Expression incNode : node.getUpdate())
+            //infos.addInformationToLayer1(sourceGraph, incFor, incNode.toString());
         Node<Integer> noEndFor = sourceGraph.addNode(++nodeNum); // the final node of the ForStatement.
         breakNode.push(noEndFor); // if a break occur goes to the final node of the ForStatement.
         continueNode.push(incFor); // if a continue occur goes to the incFor node.
@@ -371,14 +405,16 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         }
 
         Edge<Integer> edgeBody = createConnection(); // visit the ForStatement body block.
-        infos.addInformationToLayer2(sourceGraph, edgeBody, node.toString());
+        //infos.addInformationToLayer2(sourceGraph, edgeBody, node.toString());
         Node<Integer> noForBody = edgeBody.getEndNode(); // create the ForBody node.
         prevNode.push(noForBody); // the graph continues from the ForBody node.
         node.getBody().accept(this, arg);
+        
         if (continueNode.contains(incFor))
             continueNode.remove(incFor); // when ends clean the stack.
         if (breakNode.contains(noEndFor))
             breakNode.remove(noEndFor); // when ends clean the stack.
+        
         if (!returnFlag) { // verify if a return occur in the ForBody.
             if (!controlFlag) // verify if a break or a continue occur in the ForBody.
                 sourceGraph.addEdge(prevNode.pop(), incFor); // connect the previous node to the increment node.
@@ -386,9 +422,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 controlFlag = false;
         } else
             returnFlag = false;
+        
         sourceGraph.addEdge(incFor, noFor); // the loop connection.
         edge = sourceGraph.addEdge(noFor, noEndFor); // the connection from the initial node to the final node of the ForStatement.
-        infos.addInformationToLayer2(sourceGraph, edge, "(" + node.toString() + ")");
+        //infos.addInformationToLayer2(sourceGraph, edge, "(" + node.toString() + ")");
         prevNode.push(noEndFor); // the graph continues from the final node of the DoWhileStatement.
         finalnode = noEndFor; // update the final node.
     }
@@ -402,19 +439,21 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         prevNode.push(noForEach);
         node.getVariable().accept(this, arg);
         node.getIterable().accept(this, arg);
-        infos.addInformationToLayer1(sourceGraph, noForEach, node.toString());
+        //infos.addInformationToLayer1(sourceGraph, noForEach, node.toString());
         Node<Integer> noEndForEach = sourceGraph.addNode(++nodeNum); // the final node of the EnhancedForStatement.
         breakNode.push(noEndForEach); // if a break occur goes to the final node of the EnhancedForStatement.
         continueNode.push(noForEach); // if a break occur goes to the initial node of the EnhancedForStatement.
         Edge<Integer> edgeBody = createConnection(); // visit the forEach body block.
-        infos.addInformationToLayer2(sourceGraph, edgeBody, node.toString());
+        //infos.addInformationToLayer2(sourceGraph, edgeBody, node.toString());
         Node<Integer> noForEachBody = edgeBody.getEndNode(); // create the ForEachBody node.
         prevNode.push(noForEachBody); // the graph continues from the ForEachBody node.
         node.getBody().accept(this, arg);
+        
         if (continueNode.contains(noForEach))
             continueNode.remove(noForEach); // when ends clean the stack.
         if (breakNode.contains(noEndForEach))
             breakNode.remove(noEndForEach); // when ends clean the stack.
+        
         if (!returnFlag) { // verify if a return occur in the ForEachBody.
             if (!controlFlag) // verify if a break or a continue occur in the ForEachBody.
                 sourceGraph.addEdge(prevNode.pop(), noForEach); // the loop connection.
@@ -422,8 +461,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 controlFlag = false;
         } else
             returnFlag = false;
+        
         edge = sourceGraph.addEdge(noForEach, noEndForEach); // the loop connection.
-        infos.addInformationToLayer2(sourceGraph, edge, node.toString());
+        //infos.addInformationToLayer2(sourceGraph, edge, node.toString());
         prevNode.push(noEndForEach); // the graph continues from the final node of the EnhancedForStatement.
         finalnode = noEndForEach; // update the final node.
     }
@@ -434,7 +474,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         calculateCondition(n.getSelector());
         Edge<Integer> edge = createConnection(); // connect the previous node to this node.
         Node<Integer> noSwitch = edge.getEndNode(); // the initial node of the SwitchStatement.
-        infos.addInformationToLayer1(sourceGraph, noSwitch, n.toString());
+        //infos.addInformationToLayer1(sourceGraph, noSwitch, n.toString());
         Node<Integer> noEndSwitch = sourceGraph.addNode(++nodeNum); // the final node of the SwitchStatement.
         breakNode.push(noEndSwitch); // if a break occur goes to the final node of the ForStatement.
         continueNode.push(noEndSwitch); // if a continue occur goes to the incFor node.
@@ -455,12 +495,12 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         addBranchCount();
         prevNode.push(switchBegin.peek());
         Edge<Integer> edgeCase = createConnection();
-        if (node.getLabel() == null)
-            infos.addInformationToLayer2(sourceGraph, edgeCase, "default");
-        else
-            infos.addInformationToLayer2(sourceGraph, edgeCase, "case" + node.getLabel());
+//        if (node.getLabel() == null)
+            //infos.addInformationToLayer2(sourceGraph, edgeCase, "default");
+//        else
+            //infos.addInformationToLayer2(sourceGraph, edgeCase, "case" + node.getLabel());
         Node<Integer> noCase = edgeCase.getEndNode(); // the initial node of the EnhancedForStatement.
-        infos.addInformationToLayer1(sourceGraph, noCase, node.toString());
+        //infos.addInformationToLayer1(sourceGraph, noCase, node.toString());
         prevNode.push(noCase);
         controlFlag = false;
         if (node.getStmts() != null) {
@@ -479,8 +519,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     public void visit(BreakStmt n, Object arg) {
         if (!prevNode.isEmpty()) {
             Edge<Integer> edge = sourceGraph.addEdge(prevNode.pop(), breakNode.peek()); // create the edge from the previous node to the break node.
-            infos.addInformationToLayer2(sourceGraph, edge, "break;"); // add information to previous node - break.
-            infos.addInformationToLayer1(sourceGraph, edge.getBeginNode(), n.toString());
+            //infos.addInformationToLayer2(sourceGraph, edge, "break;"); // add information to previous node - break.
+            //infos.addInformationToLayer1(sourceGraph, edge.getBeginNode(), n.toString());
             controlFlag = true;
         }
     }
@@ -489,8 +529,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     public void visit(ContinueStmt n, Object arg) {
         if (!prevNode.isEmpty()) {
             Edge<Integer> edge = sourceGraph.addEdge(prevNode.pop(), continueNode.peek()); // create the edge from the previous node to the continue node.
-            infos.addInformationToLayer2(sourceGraph, edge, "continue;"); // add information to previous node - continue.
-            infos.addInformationToLayer1(sourceGraph, edge.getBeginNode(), n.toString());
+            //infos.addInformationToLayer2(sourceGraph, edge, "continue;"); // add information to previous node - continue.
+            //infos.addInformationToLayer1(sourceGraph, edge.getBeginNode(), n.toString());
             controlFlag = true;
         }
     }
@@ -499,9 +539,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
     public void visit(ReturnStmt n, Object arg) {
         if (!prevNode.isEmpty()) {
             Edge<Integer> edge = createConnection(); // create the edge from the previous node to the return node.
-            infos.addInformationToLayer2(sourceGraph, edge, "return;"); // add information to previous node - return.
+            //infos.addInformationToLayer2(sourceGraph, edge, "return;"); // add information to previous node - return.
             sourceGraph.addFinalNode(edge.getEndNode()); // add the return node to the final nodes.
-            infos.addInformationToLayer1(sourceGraph, edge.getEndNode(), n.toString()); // add information to return node.
+            //infos.addInformationToLayer1(sourceGraph, edge.getEndNode(), n.toString()); // add information to return node.
             returnFlag = true;
             finalnode = null;
         }
@@ -551,8 +591,8 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         if (!node.getName().equals(methodName)) {
             String head = "public class Module {";
             String end = "}";
-            System.out.println("===================");
-            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
+//            System.out.println("===================");
+//            System.out.println("Inner Module of:\"" + methodName + "\" Module name:\"" + node.getName() + "\"");
             StringBuilder builder = new StringBuilder();
             builder.append(head);
             builder.append(node.toString());
@@ -562,7 +602,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 MetricsEvaluator e = (new Initiator()).initiate(stream);
                 InputStream inputStream = new ByteArrayInputStream(builder.toString().getBytes());
                 LOCAnalyser.run(inputStream, e);
-                new GraphBuildVisitor(e, node.getName()).visit(node, arg);
+                GraphBuildVisitor graphBuildVisitor = new GraphBuildVisitor(e, node.getName(), evaluatorList);
+                graphBuildVisitor.setModulePath(modulePath);
+                graphBuildVisitor.visit(node, arg);
                 // Calculate circle dependency
                 LOCAnalyser.calculate(
                         e,
@@ -571,7 +613,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                         e.getDimension(Dimension.LOC_COMMENTS),
                         e.getDimension(Dimension.LOC_EXECUTABLE)
                 );
-                ModuleVisitor.printResult(e);
+                e.moduleName = node.getName();
+                e.isInnerModule = true;
+                e.setModulePath(modulePath);
+                evaluatorList.add(e);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -590,8 +635,10 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
             addGlobalParameter(node.getParameters().size()); // no "this"
         super.visit(node, arg);
 
-        System.out.println("======================================");
-        System.out.println("Module name:" + node.getName());
+//        System.out.println("======================================");
+//        System.out.println("Module name:" + node.getName());
+        evaluator.moduleName = node.getName();
+        evaluator.isInnerModule = false;
 
         for (int i = 0; i < JavaParser.commentNode.size(); i++) {
 
@@ -601,8 +648,9 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
         }
 //        System.out.println("LOC_CODE_AND_COMMENT:" + count);
 
-        // Remove unnecessary nodes/edges
-        removeNodeEdge(sourceGraph);
+//        printEdges(sourceGraph);
+
+//        removeNodeEdge(sourceGraph);
 
         addFinalNodes(sourceGraph);
         sourceGraph.sortNodes();
@@ -644,7 +692,7 @@ public class GraphBuildVisitor extends VoidVisitorAdapter {
                 for (Edge<Integer> edge : edgeToRemove) {
                     Edge<Integer> newEdge = sourceGraph.addEdge(edge.getBeginNode(), edgeToFinalNode.getEndNode());
                     sourceGraph.selectMetadataLayer(Layer.GUARDS.getLayer()); // select the layer to get the information.
-                    infos.addInformationToLayer2(sourceGraph, newEdge, (String) sourceGraph.getMetadata(edge)); // add information newEdge.
+                    //infos.addInformationToLayer2(sourceGraph, newEdge, (String) sourceGraph.getMetadata(edge)); // add information newEdge.
                     sourceGraph.removeEdge(edge);
                 }
                 nodesToRemove.add(graphNode);

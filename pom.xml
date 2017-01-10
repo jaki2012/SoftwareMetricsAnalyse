@@ -4,9 +4,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>409</groupId>
+    <groupId>cn.edu.tongji</groupId>
     <artifactId>SoftwareMetricsAnalyse</artifactId>
     <version>0.1</version>
+
+    <developers>
+        <developer>
+            <name>Novemser</name>
+            <email>Novemser@gmail.com</email>
+            <organization>Tongji 409</organization>
+        </developer>
+        <developer>
+            <name>Jaki</name>
+            <email>lijiechu@qq.com</email>
+            <organization>Tongji 409</organization>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:IDRSolutions/maven-OpenViewerFX-src.git</connection>
+        <developerConnection>scm:git:git@github.com:IDRSolutions/maven-OpenViewerFX-src.git</developerConnection>
+        <url>git@github.com:IDRSolutions/maven-OpenViewerFX-src.git</url>
+    </scm>
+
     <build>
         <plugins>
             <plugin>
@@ -48,6 +68,7 @@
             <artifactId>zip4j</artifactId>
             <version>1.3.2</version>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -56,7 +77,18 @@
 
 
     </dependencies>
+    <packaging>jar</packaging>
 
+    <name>SoftwareMetricsAnalysis</name>
+    <description>SoftwareMetricsAnalysis from Tongji Univ. School of Software Engineering, 409</description>
+    <url>http://lab-sse.cn/</url>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
 </project>
