@@ -83,7 +83,7 @@ public class MetricsEvaluator {
         this.PROGRAM_VOCABULARY = this.n1 + this.n2;
         this.ESTIMATED_LENGTH = this.n1 * (Math.log(this.n1) / Math.log(2.0D)) + this.n2 * (Math.log(this.n2) / Math.log(2.0D));
         this.PURITY_RATIO = this.ESTIMATED_LENGTH / this.PROGRAM_LENGTH;
-        this.VOLUME = this.PROGRAM_LENGTH * (Math.log(this.PROGRAM_LENGTH) / Math.log(2.0D));
+        this.VOLUME = this.PROGRAM_LENGTH * (Math.log(this.PROGRAM_VOCABULARY) / Math.log(2.0D));
         this.DIFFICULTY = this.n1 / 2.0D * (this.N2 / this.n2);
         this.PROGRAM_EFFORT = this.VOLUME * this.DIFFICULTY;
         this.PROGRAMMING_TIME = this.PROGRAM_EFFORT / 18.0D;
